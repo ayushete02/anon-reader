@@ -25,78 +25,37 @@ const OnboardingResultPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-secondary flex flex-col justify-center items-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary"></div>
-        <p className="mt-4 text-gray-400">Creating your unique profile...</p>
+      <div className="min-h-screen bg-[#87F29A] flex flex-col justify-center items-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-black"></div>
+        <p className="mt-4 text-black font-semibold">Creating your unique profile...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-secondary flex flex-col justify-center items-center px-4 py-12">
-      <div className="max-w-lg w-full text-center">
-        <div className="mb-6">
-          <span className="inline-block bg-primary text-white text-lg font-bold py-2 px-6 rounded-full mb-2">
-            Your Persona
-          </span>
-        </div>
-
-        <h1 className="text-3xl md:text-4xl font-bold mb-4 text-white">
-          You&apos;re a{" "}
-          <span className="text-primary">{persona.personaType}</span>
+    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#87F29A] px-2 py-4">
+      <div className="w-full max-w-xs sm:max-w-sm bg-[#87F29A] rounded-[2.5rem] shadow-xl flex flex-col px-6 py-8 relative items-center" style={{ boxShadow: "0 8px 32px 0 rgba(34, 60, 80, 0.2)" }}>
+        {/* Persona Type Pill */}
+        <span className="inline-block bg-black text-white text-lg font-bold py-2 px-6 rounded-full mb-6 mt-2">
+          {persona.personaType || "Your Persona"}
+        </span>
+        {/* Main Text */}
+        <h1 className="text-2xl font-extrabold text-black text-center mb-4 leading-tight">
+          You&apos;re a {persona.personaType ? <span className="text-black">{persona.personaType}</span> : "unique reader"}!
         </h1>
-
-        <p className="text-lg text-gray-300 mb-8">
+        <p className="text-lg text-black text-center mb-8">
           {getPersonaDescription(persona.personaType || "")}
         </p>
-
-        <div className="bg-black bg-opacity-30 p-6 rounded-lg mb-8">
-          <h3 className="text-xl font-semibold mb-4 text-white">
-            Your Story Preferences
-          </h3>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left">
-            <div>
-              <p className="text-gray-400 mb-1">Favorite ending:</p>
-              <p className="font-medium">{persona.storyEndingPreference}</p>
-            </div>
-
-            <div>
-              <p className="text-gray-400 mb-1">Justice vs Mercy:</p>
-              <p className="font-medium">{persona.justiceOrMercy}</p>
-            </div>
-
-            <div>
-              <p className="text-gray-400 mb-1">Favorite twist:</p>
-              <p className="font-medium">{persona.favoriteTwist}</p>
-            </div>
-
-            <div>
-              <p className="text-gray-400 mb-1">Hope vs Honesty:</p>
-              <p className="font-medium">{persona.hopeOrHonesty}</p>
-            </div>
-          </div>
-
-          <div className="mt-4 text-left">
-            <p className="text-gray-400 mb-2">Your vibes:</p>
-            <div className="flex flex-wrap gap-2">
-              {persona.vibes?.map((vibe) => (
-                <span
-                  key={vibe}
-                  className="bg-gray-800 text-white text-sm py-1 px-3 rounded-full"
-                >
-                  {vibe}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-
+        {/* Explore Button */}
         <button
           onClick={handleContinue}
-          className="bg-primary text-white py-3 px-8 rounded-full font-bold text-lg hover:bg-red-700 transition-colors"
+          className="w-full flex items-center rounded-full overflow-hidden shadow-lg mb-6 mt-2"
+          style={{ height: "56px" }}
         >
-          Explore Your Comics
+          <span className="flex-1 h-full bg-white flex items-center justify-center text-black font-bold text-lg rounded-l-full">Explore</span>
+          <span className="flex items-center justify-center bg-black h-full px-6 rounded-r-full">
+            <span className="text-white text-2xl font-bold">&gt;&gt;&gt;</span>
+          </span>
         </button>
       </div>
     </div>

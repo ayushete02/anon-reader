@@ -29,25 +29,23 @@ const QuestionOptionsSelector: React.FC<QuestionOptionsSelectorProps> = ({
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {options.map((option) => (
-        <button
-          key={option}
-          className={`persona-option p-4 rounded-lg text-left transition-all ${
-            selectedOptions.includes(option)
-              ? "border-primary bg-opacity-10 bg-primary"
-              : "border-gray-700 hover:border-gray-500"
-          } ${
-            isDisabled(option)
-              ? "opacity-50 cursor-not-allowed"
-              : "cursor-pointer"
-          }`}
-          onClick={() => !isDisabled(option) && handleOptionClick(option)}
-          disabled={isDisabled(option)}
-        >
-          <span className="block text-lg">{option}</span>
-        </button>
-      ))}
+    <div className="flex flex-col gap-6 w-full">
+      {options.map((option) => {
+        const selected = selectedOptions.includes(option);
+        return (
+          <button
+            key={option}
+            className={`w-full py-5 px-6 rounded-full shadow-md text-2xl font-bold transition-all duration-200 border-2 focus:outline-none focus:ring-2 focus:ring-black
+              ${selected ? "bg-black text-white border-black" : "bg-white text-black border-black hover:bg-gray-100"}
+              ${isDisabled(option) ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
+            `}
+            onClick={() => !isDisabled(option) && handleOptionClick(option)}
+            disabled={isDisabled(option)}
+          >
+            {option}
+          </button>
+        );
+      })}
     </div>
   );
 };
