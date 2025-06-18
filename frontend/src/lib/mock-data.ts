@@ -69,7 +69,8 @@ export const MOCK_COMICS: Comic[] = [
     title: "The Last Guardian",
     description:
       "An epic tale of a young warrior tasked with protecting the last magical creature in the realm.",
-    posterImage: "https://m.media-amazon.com/images/I/51IFcninsvL._SX342_SY445_PQ23_.jpg",
+    posterImage:
+      "https://m.media-amazon.com/images/I/51IFcninsvL._SX342_SY445_PQ23_.jpg",
     categories: ["Fantasy", "Adventure", "Epic & Grandiose"],
     hasAudio: true,
     hasImages: true,
@@ -82,7 +83,8 @@ export const MOCK_COMICS: Comic[] = [
     title: "Midnight Chronicles",
     description:
       "A dark detective story set in a dystopian future where night never ends.",
-    posterImage: "https://www.yourdecoration.com/cdn/shop/files/abystyle-abydco754-dc-comics-superman-poster-61x91-5cm_2e22d54f-c92d-4acb-a8f3-efc49d9ec202_500x.jpg?v=1721810611",
+    posterImage:
+      "https://www.yourdecoration.com/cdn/shop/files/abystyle-abydco754-dc-comics-superman-poster-61x91-5cm_2e22d54f-c92d-4acb-a8f3-efc49d9ec202_500x.jpg?v=1721810611",
     categories: ["Noir", "Mystery", "Dark & Brooding"],
     hasAudio: true,
     hasImages: true,
@@ -108,14 +110,16 @@ export const MOCK_COMICS: Comic[] = [
     title: "Quantum Break",
     description:
       "When a physics experiment goes wrong, reality itself begins to fracture.",
-    posterImage: "https://knowherecomics.com/cdn/shop/products/0922DC144.jpg?v=1669153553&width=420",
+    posterImage:
+      "https://knowherecomics.com/cdn/shop/products/0922DC144.jpg?v=1669153553&width=420",
     categories: ["Sci-Fi", "Thriller", "Mind-Bending & Mysterious"],
     hasAudio: true,
     hasImages: true,
     releaseDate: "2024-04-05",
     popularity: 91,
     rating: 4.6,
-  },  {
+  },
+  {
     id: "5",
     title: "The Jester's Court",
     description:
@@ -146,7 +150,8 @@ export const MOCK_COMICS: Comic[] = [
     title: "Velocity",
     description:
       "A high-octane story about underground racing and the dangerous world it inhabits.",
-    posterImage: "https://m.media-amazon.com/images/I/51IFcninsvL._SX342_SY445_PQ23_.jpg",
+    posterImage:
+      "https://m.media-amazon.com/images/I/51IFcninsvL._SX342_SY445_PQ23_.jpg",
     categories: ["Action", "Thriller", "Action-Packed & Thrilling"],
     hasAudio: true,
     hasImages: true,
@@ -159,7 +164,8 @@ export const MOCK_COMICS: Comic[] = [
     title: "Shadow Twins",
     description:
       "A woman discovers her long-lost twin is living in a parallel dimension.",
-    posterImage: "https://www.yourdecoration.com/cdn/shop/files/abystyle-abydco754-dc-comics-superman-poster-61x91-5cm_2e22d54f-c92d-4acb-a8f3-efc49d9ec202_500x.jpg?v=1721810611",
+    posterImage:
+      "https://www.yourdecoration.com/cdn/shop/files/abystyle-abydco754-dc-comics-superman-poster-61x91-5cm_2e22d54f-c92d-4acb-a8f3-efc49d9ec202_500x.jpg?v=1721810611",
     categories: ["Drama", "Sci-Fi", "Identity reveal"],
     hasAudio: false,
     hasImages: true,
@@ -178,12 +184,14 @@ export const MOCK_COMICS: Comic[] = [
     releaseDate: "2024-09-02",
     popularity: 89,
     rating: 4.7,
-  },  {
+  },
+  {
     id: "10",
     title: "Time Fracture",
     description:
       "When the timeline splinters, a historian must put it back together.",
-    posterImage: "https://knowherecomics.com/cdn/shop/products/0922DC144.jpg?v=1669153553&width=420",
+    posterImage:
+      "https://knowherecomics.com/cdn/shop/products/0922DC144.jpg?v=1669153553&width=420",
     categories: ["Sci-Fi", "Adventure", "Time/reality bend"],
     hasAudio: true,
     hasImages: true,

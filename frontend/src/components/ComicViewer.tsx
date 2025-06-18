@@ -68,7 +68,8 @@ const ComicViewer: React.FC<ComicViewerProps> = ({
         ? "/audio/page4.mp3"
         : i === 7
         ? "/audio/page8.mp3"
-        : undefined,    caption: `Page ${i + 1} of ${comic.title}`,
+        : undefined,
+    caption: `Page ${i + 1} of ${comic.title}`,
   }));
 
   // Handle touch events for vertical swiping
@@ -152,7 +153,7 @@ const ComicViewer: React.FC<ComicViewerProps> = ({
       } else {
         // Add new entry
         newHistory = [...user.history, historyItem];
-      }      // Update user
+      } // Update user
       updateUser({ history: newHistory });
     },
     [user, comic, mockPages.length, updateUser]
