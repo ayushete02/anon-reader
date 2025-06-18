@@ -1,0 +1,65 @@
+/* filepath: c:\Users\Ayush Shete\Documents\github\anon-reader\frontend\src\app\globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Define custom variables */
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --primary: #E50914;
+  --secondary: #141414;
+  --accent: #F5F5F1;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-secondary text-accent;
+  }
+
+  .comic-card {
+    @apply transition duration-300 ease-in-out;
+  }
+
+  .comic-card:hover {
+    @apply transform scale-105;
+  }
+
+  .onboarding-progress-bar {
+    @apply h-1 bg-white/30 rounded overflow-hidden;
+  }
+
+  .onboarding-progress-bar-filled {
+    @apply h-full bg-primary transition-all duration-300 ease-in-out;
+  }
+
+  .persona-option {
+    @apply border-2 border-transparent transition-all duration-200;
+  }
+
+  .persona-option:hover, .persona-option.selected {
+    @apply border-primary bg-primary/10;
+  }
+}
+
+/* Fallback direct classes in case Tailwind doesn't work */
+.bg-primary-direct {
+  background-color: #E50914 !important;
+}
+
+.bg-secondary-direct {
+  background-color: #141414 !important;
+}
+
+.text-white-direct {
+  color: #FFFFFF !important;
+}

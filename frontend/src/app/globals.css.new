@@ -1,0 +1,112 @@
+/* filepath: c:\Users\Ayush Shete\Documents\github\anon-reader\frontend\src\app\globals.css */
+/* Tailwind CSS v4 setup */
+@import "tailwindcss/preflight";
+@import "tailwindcss/utilities";
+
+/* Define custom variables */
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --primary: #E50914;
+  --secondary: #141414;
+  --accent: #F5F5F1;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* Add direct CSS rules to ensure basic styles are working */
+.bg-primary-direct {
+  background-color: #E50914 !important;
+}
+
+.bg-secondary-direct {
+  background-color: #141414 !important;
+}
+
+.text-white-direct {
+  color: #FFFFFF !important;
+}
+
+.min-h-screen {
+  min-height: 100vh;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+}
+
+.mb-8 {
+  margin-bottom: 2rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.rounded {
+  border-radius: 0.25rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background-color: var(--secondary);
+  color: var(--accent);
+}
+
+.comic-card {
+  transition: transform 0.3s ease;
+}
+
+.comic-card:hover {
+  transform: scale(1.05);
+}
+
+.onboarding-progress-bar {
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.onboarding-progress-bar-filled {
+  height: 100%;
+  background-color: var(--primary);
+  transition: width 0.3s ease;
+}
+
+.persona-option {
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.persona-option:hover, .persona-option.selected {
+  border-color: var(--primary);
+  background-color: rgba(229, 9, 20, 0.1);
+}
