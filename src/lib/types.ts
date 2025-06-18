@@ -4,11 +4,23 @@ export interface Comic {
   description: string;
   posterImage: string;
   categories: string[];
-  hasAudio: boolean;
-  hasImages: boolean;
+  type: "text" | "image"; // Story type - either text-based or image-based
   releaseDate: string;
   popularity: number;
   rating: number;
+  pages?: ComicPage[]; // For image-based stories
+  textContent?: TextChapter[]; // For text-based stories
+}
+
+export interface ComicPage {
+  id: number;
+  imageUrl: string;
+}
+
+export interface TextChapter {
+  id: number;
+  title: string;
+  paragraphs: string[];
 }
 
 export interface User {

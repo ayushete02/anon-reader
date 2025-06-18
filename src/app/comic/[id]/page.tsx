@@ -3,14 +3,15 @@
 import ComicViewer from "@/components/ComicViewer";
 import { useUser } from "@/context/UserContext";
 import { MOCK_COMICS } from "@/lib/mock-data";
+import { Comic } from "@/lib/types";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const ComicDetailPage = () => {
+const ComicReaderPage = () => {
   const params = useParams();
   const router = useRouter();
   const { user } = useUser();
-  const [comic, setComic] = useState(null);
+  const [comic, setComic] = useState<Comic | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Get reading progress if it exists
@@ -36,7 +37,7 @@ const ComicDetailPage = () => {
 
   // Return button handler
   const handleReturn = () => {
-    router.push("/browse");
+    router.push(`/story/${params.id}`);
   };
 
   if (loading || !comic) {
@@ -57,7 +58,7 @@ const ComicDetailPage = () => {
         />
       </div>
 
-      {/* Close button */}
+      {/* Close button - goes back to story details */}
       <button
         onClick={handleReturn}
         className="absolute top-4 left-4 z-50 p-2 bg-black/50 backdrop-blur-sm rounded-full hover:bg-black/80 transition-colors"
@@ -81,4 +82,4 @@ const ComicDetailPage = () => {
   );
 };
 
-export default ComicDetailPage;
+export default ComicReaderPage;

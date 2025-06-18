@@ -9,6 +9,7 @@ import React, {
   useEffect,
   useRef,
   useState,
+  useMemo,
 } from "react";
 
 interface ComicViewerProps {
@@ -17,62 +18,50 @@ interface ComicViewerProps {
   onPageChange?: (page: number) => void;
 }
 
-// Define the structure for a comic page
-interface ComicPage {
-  id: string;
-  imageUrl: string;
-  hasAudio: boolean;
-  audioUrl?: string;
-  caption?: string;
-}
-
 const ComicViewer: React.FC<ComicViewerProps> = ({
   comic,
   initialPage = 0,
   onPageChange,
 }) => {
   const [currentPage, setCurrentPage] = useState(initialPage);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [audioProgress, setAudioProgress] = useState(0);
-  const [volume, setVolume] = useState(0.75);
+  const [showControls, setShowControls] = useState(false);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
-  const [showControls, setShowControls] = useState(false);
   const [autoScrollActive, setAutoScrollActive] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const audioContextRef = useRef<AudioContext | null>(null);
+  const [currentParagraph, setCurrentParagraph] = useState(0);
+  const [currentChapter, setCurrentChapter] = useState(0);
+
   const containerRef = useRef<HTMLDivElement>(null);
+  const textContainerRef = useRef<HTMLDivElement>(null);
   const { user, updateUser } = useUser();
-  // Mock comic pages (in a real app, these would come from the API)
-  const pageImages = [
-    "https://m.media-amazon.com/images/I/51IFcninsvL._SX342_SY445_PQ23_.jpg",
-    "https://www.yourdecoration.com/cdn/shop/files/abystyle-abydco754-dc-comics-superman-poster-61x91-5cm_2e22d54f-c92d-4acb-a8f3-efc49d9ec202_500x.jpg?v=1721810611",
-    "https://i.ebayimg.com/images/g/z~wAAOSwHH5hCbDE/s-l1600.webp",
-    "https://knowherecomics.com/cdn/shop/products/0922DC144.jpg?v=1669153553&width=420",
-    "https://media.mycomicshop.com/n_iv/600/642625.jpg",
-    "https://media.mycomicshop.com/n_iv/600/5343551.jpg",
-    "https://m.media-amazon.com/images/I/51IFcninsvL._SX342_SY445_PQ23_.jpg",
-    "https://www.yourdecoration.com/cdn/shop/files/abystyle-abydco754-dc-comics-superman-poster-61x91-5cm_2e22d54f-c92d-4acb-a8f3-efc49d9ec202_500x.jpg?v=1721810611",
-    "https://i.ebayimg.com/images/g/z~wAAOSwHH5hCbDE/s-l1600.webp",
-    "https://knowherecomics.com/cdn/shop/products/0922DC144.jpg?v=1669153553&width=420",
-  ];
 
-  const mockPages: ComicPage[] = Array.from({ length: 10 }, (_, i) => ({
-    id: `page-${i}`,
-    imageUrl: pageImages[i],
-    hasAudio: i === 0 || i === 3 || i === 7, // Only some pages have audio
-    audioUrl:
-      i === 0
-        ? "/audio/page1.mp3"
-        : i === 3
-        ? "/audio/page4.mp3"
-        : i === 7
-        ? "/audio/page8.mp3"
-        : undefined,
-    caption: `Page ${i + 1} of ${comic.title}`,
-  }));
+  // Determine if this is a text or image story
+  const isTextStory = comic.type === "text";
+  const isImageStory = comic.type === "image";
+  // Get content based on story type
+  const imagePages = comic.pages || [];
+  const textChapters = useMemo(
+    () => comic.textContent || [],
+    [comic.textContent]
+  );
+  const totalPages = isTextStory
+    ? textChapters.reduce(
+        (total, chapter) => total + chapter.paragraphs.length,
+        0
+      )
+    : imagePages.length;
 
-  // Handle touch events for vertical swiping
+  // Calculate current position for text stories
+  const getCurrentTextPosition = useCallback(() => {
+    let position = 0;
+    for (let i = 0; i < currentChapter; i++) {
+      position += textChapters[i].paragraphs.length;
+    }
+    position += currentParagraph;
+    return position;
+  }, [currentChapter, currentParagraph, textChapters]);
+
+  // Handle touch events for navigation
   const handleTouchStart = (e: TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientY);
   };
@@ -83,270 +72,286 @@ const ComicViewer: React.FC<ComicViewerProps> = ({
 
   const handleTouchEnd = () => {
     if (touchStart - touchEnd > 100) {
-      // Swipe up - go to next page
-      navigateToPage(currentPage + 1);
+      // Swipe up - go to next page/paragraph
+      navigateNext();
     } else if (touchStart - touchEnd < -100) {
-      // Swipe down - go to previous page
-      navigateToPage(currentPage - 1);
+      // Swipe down - go to previous page/paragraph
+      navigatePrevious();
     }
 
     // Show controls temporarily when tapping
     setShowControls(true);
     setTimeout(() => setShowControls(false), 3000);
   };
+
   // Handle wheel event for mouse scrolling
   const handleWheel = (e: React.WheelEvent) => {
-    // Prevent default scrolling behavior
     e.preventDefault();
-
-    // Wait until animation is complete to prevent rapid scrolling
     if (autoScrollActive) return;
-
-    // Check if there's significant scroll delta to prevent accidental scrolls
     if (Math.abs(e.deltaY) < 50) return;
 
     if (e.deltaY > 0) {
-      // Scroll down - go to next page
       setAutoScrollActive(true);
-      navigateToPage(currentPage + 1);
-      setTimeout(() => setAutoScrollActive(false), 1000); // Longer delay for better control
+      navigateNext();
+      setTimeout(() => setAutoScrollActive(false), 500);
     } else if (e.deltaY < 0) {
-      // Scroll up - go to previous page
       setAutoScrollActive(true);
-      navigateToPage(currentPage - 1);
-      setTimeout(() => setAutoScrollActive(false), 1000); // Longer delay for better control
+      navigatePrevious();
+      setTimeout(() => setAutoScrollActive(false), 500);
     }
   };
 
-  // Toggle controls visibility when clicking the screen
+  // Toggle controls visibility
   const handleScreenTap = () => {
     setShowControls(!showControls);
     setTimeout(() => setShowControls(false), 3000);
   };
-  // Save reading progress
-  const saveReadingProgress = useCallback(
-    (page: number) => {
-      if (!user || !comic) return;
 
-      // Calculate progress percentage
-      const progress = Math.round((page / mockPages.length) * 100);
-
-      // Create new history item
-      const historyItem = {
-        comicId: comic.id,
-        lastReadPage: page,
-        lastReadAt: new Date().toISOString(),
-        progress,
-      };
-
-      // Check if we already have a history entry for this comic
-      const existingHistoryIndex = user.history.findIndex(
-        (h) => h.comicId === comic.id
-      );
-
-      // Create a new history array
-      let newHistory;
-      if (existingHistoryIndex >= 0) {
-        // Update existing entry
-        newHistory = [...user.history];
-        newHistory[existingHistoryIndex] = historyItem;
-      } else {
-        // Add new entry
-        newHistory = [...user.history, historyItem];
-      } // Update user
-      updateUser({ history: newHistory });
-    },
-    [user, comic, mockPages.length, updateUser]
-  );
-
-  // Auto-save reading progress
-  useEffect(() => {
-    if (!user || !comic) return;
-
-    // Debounce the save operation to avoid too many updates
-    const saveTimeout = setTimeout(() => {
-      saveReadingProgress(currentPage);
-    }, 500);
-
-    return () => clearTimeout(saveTimeout);
-  }, [currentPage, comic, user, saveReadingProgress]);
-
-  // Handle audio time updates
-  const handleTimeUpdate = () => {
-    if (audioRef.current) {
-      const progress =
-        (audioRef.current.currentTime / audioRef.current.duration) * 100;
-      setAudioProgress(isNaN(progress) ? 0 : progress);
-    }
-  };
-
-  // Handle audio playback ending
-  const handleAudioEnded = () => {
-    setIsPlaying(false);
-    setAudioProgress(0);
-  };
-
-  const handlePlayPause = () => {
-    if (!audioRef.current) return;
-
-    if (isPlaying) {
-      audioRef.current.pause();
+  // Navigation functions
+  const navigateNext = () => {
+    if (isTextStory) {
+      const currentChapterData = textChapters[currentChapter];
+      if (currentParagraph < currentChapterData.paragraphs.length - 1) {
+        setCurrentParagraph((prev) => prev + 1);
+      } else if (currentChapter < textChapters.length - 1) {
+        setCurrentChapter((prev) => prev + 1);
+        setCurrentParagraph(0);
+      }
     } else {
-      audioRef.current.play().catch((err) => {
-        console.error("Audio playback failed:", err);
-      });
+      navigateToPage(currentPage + 1);
     }
+  };
 
-    setIsPlaying(!isPlaying);
+  const navigatePrevious = () => {
+    if (isTextStory) {
+      if (currentParagraph > 0) {
+        setCurrentParagraph((prev) => prev - 1);
+      } else if (currentChapter > 0) {
+        setCurrentChapter((prev) => prev - 1);
+        setCurrentParagraph(
+          textChapters[currentChapter - 1].paragraphs.length - 1
+        );
+      }
+    } else {
+      navigateToPage(currentPage - 1);
+    }
   };
 
   const navigateToPage = (pageIndex: number) => {
-    if (pageIndex >= 0 && pageIndex < mockPages.length) {
+    if (pageIndex >= 0 && pageIndex < imagePages.length) {
       setCurrentPage(pageIndex);
-
-      // Call the onPageChange callback if provided
       if (onPageChange) {
         onPageChange(pageIndex);
       }
-
-      // Pause audio when changing pages
-      if (isPlaying) {
-        setIsPlaying(false);
-      }
-
-      // Reset audio progress
-      setAudioProgress(0);
     }
-  };
+  }; // Save reading progress
+  const saveReadingProgress = useCallback(() => {
+    if (!user || !comic) return;
 
-  const currentPageData = mockPages[currentPage];
+    const currentPosition = isTextStory
+      ? getCurrentTextPosition()
+      : currentPage;
+    const progress = Math.round(
+      (currentPosition / Math.max(totalPages - 1, 1)) * 100
+    );
 
-  return (
-    <div
-      ref={containerRef}
-      className="flex flex-col h-full bg-black relative overflow-hidden"
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-      onWheel={handleWheel}
-      onClick={handleScreenTap}
-    >
-      {/* Hidden audio element */}
-      {currentPageData.hasAudio && currentPageData.audioUrl && (
-        <audio
-          ref={audioRef}
-          src={currentPageData.audioUrl}
-          onTimeUpdate={handleTimeUpdate}
-          onEnded={handleAudioEnded}
-          preload="auto"
-          hidden
-        />
-      )}
+    const historyItem = {
+      comicId: comic.id,
+      lastReadPage: currentPosition,
+      lastReadAt: new Date().toISOString(),
+      progress: Math.min(progress, 100),
+    };
 
-      {/* Comic Content */}
-      <div className="flex-grow flex justify-center items-center bg-black">
+    const existingHistoryIndex = user.history.findIndex(
+      (h) => h.comicId === comic.id
+    );
+
+    let newHistory;
+    if (existingHistoryIndex >= 0) {
+      newHistory = [...user.history];
+      newHistory[existingHistoryIndex] = historyItem;
+    } else {
+      newHistory = [...user.history, historyItem];
+    }
+
+    updateUser({ history: newHistory });
+  }, [
+    user,
+    comic,
+    currentPage,
+    isTextStory,
+    totalPages,
+    updateUser,
+    getCurrentTextPosition,
+  ]);
+
+  // Auto-save reading progress
+  useEffect(() => {
+    const saveTimeout = setTimeout(() => {
+      saveReadingProgress();
+    }, 500);
+    return () => clearTimeout(saveTimeout);
+  }, [saveReadingProgress]);
+
+  // Auto-scroll text into view
+  useEffect(() => {
+    if (isTextStory && textContainerRef.current) {
+      const activeElement =
+        textContainerRef.current.querySelector(".paragraph-active");
+      if (activeElement) {
+        activeElement.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }
+  }, [currentParagraph, currentChapter, isTextStory]);
+
+  if (isTextStory) {
+    const currentChapterData = textChapters[currentChapter];
+    if (!currentChapterData) return null;
+
+    return (
+      <div
+        ref={containerRef}
+        className="flex flex-col h-full bg-gradient-to-br from-gray-900 to-black relative overflow-hidden"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onWheel={handleWheel}
+        onClick={handleScreenTap}
+      >
+        {/* Chapter Title */}
+        <div className="sticky top-0 z-10 bg-gradient-to-b from-black/90 to-transparent p-6">
+          <h2 className="text-2xl font-bold text-white text-center">
+            {currentChapterData.title}
+          </h2>
+        </div>
+
+        {/* Text Content */}
         <div
-          className={`transform transition-transform duration-700 ${
-            autoScrollActive ? "scale-95 opacity-90" : "scale-100 opacity-100"
-          }`}
+          ref={textContainerRef}
+          className="flex-grow px-6 pb-20 overflow-y-auto"
         >
-          <Image
-            src={currentPageData.imageUrl}
-            alt={`${comic.title} - Page ${currentPage + 1}`}
-            width={800}
-            height={1200}
-            className="max-h-[calc(100vh-100px)] w-auto object-contain"
-            priority
-          />
+          <div className="max-w-4xl mx-auto space-y-8">
+            {currentChapterData.paragraphs.map((paragraph, index) => (
+              <p
+                key={index}
+                className={`text-lg leading-relaxed transition-all duration-500 ${
+                  index === currentParagraph
+                    ? "paragraph-active text-white bg-white/5 p-6 rounded-xl border-l-4 border-primary shadow-lg"
+                    : index < currentParagraph
+                    ? "text-gray-400 opacity-60"
+                    : "text-gray-500 opacity-40"
+                }`}
+              >
+                {paragraph}
+              </p>
+            ))}
+          </div>
+        </div>
+
+        {/* Controls for Text Stories */}
+        {showControls && (
+          <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+            <div className="flex justify-between items-center text-white">
+              <div className="text-sm">
+                Chapter {currentChapter + 1} of {textChapters.length}
+              </div>
+              <div className="text-sm">
+                Paragraph {currentParagraph + 1} of{" "}
+                {currentChapterData.paragraphs.length}
+              </div>
+            </div>
+            <div className="text-center mt-2 text-white/60 text-xs">
+              Swipe up/down or scroll to navigate
+            </div>
+          </div>
+        )}
+
+        {/* Progress indicator for text */}
+        <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+          <div className="w-1 bg-gray-600 rounded-full h-32">
+            <div
+              className="w-full bg-primary rounded-full transition-all duration-300"
+              style={{
+                height: `${
+                  (getCurrentTextPosition() / Math.max(totalPages - 1, 1)) * 100
+                }%`,
+              }}
+            />
+          </div>
         </div>
       </div>
+    );
+  }
 
-      {/* Audio indicator */}
-      {currentPageData.hasAudio && (
-        <div className="absolute top-4 right-4 p-2 bg-primary/80 rounded-full">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 text-white"
-            viewBox="0 0 20 20"
-            fill="currentColor"
+  // Image story rendering
+  if (isImageStory && imagePages.length > 0) {
+    const currentPageData = imagePages[currentPage];
+
+    return (
+      <div
+        ref={containerRef}
+        className="flex flex-col h-full bg-black relative overflow-hidden"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onWheel={handleWheel}
+        onClick={handleScreenTap}
+      >
+        {/* Comic Content */}
+        <div className="flex-grow flex justify-center items-center bg-black">
+          <div
+            className={`transform transition-transform duration-700 ${
+              autoScrollActive ? "scale-95 opacity-90" : "scale-100 opacity-100"
+            }`}
           >
-            <path
-              fillRule="evenodd"
-              d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217z"
-              clipRule="evenodd"
+            <Image
+              src={currentPageData.imageUrl}
+              alt={`${comic.title} - Page ${currentPage + 1}`}
+              width={800}
+              height={1200}
+              className="max-h-[calc(100vh-100px)] w-auto object-contain"
+              priority
             />
-          </svg>
+          </div>
         </div>
-      )}
 
-      {/* Minimal Controls - shown only when tapped */}
-      {showControls && (
-        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent transition-opacity duration-300">
-          <div className="flex justify-between items-center">
-            {/* Page indicator */}
-            <div className="text-white/80 font-medium">
-              {currentPage + 1} / {mockPages.length}
+        {/* Controls for Image Stories */}
+        {showControls && (
+          <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+            <div className="flex justify-between items-center">
+              <div className="text-white/80 font-medium">
+                {currentPage + 1} / {imagePages.length}
+              </div>
             </div>
-
-            {/* Audio controls if available */}
-            {currentPageData.hasAudio && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handlePlayPause();
-                }}
-                className="p-2 bg-primary/80 rounded-full"
-              >
-                {isPlaying ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-white"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-white"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                )}
-              </button>
-            )}
+            <div className="text-center mt-2 text-white/60 text-xs">
+              Swipe up/down or scroll to navigate between pages
+            </div>
           </div>
+        )}
 
-          {/* Navigation guide */}
-          <div className="text-center mt-2 text-white/60 text-xs">
-            Swipe up/down or scroll to navigate between pages
+        {/* Progress dots for images */}
+        <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
+          <div className="flex flex-col space-y-1">
+            {imagePages.map((_, index) => (
+              <div
+                key={index}
+                className={`w-1.5 h-1.5 rounded-full ${
+                  index === currentPage ? "bg-primary" : "bg-white/30"
+                }`}
+              />
+            ))}
           </div>
         </div>
-      )}
+      </div>
+    );
+  }
 
-      {/* Progress dots */}
-      <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
-        <div className="flex flex-col space-y-1">
-          {mockPages.map((_, index) => (
-            <div
-              key={index}
-              className={`w-1.5 h-1.5 rounded-full ${
-                index === currentPage ? "bg-primary" : "bg-white/30"
-              }`}
-            />
-          ))}
-        </div>
+  // Fallback for stories without content
+  return (
+    <div className="flex flex-col h-full bg-black relative overflow-hidden items-center justify-center">
+      <div className="text-white text-center">
+        <h2 className="text-2xl font-bold mb-4">{comic.title}</h2>
+        <p className="text-gray-400">No content available for this story.</p>
       </div>
     </div>
   );
