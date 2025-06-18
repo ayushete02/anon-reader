@@ -3,7 +3,13 @@
 import { useUser } from "@/context/UserContext";
 import { Comic } from "@/lib/types";
 import Image from "next/image";
-import React, { TouchEvent, useEffect, useRef, useState } from "react";
+import React, {
+  TouchEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 interface ComicViewerProps {
   comic: Comic;
@@ -37,11 +43,23 @@ const ComicViewer: React.FC<ComicViewerProps> = ({
   const audioContextRef = useRef<AudioContext | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const { user, updateUser } = useUser();
-
   // Mock comic pages (in a real app, these would come from the API)
+  const pageImages = [
+    "https://m.media-amazon.com/images/I/51IFcninsvL._SX342_SY445_PQ23_.jpg",
+    "https://www.yourdecoration.com/cdn/shop/files/abystyle-abydco754-dc-comics-superman-poster-61x91-5cm_2e22d54f-c92d-4acb-a8f3-efc49d9ec202_500x.jpg?v=1721810611",
+    "https://i.ebayimg.com/images/g/z~wAAOSwHH5hCbDE/s-l1600.webp",
+    "https://knowherecomics.com/cdn/shop/products/0922DC144.jpg?v=1669153553&width=420",
+    "https://media.mycomicshop.com/n_iv/600/642625.jpg",
+    "https://media.mycomicshop.com/n_iv/600/5343551.jpg",
+    "https://m.media-amazon.com/images/I/51IFcninsvL._SX342_SY445_PQ23_.jpg",
+    "https://www.yourdecoration.com/cdn/shop/files/abystyle-abydco754-dc-comics-superman-poster-61x91-5cm_2e22d54f-c92d-4acb-a8f3-efc49d9ec202_500x.jpg?v=1721810611",
+    "https://i.ebayimg.com/images/g/z~wAAOSwHH5hCbDE/s-l1600.webp",
+    "https://knowherecomics.com/cdn/shop/products/0922DC144.jpg?v=1669153553&width=420",
+  ];
+
   const mockPages: ComicPage[] = Array.from({ length: 10 }, (_, i) => ({
     id: `page-${i}`,
-    imageUrl: comic.posterImage || `/comics/page-${i}.jpg`,
+    imageUrl: pageImages[i],
     hasAudio: i === 0 || i === 3 || i === 7, // Only some pages have audio
     audioUrl:
       i === 0
@@ -50,21 +68,8 @@ const ComicViewer: React.FC<ComicViewerProps> = ({
         ? "/audio/page4.mp3"
         : i === 7
         ? "/audio/page8.mp3"
-        : undefined,
-    caption: `Page ${i + 1} of ${comic.title}`,
+        : undefined,    caption: `Page ${i + 1} of ${comic.title}`,
   }));
-
-  // Auto-save reading progress
-  useEffect(() => {
-    if (!user || !comic) return;
-
-    // Debounce the save operation to avoid too many updates
-    const saveTimeout = setTimeout(() => {
-      saveReadingProgress(currentPage);
-    }, 500);
-
-    return () => clearTimeout(saveTimeout);
-  }, [currentPage, comic.id]);
 
   // Handle touch events for vertical swiping
   const handleTouchStart = (e: TouchEvent) => {
@@ -88,7 +93,6 @@ const ComicViewer: React.FC<ComicViewerProps> = ({
     setShowControls(true);
     setTimeout(() => setShowControls(false), 3000);
   };
-
   // Handle wheel event for mouse scrolling
   const handleWheel = (e: React.WheelEvent) => {
     // Prevent default scrolling behavior
@@ -97,16 +101,19 @@ const ComicViewer: React.FC<ComicViewerProps> = ({
     // Wait until animation is complete to prevent rapid scrolling
     if (autoScrollActive) return;
 
+    // Check if there's significant scroll delta to prevent accidental scrolls
+    if (Math.abs(e.deltaY) < 50) return;
+
     if (e.deltaY > 0) {
       // Scroll down - go to next page
       setAutoScrollActive(true);
       navigateToPage(currentPage + 1);
-      setTimeout(() => setAutoScrollActive(false), 700); // Animation duration
+      setTimeout(() => setAutoScrollActive(false), 1000); // Longer delay for better control
     } else if (e.deltaY < 0) {
       // Scroll up - go to previous page
       setAutoScrollActive(true);
       navigateToPage(currentPage - 1);
-      setTimeout(() => setAutoScrollActive(false), 700); // Animation duration
+      setTimeout(() => setAutoScrollActive(false), 1000); // Longer delay for better control
     }
   };
 
@@ -115,41 +122,53 @@ const ComicViewer: React.FC<ComicViewerProps> = ({
     setShowControls(!showControls);
     setTimeout(() => setShowControls(false), 3000);
   };
-
   // Save reading progress
-  const saveReadingProgress = (page: number) => {
+  const saveReadingProgress = useCallback(
+    (page: number) => {
+      if (!user || !comic) return;
+
+      // Calculate progress percentage
+      const progress = Math.round((page / mockPages.length) * 100);
+
+      // Create new history item
+      const historyItem = {
+        comicId: comic.id,
+        lastReadPage: page,
+        lastReadAt: new Date().toISOString(),
+        progress,
+      };
+
+      // Check if we already have a history entry for this comic
+      const existingHistoryIndex = user.history.findIndex(
+        (h) => h.comicId === comic.id
+      );
+
+      // Create a new history array
+      let newHistory;
+      if (existingHistoryIndex >= 0) {
+        // Update existing entry
+        newHistory = [...user.history];
+        newHistory[existingHistoryIndex] = historyItem;
+      } else {
+        // Add new entry
+        newHistory = [...user.history, historyItem];
+      }      // Update user
+      updateUser({ history: newHistory });
+    },
+    [user, comic, mockPages.length, updateUser]
+  );
+
+  // Auto-save reading progress
+  useEffect(() => {
     if (!user || !comic) return;
 
-    // Calculate progress percentage
-    const progress = Math.round((page / mockPages.length) * 100);
+    // Debounce the save operation to avoid too many updates
+    const saveTimeout = setTimeout(() => {
+      saveReadingProgress(currentPage);
+    }, 500);
 
-    // Create new history item
-    const historyItem = {
-      comicId: comic.id,
-      lastReadPage: page,
-      lastReadAt: new Date().toISOString(),
-      progress,
-    };
-
-    // Check if we already have a history entry for this comic
-    const existingHistoryIndex = user.history.findIndex(
-      (h) => h.comicId === comic.id
-    );
-
-    // Create a new history array
-    let newHistory;
-    if (existingHistoryIndex >= 0) {
-      // Update existing entry
-      newHistory = [...user.history];
-      newHistory[existingHistoryIndex] = historyItem;
-    } else {
-      // Add new entry
-      newHistory = [...user.history, historyItem];
-    }
-
-    // Update user
-    updateUser({ history: newHistory });
-  };
+    return () => clearTimeout(saveTimeout);
+  }, [currentPage, comic, user, saveReadingProgress]);
 
   // Handle audio time updates
   const handleTimeUpdate = () => {

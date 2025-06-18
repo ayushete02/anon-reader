@@ -40,7 +40,10 @@ export default function Home() {
           <div className="flex gap-4 items-center flex-col sm:flex-row">
             <button
               className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-primary text-white font-bold gap-2 hover:bg-red-700 text-lg sm:text-xl h-14 sm:h-16 px-8 sm:px-10 w-64 sm:w-72"
-              onClick={() => setShowLoginForm(true)}
+              // onClick={() => setShowLoginForm(true)}
+              onClick={() => {
+                router.push("/onboarding");
+              }}
             >
               Get Started
             </button>

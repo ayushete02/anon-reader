@@ -69,7 +69,7 @@ export const MOCK_COMICS: Comic[] = [
     title: "The Last Guardian",
     description:
       "An epic tale of a young warrior tasked with protecting the last magical creature in the realm.",
-    posterImage: "/comics/comic1.jpg",
+    posterImage: "https://m.media-amazon.com/images/I/51IFcninsvL._SX342_SY445_PQ23_.jpg",
     categories: ["Fantasy", "Adventure", "Epic & Grandiose"],
     hasAudio: true,
     hasImages: true,
@@ -82,7 +82,7 @@ export const MOCK_COMICS: Comic[] = [
     title: "Midnight Chronicles",
     description:
       "A dark detective story set in a dystopian future where night never ends.",
-    posterImage: "/comics/comic2.jpg",
+    posterImage: "https://www.yourdecoration.com/cdn/shop/files/abystyle-abydco754-dc-comics-superman-poster-61x91-5cm_2e22d54f-c92d-4acb-a8f3-efc49d9ec202_500x.jpg?v=1721810611",
     categories: ["Noir", "Mystery", "Dark & Brooding"],
     hasAudio: true,
     hasImages: true,
@@ -95,7 +95,7 @@ export const MOCK_COMICS: Comic[] = [
     title: "Hearth & Home",
     description:
       "A slice-of-life story about finding peace and connection in a small magical village.",
-    posterImage: "/comics/comic3.jpg",
+    posterImage: "https://i.ebayimg.com/images/g/z~wAAOSwHH5hCbDE/s-l1600.webp",
     categories: ["Slice of Life", "Fantasy", "Cozy & Heartwarming"],
     hasAudio: false,
     hasImages: true,
@@ -108,20 +108,19 @@ export const MOCK_COMICS: Comic[] = [
     title: "Quantum Break",
     description:
       "When a physics experiment goes wrong, reality itself begins to fracture.",
-    posterImage: "/comics/comic4.jpg",
+    posterImage: "https://knowherecomics.com/cdn/shop/products/0922DC144.jpg?v=1669153553&width=420",
     categories: ["Sci-Fi", "Thriller", "Mind-Bending & Mysterious"],
     hasAudio: true,
     hasImages: true,
     releaseDate: "2024-04-05",
     popularity: 91,
     rating: 4.6,
-  },
-  {
+  },  {
     id: "5",
     title: "The Jester's Court",
     description:
       "A witty tale of political intrigue told from the perspective of a royal jester.",
-    posterImage: "/comics/comic5.jpg",
+    posterImage: "https://media.mycomicshop.com/n_iv/600/642625.jpg",
     categories: ["Comedy", "Historical", "Witty & Charming"],
     hasAudio: false,
     hasImages: true,
@@ -134,7 +133,7 @@ export const MOCK_COMICS: Comic[] = [
     title: "Final Stand",
     description:
       "The heart-wrenching story of the last survivors of a galactic war.",
-    posterImage: "/comics/comic6.jpg",
+    posterImage: "https://media.mycomicshop.com/n_iv/600/5343551.jpg",
     categories: ["Sci-Fi", "Drama", "Tragic & Cathartic"],
     hasAudio: true,
     hasImages: true,
@@ -147,7 +146,7 @@ export const MOCK_COMICS: Comic[] = [
     title: "Velocity",
     description:
       "A high-octane story about underground racing and the dangerous world it inhabits.",
-    posterImage: "/comics/comic7.jpg",
+    posterImage: "https://m.media-amazon.com/images/I/51IFcninsvL._SX342_SY445_PQ23_.jpg",
     categories: ["Action", "Thriller", "Action-Packed & Thrilling"],
     hasAudio: true,
     hasImages: true,
@@ -160,7 +159,7 @@ export const MOCK_COMICS: Comic[] = [
     title: "Shadow Twins",
     description:
       "A woman discovers her long-lost twin is living in a parallel dimension.",
-    posterImage: "/comics/comic8.jpg",
+    posterImage: "https://www.yourdecoration.com/cdn/shop/files/abystyle-abydco754-dc-comics-superman-poster-61x91-5cm_2e22d54f-c92d-4acb-a8f3-efc49d9ec202_500x.jpg?v=1721810611",
     categories: ["Drama", "Sci-Fi", "Identity reveal"],
     hasAudio: false,
     hasImages: true,
@@ -172,20 +171,19 @@ export const MOCK_COMICS: Comic[] = [
     id: "9",
     title: "Betrayal's Price",
     description: "A royal advisor plots against the throne, but at what cost?",
-    posterImage: "/comics/comic9.jpg",
+    posterImage: "https://i.ebayimg.com/images/g/z~wAAOSwHH5hCbDE/s-l1600.webp",
     categories: ["Fantasy", "Drama", "Hidden betrayal"],
     hasAudio: true,
     hasImages: true,
     releaseDate: "2024-09-02",
     popularity: 89,
     rating: 4.7,
-  },
-  {
+  },  {
     id: "10",
     title: "Time Fracture",
     description:
       "When the timeline splinters, a historian must put it back together.",
-    posterImage: "/comics/comic10.jpg",
+    posterImage: "https://knowherecomics.com/cdn/shop/products/0922DC144.jpg?v=1669153553&width=420",
     categories: ["Sci-Fi", "Adventure", "Time/reality bend"],
     hasAudio: true,
     hasImages: true,
@@ -198,7 +196,7 @@ export const MOCK_COMICS: Comic[] = [
     title: "The Long Con",
     description:
       "A con artist finally meets his match when he targets the wrong mark.",
-    posterImage: "/comics/comic11.jpg",
+    posterImage: "https://media.mycomicshop.com/n_iv/600/642625.jpg",
     categories: ["Crime", "Thriller", "Karma hits hard"],
     hasAudio: true,
     hasImages: true,
@@ -210,7 +208,7 @@ export const MOCK_COMICS: Comic[] = [
     id: "12",
     title: "Eternal Love",
     description: "A romance that spans centuries and multiple lifetimes.",
-    posterImage: "/comics/comic12.jpg",
+    posterImage: "https://media.mycomicshop.com/n_iv/600/5343551.jpg",
     categories: ["Romance", "Fantasy", "Love wins"],
     hasAudio: false,
     hasImages: true,
