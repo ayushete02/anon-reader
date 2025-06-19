@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
+import { signOutGoogle } from "@/lib/google-auth";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -46,7 +47,11 @@ const Navbar = () => {
   }, []);
 
   // Handle logout
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    // Sign out from Google if user was authenticated with Google
+    await signOutGoogle();
+
+    // Clear local user state
     logout();
     router.push("/");
   };
@@ -86,7 +91,7 @@ const Navbar = () => {
             }`}
           >
             Trending
-          </Link>
+          </Link>{" "}
           <Link
             href="/browse?category=new"
             className={`text-sm font-medium hover:text-primary transition-colors ${
@@ -95,6 +100,16 @@ const Navbar = () => {
           >
             New Releases
           </Link>
+          {user && (
+            <Link
+              href="/producer"
+              className={`text-sm font-medium hover:text-primary transition-colors ${
+                pathname === "/producer" ? "text-primary" : "text-gray-300"
+              }`}
+            >
+              Create Story
+            </Link>
+          )}
         </div>{" "}
         {/* User Menu */}
         <div className="flex items-center">
