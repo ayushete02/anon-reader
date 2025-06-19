@@ -59,28 +59,6 @@ const HeroBanner: React.FC<HeroBannerProps> = ({ comic }) => {
             </div>
             <span className="mx-2">•</span>
             <span>{new Date(comic.releaseDate).getFullYear()}</span>
-            {comic.hasAudio && (
-              <>
-                <span className="mx-2">•</span>
-                <div className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.536a5 5 0 001.414-7.072m-2.828 9.9a9 9 0 010-12.728"
-                    />
-                  </svg>
-                  <span className="ml-1">Audio Available</span>
-                </div>
-              </>
-            )}
           </div>
 
           {/* Description */}
