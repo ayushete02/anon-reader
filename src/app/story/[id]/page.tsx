@@ -40,31 +40,30 @@ const StoryDetailPage = () => {
   const handleBack = () => {
     router.push("/browse");
   };
-
   if (loading || !story) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex justify-center items-center">
+      <div className="min-h-screen bg-secondary flex justify-center items-center">
         <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary"></div>
       </div>
     );
   }
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white relative overflow-hidden">
+    <div className="min-h-screen bg-secondary text-accent relative overflow-hidden">
+      {" "}
       {/* Background blur effect */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-purple-500/5" />
-        <div className="absolute top-20 left-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-20 left-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[500px] bg-gradient-to-r from-primary/3 to-purple-500/3 rounded-full blur-3xl" />
       </div>
-
       {/* Navigation Header */}
       <nav className="relative z-20 p-6">
         <button
           onClick={handleBack}
-          className="group flex items-center gap-3 text-gray-300 hover:text-white transition-all duration-300 hover:scale-105"
+          className="group flex items-center gap-3 text-accent/80 hover:text-accent transition-all duration-300 hover:scale-105"
         >
-          <div className="p-2 bg-white/10 backdrop-blur-sm rounded-full group-hover:bg-white/20 transition-all duration-300">
+          <div className="p-2 bg-accent/10 backdrop-blur-sm rounded-full group-hover:bg-accent/20 transition-all duration-300">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -83,7 +82,6 @@ const StoryDetailPage = () => {
           <span className="font-medium">Back to Browse</span>
         </button>
       </nav>
-
       {/* Main Content */}
       <div className="relative z-10 px-6 pb-12">
         <div className="max-w-7xl mx-auto">
@@ -95,42 +93,41 @@ const StoryDetailPage = () => {
                 <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-purple-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-500" />
 
                 <div className="relative">
+                  {" "}
                   <Image
                     src={story.posterImage}
                     alt={story.title}
                     width={500}
                     height={750}
-                    className="w-full h-auto rounded-xl shadow-2xl border border-white/10 group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-auto rounded-xl shadow-2xl border border-accent/20 group-hover:scale-105 transition-transform duration-500"
                   />
-
-                  {/* Story Type Badge */}
+                  {/* Story Type Badge */}{" "}
                   <div className="absolute top-4 right-4">
                     <div
-                      className={`px-4 py-2 rounded-full backdrop-blur-md border border-white/20 text-sm font-semibold ${
+                      className={`px-4 py-2 rounded-full backdrop-blur-md border border-accent/30 text-sm font-semibold ${
                         story.type === "text"
-                          ? "bg-blue-500/80 text-white shadow-lg shadow-blue-500/25"
-                          : "bg-emerald-500/80 text-white shadow-lg shadow-emerald-500/25"
+                          ? "bg-blue-500/80 text-accent shadow-lg shadow-blue-500/25"
+                          : "bg-emerald-500/80 text-accent shadow-lg shadow-emerald-500/25"
                       }`}
                     >
                       {story.type === "text"
                         ? "📖 Text Story"
                         : "🎨 Visual Story"}
                     </div>
-                  </div>
-
+                  </div>{" "}
                   {/* Reading Progress Overlay */}
                   {readingProgress && (
                     <div className="absolute bottom-4 left-4 right-4">
-                      <div className="bg-black/60 backdrop-blur-md rounded-lg p-3 border border-white/10">
+                      <div className="bg-secondary/80 backdrop-blur-md rounded-lg p-3 border border-accent/20">
                         <div className="flex justify-between items-center mb-2">
-                          <span className="text-xs text-gray-300">
+                          <span className="text-xs text-accent/70">
                             Progress
                           </span>
                           <span className="text-xs text-primary font-semibold">
                             {readingProgress.progress}%
                           </span>
                         </div>
-                        <div className="w-full bg-gray-700/50 rounded-full h-1.5">
+                        <div className="w-full bg-accent/20 rounded-full h-1.5">
                           <div
                             className="bg-gradient-to-r from-primary to-purple-500 h-1.5 rounded-full transition-all duration-300"
                             style={{ width: `${readingProgress.progress}%` }}
@@ -147,15 +144,15 @@ const StoryDetailPage = () => {
             <div className="lg:col-span-3 space-y-8">
               {/* Title and Meta */}
               <div className="space-y-6">
+                {" "}
                 <div>
-                  <h1 className="text-5xl lg:text-6xl font-bold bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent leading-tight">
+                  <h1 className="text-5xl lg:text-6xl font-bold bg-gradient-to-r from-accent via-accent/90 to-accent/80 bg-clip-text text-transparent leading-tight">
                     {story.title}
                   </h1>
-                </div>
-
+                </div>{" "}
                 {/* Stats */}
-                <div className="flex flex-wrap items-center gap-6 text-gray-300">
-                  <div className="flex items-center gap-2 bg-white/5 backdrop-blur-sm rounded-lg px-3 py-2 border border-white/10">
+                <div className="flex flex-wrap items-center gap-6 text-accent/80">
+                  <div className="flex items-center gap-2 bg-accent/10 backdrop-blur-sm rounded-lg px-3 py-2 border border-accent/20">
                     <svg
                       className="w-5 h-5 text-yellow-400"
                       fill="currentColor"
@@ -166,9 +163,9 @@ const StoryDetailPage = () => {
                     <span className="font-semibold">{story.rating}</span>
                   </div>
 
-                  <div className="flex items-center gap-2 bg-white/5 backdrop-blur-sm rounded-lg px-3 py-2 border border-white/10">
+                  <div className="flex items-center gap-2 bg-accent/10 backdrop-blur-sm rounded-lg px-3 py-2 border border-accent/20">
                     <svg
-                      className="w-5 h-5 text-gray-400"
+                      className="w-5 h-5 text-accent/60"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -183,7 +180,7 @@ const StoryDetailPage = () => {
                     <span>{new Date(story.releaseDate).getFullYear()}</span>
                   </div>
 
-                  <div className="flex items-center gap-2 bg-white/5 backdrop-blur-sm rounded-lg px-3 py-2 border border-white/10">
+                  <div className="flex items-center gap-2 bg-accent/10 backdrop-blur-sm rounded-lg px-3 py-2 border border-accent/20">
                     <svg
                       className="w-5 h-5 text-green-400"
                       fill="none"
@@ -199,39 +196,36 @@ const StoryDetailPage = () => {
                     </svg>
                     <span>{story.popularity}% Match</span>
                   </div>
-                </div>
-
+                </div>{" "}
                 {/* Categories */}
                 <div className="flex flex-wrap gap-3">
                   {story.categories.map((category, index) => (
                     <span
                       key={category}
-                      className={`px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm border border-white/20 transition-all duration-300 hover:scale-105 ${
+                      className={`px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm border border-accent/30 transition-all duration-300 hover:scale-105 ${
                         index % 3 === 0
-                          ? "bg-primary/20 text-primary-300"
+                          ? "bg-primary/20 text-primary"
                           : index % 3 === 1
-                          ? "bg-purple-500/20 text-purple-300"
-                          : "bg-emerald-500/20 text-emerald-300"
+                          ? "bg-purple-500/20 text-purple-400"
+                          : "bg-emerald-500/20 text-emerald-400"
                       }`}
                     >
                       {category}
                     </span>
                   ))}
                 </div>
-              </div>
-
+              </div>{" "}
               {/* Description */}
               <div className="space-y-4">
-                <h2 className="text-2xl font-semibold text-gray-200">
+                <h2 className="text-2xl font-semibold text-accent">
                   Story Description
                 </h2>
-                <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-                  <p className="text-gray-300 leading-relaxed text-lg">
+                <div className="bg-accent/5 backdrop-blur-sm rounded-xl p-6 border border-accent/20 shadow-lg">
+                  <p className="text-accent/90 leading-relaxed text-lg">
                     {story.description}
                   </p>
                 </div>
               </div>
-
               {/* Action Button */}
               <div className="pt-4">
                 <button
