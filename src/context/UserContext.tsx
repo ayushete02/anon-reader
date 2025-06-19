@@ -7,12 +7,14 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
+import { useSession } from "next-auth/react";
 import { User } from "@/lib/types";
 import {
   getUserFromLocalStorage,
   saveUserToLocalStorage,
   clearUserFromLocalStorage,
 } from "@/lib/utils";
+import { getCurrentGoogleUser } from "@/lib/google-auth";
 
 interface UserContextType {
   user: User | null;
@@ -38,17 +40,36 @@ interface UserProviderProps {
 }
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
+  const { data: session, status } = useSession();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Load user from localStorage on initial render
+  // Load user from localStorage or session on initial render
   useEffect(() => {
-    const storedUser = getUserFromLocalStorage();
-    if (storedUser) {
-      setUser(storedUser);
+    const loadUser = async () => {
+      // If NextAuth session exists, prioritize that
+      if (session?.user) {
+        const googleUser = await getCurrentGoogleUser();
+        if (googleUser) {
+          setUser(googleUser);
+          setLoading(false);
+          return;
+        }
+      }
+
+      // Otherwise, check localStorage
+      const storedUser = getUserFromLocalStorage();
+      if (storedUser) {
+        setUser(storedUser);
+      }
+
+      setLoading(false);
+    };
+
+    if (status !== "loading") {
+      loadUser();
     }
-    setLoading(false);
-  }, []);
+  }, [session, status]);
 
   // Login function to set user in state and localStorage
   const login = (userData: User) => {
