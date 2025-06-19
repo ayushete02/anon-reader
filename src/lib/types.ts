@@ -27,9 +27,13 @@ export interface User {
   id: string;
   email: string;
   name?: string;
+  avatar?: string; // User profile image URL
   persona?: UserPersona;
+  preferences?: UserPreferences; // User settings and preferences
   favorites: string[]; // Comic IDs that the user has favorited
   history: ReadingHistory[];
+  readingHistory?: ReadingHistory[]; // Alternative name for backwards compatibility
+  isProducer?: boolean; // Whether user can create comics
   createdAt: string;
 }
 
@@ -38,6 +42,12 @@ export interface ReadingHistory {
   lastReadPage: number;
   lastReadAt: string;
   progress: number; // 0-100 percentage
+}
+
+export interface UserPreferences {
+  theme: "light" | "dark";
+  autoplay: boolean;
+  notifications: boolean;
 }
 
 export interface UserPersona {
@@ -113,3 +123,82 @@ export const PERSONA_QUESTIONS = {
     ],
   },
 };
+
+// Producer/Story Creation Types
+export interface Character {
+  id: string;
+  name: string;
+  description: string;
+  type: CharacterType;
+  imageUrl?: string;
+  isGenerated?: boolean; // Whether the image was AI-generated
+}
+
+export type CharacterType =
+  | "protagonist"
+  | "antagonist"
+  | "supporting"
+  | "love-interest"
+  | "mentor"
+  | "comic-relief"
+  | "mysterious"
+  | "villain";
+
+export interface StoryDraft {
+  id?: string;
+  title: string;
+  description: string;
+  plot: string; // Max 2000 words
+  type: "text" | "image";
+  characters: Character[];
+  categories: string[];
+  posterImage?: string;
+  createdBy: string; // User ID
+  status: "draft" | "published" | "generating";
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PublishedStory extends Comic {
+  createdBy: string;
+  publishedAt: string;
+}
+
+export const CHARACTER_TYPES: { value: CharacterType; label: string }[] = [
+  { value: "protagonist", label: "Protagonist" },
+  { value: "antagonist", label: "Antagonist" },
+  { value: "supporting", label: "Supporting Character" },
+  { value: "love-interest", label: "Love Interest" },
+  { value: "mentor", label: "Mentor" },
+  { value: "comic-relief", label: "Comic Relief" },
+  { value: "mysterious", label: "Mysterious Character" },
+  { value: "villain", label: "Villain" },
+];
+
+export const STORY_CATEGORIES = [
+  "Action-Packed & Thrilling",
+  "Cozy & Heartwarming",
+  "Dark & Brooding",
+  "Epic & Grandiose",
+  "Mind-Bending & Mysterious",
+  "Witty & Charming",
+  "Tragic & Cathartic",
+  "Love wins",
+  "Justice served",
+  "Identity reveal",
+  "Hidden betrayal",
+  "Time/reality bend",
+  "Karma hits hard",
+  "Justice",
+  "Mercy",
+  "Perfect Plan",
+  "Glorious Mess",
+  "Calculated Risk",
+  "Leap of Faith",
+  "Shocking Twist",
+  "Satisfying Payoff",
+  "Unshakeable Hope",
+  "Brutal Honesty",
+  "Greater Good",
+  "Personal Bond",
+];
