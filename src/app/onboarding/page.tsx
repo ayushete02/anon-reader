@@ -6,6 +6,7 @@ import OnboardingLayout from "@/components/OnboardingLayout";
 import QuestionOptionsSelector from "@/components/QuestionOptionsSelector";
 import { PERSONA_QUESTIONS } from "@/lib/types";
 import { determinePersonaType } from "@/lib/utils";
+import AuthGuard from "@/components/AuthGuard";
 
 const steps = [
   "welcome",
@@ -236,15 +237,16 @@ const OnboardingPage = () => {
       localStorage.setItem("userPersona", JSON.stringify(persona));
     }
   }, [persona]);
-
   return (
-    <OnboardingLayout
-      currentStep={currentStepIndex + 1}
-      totalSteps={totalSteps}
-      title={getStepTitle()}
-    >
-      {renderContent()}
-    </OnboardingLayout>
+    <AuthGuard requireAuth={true}>
+      <OnboardingLayout
+        currentStep={currentStepIndex + 1}
+        totalSteps={totalSteps}
+        title={getStepTitle()}
+      >
+        {renderContent()}
+      </OnboardingLayout>
+    </AuthGuard>
   );
 };
 

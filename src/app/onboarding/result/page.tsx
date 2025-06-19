@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { UserPersona } from "@/lib/types";
+import AuthGuard from "@/components/AuthGuard";
 
 const OnboardingResultPage = () => {
   const router = useRouter();
@@ -27,38 +28,54 @@ const OnboardingResultPage = () => {
     return (
       <div className="min-h-screen bg-[#87F29A] flex flex-col justify-center items-center">
         <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-black"></div>
-        <p className="mt-4 text-black font-semibold">Creating your unique profile...</p>
+        <p className="mt-4 text-black font-semibold">
+          Creating your unique profile...
+        </p>
       </div>
     );
   }
-
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#87F29A] px-2 py-4">
-      <div className="w-full max-w-xs sm:max-w-sm bg-[#87F29A] rounded-[2.5rem] shadow-xl flex flex-col px-6 py-8 relative items-center" style={{ boxShadow: "0 8px 32px 0 rgba(34, 60, 80, 0.2)" }}>
-        {/* Persona Type Pill */}
-        <span className="inline-block bg-black text-white text-lg font-bold py-2 px-6 rounded-full mb-6 mt-2">
-          {persona.personaType || "Your Persona"}
-        </span>
-        {/* Main Text */}
-        <h1 className="text-2xl font-extrabold text-black text-center mb-4 leading-tight">
-          You&apos;re a {persona.personaType ? <span className="text-black">{persona.personaType}</span> : "unique reader"}!
-        </h1>
-        <p className="text-lg text-black text-center mb-8">
-          {getPersonaDescription(persona.personaType || "")}
-        </p>
-        {/* Explore Button */}
-        <button
-          onClick={handleContinue}
-          className="w-full flex items-center rounded-full overflow-hidden shadow-lg mb-6 mt-2"
-          style={{ height: "56px" }}
+    <AuthGuard requireAuth={true}>
+      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#87F29A] px-2 py-4">
+        <div
+          className="w-full max-w-xs sm:max-w-sm bg-[#87F29A] rounded-[2.5rem] shadow-xl flex flex-col px-6 py-8 relative items-center"
+          style={{ boxShadow: "0 8px 32px 0 rgba(34, 60, 80, 0.2)" }}
         >
-          <span className="flex-1 h-full bg-white flex items-center justify-center text-black font-bold text-lg rounded-l-full">Explore</span>
-          <span className="flex items-center justify-center bg-black h-full px-6 rounded-r-full">
-            <span className="text-white text-2xl font-bold">&gt;&gt;&gt;</span>
+          {/* Persona Type Pill */}
+          <span className="inline-block bg-black text-white text-lg font-bold py-2 px-6 rounded-full mb-6 mt-2">
+            {persona.personaType || "Your Persona"}
           </span>
-        </button>
+          {/* Main Text */}
+          <h1 className="text-2xl font-extrabold text-black text-center mb-4 leading-tight">
+            You&apos;re a{" "}
+            {persona.personaType ? (
+              <span className="text-black">{persona.personaType}</span>
+            ) : (
+              "unique reader"
+            )}
+            !
+          </h1>
+          <p className="text-lg text-black text-center mb-8">
+            {getPersonaDescription(persona.personaType || "")}
+          </p>
+          {/* Explore Button */}
+          <button
+            onClick={handleContinue}
+            className="w-full flex items-center rounded-full overflow-hidden shadow-lg mb-6 mt-2"
+            style={{ height: "56px" }}
+          >
+            <span className="flex-1 h-full bg-white flex items-center justify-center text-black font-bold text-lg rounded-l-full">
+              Explore
+            </span>
+            <span className="flex items-center justify-center bg-black h-full px-6 rounded-r-full">
+              <span className="text-white text-2xl font-bold">
+                &gt;&gt;&gt;
+              </span>
+            </span>{" "}
+          </button>
+        </div>
       </div>
-    </div>
+    </AuthGuard>
   );
 };
 

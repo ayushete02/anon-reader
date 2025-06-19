@@ -9,6 +9,56 @@ This document outlines the required backend API endpoints and data structures fo
 - **Expected Backend**: RESTful API with JSON responses
 - **Database**: Expected to support relational data with proper indexing
 
+## Frontend Authentication System
+
+### Route Protection Strategy
+The frontend implements a sophisticated authentication system with the following route protection:
+
+#### **Public Routes** (No Authentication Required)
+- `/` - Landing page with login functionality
+- `/browse` - Browse comics (read-only access)
+- `/story/[id]` - Story viewing pages (browse only, reading requires auth)
+
+#### **Protected Routes** (Authentication Required)
+- `/home` - User dashboard (personalized landing page for logged-in users)
+- `/onboarding` - Personality assessment setup
+- `/onboarding/result` - Onboarding completion page
+- `/producer` - Story creation tools
+- `/profile` - User profile management
+
+#### **Interactive Authentication Features**
+- **Smart Login Popups**: Non-authenticated users see login modals when trying to access premium features
+- **Comic Reading Protection**: Clicking to read comics shows authentication popup for non-logged users
+- **Seamless UX**: Users can browse and explore content freely, authentication only required for engagement
+
+#### **Authentication Flow**
+1. **Non-logged-in user visits `/`** → Landing page with login options
+2. **User completes login** → Redirected based on persona completion:
+   - If persona complete → `/browse` 
+   - If no persona → `/onboarding`
+3. **Logged-in user can access `/home`** → Personalized dashboard matching landing page design
+4. **Route protection** → AuthGuard component handles redirects and login popups
+
+### Required Backend Support
+The frontend authentication system requires these backend capabilities:
+
+#### **Session Management**
+- Session token validation for protected routes
+- User session persistence across browser sessions
+- Logout functionality that invalidates tokens
+
+#### **User State Tracking**
+- Persona completion status tracking
+- Reading progress persistence
+- Favorites and user preferences storage
+
+#### **Authentication Events**
+The backend should track these authentication-related events:
+- User login/logout events
+- First-time user registration
+- Persona completion events
+- Failed authentication attempts
+
 ## Core Data Models
 
 ### User
@@ -153,6 +203,44 @@ Invalidate user session.
 {
   "success": true,
   "message": "Logged out successfully"
+}
+```
+
+#### `POST /api/auth/verify-session`
+Verify if current session token is valid.
+
+**Headers:** `Authorization: Bearer {sessionToken}`
+
+**Response:**
+```json
+{
+  "success": true,
+  "valid": true,
+  "user": User
+}
+```
+
+#### `GET /api/auth/status`
+Get current authentication status and user state.
+
+**Headers:** `Authorization: Bearer {sessionToken}` (optional)
+
+**Response (Authenticated):**
+```json
+{
+  "success": true,
+  "authenticated": true,
+  "user": User,
+  "hasPersona": true
+}
+```
+
+**Response (Not Authenticated):**
+```json
+{
+  "success": true,
+  "authenticated": false,
+  "hasPersona": false
 }
 ```
 
@@ -462,6 +550,53 @@ Generate character image based on description.
 }
 ```
 
+### Authentication Tracking Endpoints
+
+#### `POST /api/auth/track-access-attempt`
+Track attempts to access protected content by non-authenticated users.
+
+**Request Body:**
+```json
+{
+  "route": "string",           // The protected route attempted
+  "action": "string",          // Action attempted (e.g., "read_comic", "create_story")
+  "comicId"?: "string",        // If related to specific comic
+  "userAgent": "string",       // Browser user agent
+  "referrer"?: "string"        // Referring page
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Access attempt tracked"
+}
+```
+
+#### `POST /api/auth/track-login-popup`
+Track when authentication popup is shown to users.
+
+**Request Body:**
+```json
+{
+  "trigger": "string",         // What triggered the popup (e.g., "comic_read", "story_create")
+  "context": {
+    "route": "string",
+    "comicId"?: "string",
+    "timestamp": "string"      // ISO 8601 timestamp
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Popup event tracked"
+}
+```
+
 ### Analytics Endpoints (Optional)
 
 #### `POST /api/analytics/reading`
@@ -509,6 +644,10 @@ All endpoints should return consistent error responses:
 - `VALIDATION_ERROR`: Invalid request data
 - `RATE_LIMIT_EXCEEDED`: Too many requests
 - `INTERNAL_ERROR`: Server error
+- `SESSION_EXPIRED`: User session has expired, re-authentication required
+- `PERSONA_REQUIRED`: User must complete onboarding before accessing this feature
+- `LOGIN_REQUIRED`: Authentication required for this action
+- `INVALID_SESSION_TOKEN`: Provided session token is malformed or invalid
 
 ## Database Considerations
 
@@ -519,7 +658,44 @@ All endpoints should return consistent error responses:
 4. **characters** - Character definitions
 5. **reading_history** - User reading progress
 6. **user_favorites** - User favorite comics
-7. **analytics_events** - Reading behavior tracking (optional)
+7. **user_sessions** - Active user sessions and tokens
+8. **auth_events** - Authentication-related event tracking
+9. **analytics_events** - Reading behavior tracking (optional)
+
+### Authentication Tables Schema
+
+#### **user_sessions**
+```typescript
+interface UserSession {
+  id: string;
+  userId: string;
+  sessionToken: string;       // Unique session identifier
+  createdAt: string;         // ISO 8601 timestamp
+  expiresAt: string;         // ISO 8601 timestamp
+  lastActivity: string;      // ISO 8601 timestamp
+  userAgent?: string;        // Browser user agent
+  ipAddress?: string;        // User's IP address
+  isActive: boolean;         // Session status
+}
+```
+
+#### **auth_events**
+```typescript
+interface AuthEvent {
+  id: string;
+  userId?: string;           // Null for non-authenticated events
+  eventType: "login" | "logout" | "access_attempt" | "popup_shown" | "session_expired";
+  context: {
+    route?: string;
+    action?: string;
+    comicId?: string;
+    userAgent?: string;
+    ipAddress?: string;
+    referrer?: string;
+  };
+  timestamp: string;         // ISO 8601 timestamp
+}
+```
 
 ### Recommended Indexes
 - `users.email` (unique)
@@ -529,6 +705,11 @@ All endpoints should return consistent error responses:
 - `comics.releaseDate` (descending)
 - `reading_history.userId` + `reading_history.lastReadAt`
 - `story_drafts.userId` + `story_drafts.updatedAt`
+- `user_sessions.sessionToken` (unique)
+- `user_sessions.userId` + `user_sessions.isActive`
+- `user_sessions.expiresAt` (for cleanup)
+- `auth_events.userId` + `auth_events.timestamp`
+- `auth_events.eventType` + `auth_events.timestamp`
 
 ### File Storage
 The application expects file upload capabilities for:
@@ -541,12 +722,31 @@ Recommend using cloud storage (AWS S3, Google Cloud Storage, etc.) with CDN for 
 
 ## Authentication Flow
 
+### OAuth Authentication
 1. User clicks "Sign in with Google" on frontend
 2. NextAuth.js handles OAuth flow with Google
 3. On successful authentication, NextAuth calls your backend `/api/auth/google/callback`
 4. Backend creates/updates user record and returns session token
 5. Frontend stores session token for subsequent API calls
 6. All protected endpoints verify session token in Authorization header
+
+### Frontend Route Protection
+7. Frontend AuthGuard components check authentication status
+8. For protected routes: verify session with backend using `/api/auth/verify-session`
+9. For unauthenticated access to protected content: show login popup instead of redirect
+10. Track access attempts using `/api/auth/track-access-attempt` for analytics
+
+### Session Management
+11. Session tokens should have reasonable expiration (e.g., 7 days)
+12. Implement sliding session renewal for active users
+13. Clean up expired sessions periodically
+14. Track user activity for session management
+
+### User State Flow
+15. After login, check if user has completed persona onboarding
+16. If no persona: redirect to `/onboarding`
+17. If persona complete: redirect to `/browse` or intended destination
+18. For `/home` access: always allow authenticated users regardless of persona
 
 ## Rate Limiting Recommendations
 

@@ -71,7 +71,7 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Logo */}
-        <Link href="/" className="flex items-center">
+        <Link href="/browse" className="flex items-center">
           <span className="text-primary font-bold text-2xl">ComicReader</span>
         </Link>
         {/* Main Navigation */}
@@ -146,8 +146,14 @@ const Navbar = () => {
                       {user.name || "User"}
                     </p>
                     <p className="text-xs text-gray-400">{user.email}</p>
-                  </div>
-
+                  </div>{" "}
+                  <Link
+                    href="/home"
+                    className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    Home Dashboard
+                  </Link>
                   <Link
                     href="/profile"
                     className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white"
@@ -155,7 +161,6 @@ const Navbar = () => {
                   >
                     Profile
                   </Link>
-
                   <Link
                     href="/favorites"
                     className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white"
@@ -163,7 +168,6 @@ const Navbar = () => {
                   >
                     My Favorites
                   </Link>
-
                   <Link
                     href="/history"
                     className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white"
@@ -171,7 +175,6 @@ const Navbar = () => {
                   >
                     Reading History
                   </Link>
-
                   <button
                     className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white border-t border-gray-800"
                     onClick={handleLogout}

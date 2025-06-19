@@ -6,11 +6,13 @@ import Image from "next/image";
 import { MOCK_COMICS } from "@/lib/mock-data";
 import { Comic } from "@/lib/types";
 import { useUser } from "@/context/UserContext";
+import { useAuthGuard } from "@/components/AuthGuard";
 
 const StoryDetailPage = () => {
   const params = useParams();
   const router = useRouter();
   const { user } = useUser();
+  const { requireAuth, LoginModal } = useAuthGuard();
   const [story, setStory] = useState<Comic | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -32,9 +34,10 @@ const StoryDetailPage = () => {
 
     setLoading(false);
   }, [params.id, router]);
-
   const handlePlay = () => {
-    router.push(`/comic/${story?.id}`);
+    requireAuth(() => {
+      router.push(`/comic/${story?.id}`);
+    });
   };
 
   const handleBack = () => {
@@ -253,9 +256,10 @@ const StoryDetailPage = () => {
                 </button>
               </div>
             </div>
-          </div>
+          </div>{" "}
         </div>
       </div>
+      <LoginModal />
     </div>
   );
 };

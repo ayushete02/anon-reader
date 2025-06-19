@@ -25,19 +25,31 @@ const LoginForm: React.FC = () => {
     }
 
     setIsLoading(true);
-
     try {
       const user = await authenticateUser(email, password);
 
       if (user) {
-        // Use the login function from UserContext
-        login(user);
+        // Use the login function from UserContext        login(user);
 
-        // If user has completed onboarding, go to browse
-        if (user.persona) {
-          router.push("/browse");
+        // Check if user has completed persona onboarding
+        const savedPersona = localStorage.getItem("userPersona");
+        if (savedPersona) {
+          try {
+            const persona = JSON.parse(savedPersona);
+            if (persona.personaType) {
+              // User has completed persona - redirect to browse
+              router.push("/browse");
+            } else {
+              // User has incomplete persona - redirect to onboarding
+              router.push("/onboarding");
+            }
+          } catch (error) {
+            console.error("Error parsing user persona:", error);
+            // If persona data is corrupted, redirect to onboarding
+            router.push("/onboarding");
+          }
         } else {
-          // Otherwise, go to onboarding
+          // No persona found - redirect to onboarding
           router.push("/onboarding");
         }
       } else {
@@ -53,7 +65,6 @@ const LoginForm: React.FC = () => {
   const handleGoogleSignIn = async () => {
     setError("");
     setIsGoogleLoading(true);
-
     try {
       const user = await signInWithGoogle();
 
@@ -61,13 +72,8 @@ const LoginForm: React.FC = () => {
         // Use the login function from UserContext
         login(user);
 
-        // If user has completed onboarding, go to browse
-        if (user.persona) {
-          router.push("/browse");
-        } else {
-          // Otherwise, go to onboarding
-          router.push("/onboarding");
-        }
+        // Redirect to home dashboard after successful login
+        router.push("/home");
       } else {
         setError("Google sign-in failed. Please try again.");
       }

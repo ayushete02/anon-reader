@@ -8,18 +8,56 @@ import { useRouter } from "next/navigation";
 export default function Home() {
   const router = useRouter();
   const [showLoginForm, setShowLoginForm] = useState(false);
-
-  // Check if user is already logged in on component mount
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true); // Check if user is already logged in on component mount
   useEffect(() => {
     const user = getUserFromLocalStorage();
     if (user) {
-      if (user.persona) {
-        router.push("/browse");
+      // Check if user has completed persona onboarding
+      const savedPersona = localStorage.getItem("userPersona");
+      if (savedPersona) {
+        try {
+          const persona = JSON.parse(savedPersona);
+          if (persona.personaType) {
+            // User has completed persona - redirect to browse
+            router.push("/browse");
+            return;
+          } else {
+            // User has incomplete persona - redirect to onboarding
+            router.push("/onboarding");
+            return;
+          }
+        } catch (error) {
+          console.error("Error parsing user persona:", error);
+          // If persona data is corrupted, redirect to onboarding
+          router.push("/onboarding");
+          return;
+        }
       } else {
+        // No persona found - redirect to onboarding
         router.push("/onboarding");
+        return;
       }
     }
+    // If no user, stay on landing page
+    setIsCheckingAuth(false);
   }, [router]);
+
+  // Show loading state while checking authentication
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex justify-center items-center">
+        <div className="text-center">
+          <div className="relative">
+            <div className="animate-spin rounded-full h-20 w-20 border-4 border-gray-700 border-t-red-600 mx-auto mb-4"></div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-8 h-8 bg-red-600 rounded-full animate-pulse"></div>
+            </div>
+          </div>
+          <p className="text-white text-lg">Checking your account...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen w-full flex flex-col md:flex-row items-stretch bg-[#B4AAFF] font-sans relative overflow-hidden">
@@ -59,7 +97,8 @@ export default function Home() {
             Comic Reader
           </h1>
           <p className="text-xl md:text-2xl text-black mb-8 text-left">
-            Discover stories that match your unique taste. Every panel, every frame, tailored just for you.
+            Discover stories that match your unique taste. Every panel, every
+            frame, tailored just for you.
           </p>
           <button
             className="w-full py-4 rounded-full bg-black text-white text-2xl font-bold shadow-md hover:bg-gray-900 transition-colors mb-2"
@@ -68,7 +107,9 @@ export default function Home() {
             Get Started
           </button>
           <div className="w-full text-left mt-2">
-            <span className="text-gray-400 text-sm">Already have an account? </span>
+            <span className="text-gray-400 text-sm">
+              Already have an account?{" "}
+            </span>
             <button
               className="text-black font-semibold underline text-sm"
               onClick={() => setShowLoginForm(true)}
