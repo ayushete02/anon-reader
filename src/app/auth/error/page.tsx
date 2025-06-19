@@ -1,9 +1,9 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 
-export default function AuthError() {
+function AuthErrorContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState("");
@@ -66,7 +66,27 @@ export default function AuthError() {
             </button>
           </div>
         </div>
+      </div>    </div>
+  );
+}
+
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-secondary via-black to-secondary flex items-center justify-center px-4">
+      <div className="max-w-md w-full bg-black bg-opacity-50 p-8 rounded-lg border border-gray-800">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white mx-auto mb-4"></div>
+          <p className="text-gray-300">Loading...</p>
+        </div>
       </div>
     </div>
+  );
+}
+
+export default function AuthError() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <AuthErrorContent />
+    </Suspense>
   );
 }
