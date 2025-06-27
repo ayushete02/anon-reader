@@ -181,11 +181,11 @@ const OnboardingPage = () => {
     if (currentStep === "welcome") {
       return (
         <div className="text-center">
-          <p className="text-lg mb-8 text-gray-300">
+          <p className="text-lg mb-8 text-gray-600 dark:text-gray-300">
             Let&apos;s discover your unique story preferences
           </p>
           <button
-            className="bg-primary text-white py-3 px-8 rounded-full font-bold text-lg hover:bg-red-700 transition-colors"
+            className="bg-primary text-white py-3 px-8 rounded-xl font-medium text-lg hover:bg-primary/90 transition-colors shadow-soft hover:shadow-hover"
             onClick={goToNextStep}
           >
             Start Journey
@@ -197,7 +197,7 @@ const OnboardingPage = () => {
     if (currentStep === "vibes") {
       return (
         <>
-          <p className="text-gray-400 mb-6">
+          <p className="text-gray-600 dark:text-gray-300 mb-6 text-center">
             Select 3-5 options that speak to you
           </p>
           <QuestionOptionsSelector
@@ -210,7 +210,7 @@ const OnboardingPage = () => {
           {persona.vibes.length >= 3 && (
             <div className="mt-8 text-center">
               <button
-                className="bg-primary text-white py-3 px-8 rounded-full font-bold hover:bg-red-700 transition-colors"
+                className="bg-primary text-white py-3 px-8 rounded-xl font-medium hover:bg-primary/90 transition-colors shadow-soft hover:shadow-hover"
                 onClick={goToNextStep}
               >
                 Continue

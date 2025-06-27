@@ -6,48 +6,62 @@
 /* Define custom variables */
 :root {
   --background: #ffffff;
-  --foreground: #171717;
-  --primary: #E50914;
-  --secondary: #141414;
-  --accent: #F5F5F1;
+  --foreground: #111827;
+  --primary: #3B82F6;
+  --secondary: #111827;
+  --accent: #F9FAFB;
+  --highlight: #6366F1;
+  --muted: #6B7280;
+  --success: #10B981;
+  --warning: #FBBF24;
+  --danger: #EF4444;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --border-radius: 0.75rem;
+  --transition-standard: all 0.3s ease;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #111827;
+    --foreground: #F9FAFB;
+    --accent: #1F2937;
+    --muted: #9CA3AF;
   }
 }
 
 @layer base {
   body {
-    @apply bg-secondary text-accent;
+    @apply bg-accent text-secondary;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   .comic-card {
-    @apply transition duration-300 ease-in-out;
+    @apply transition duration-300 ease-in-out shadow-soft hover:shadow-hover;
   }
 
   .comic-card:hover {
-    @apply transform scale-105;
+    @apply transform scale-102;
   }
 
+  /* Modern progress bar */
   .onboarding-progress-bar {
-    @apply h-1 bg-white/30 rounded overflow-hidden;
+    @apply h-2 bg-gray-200 rounded-full overflow-hidden;
   }
 
   .onboarding-progress-bar-filled {
     @apply h-full bg-primary transition-all duration-300 ease-in-out;
   }
 
+  /* Modern option styles */
   .persona-option {
-    @apply border-2 border-transparent transition-all duration-200;
+    @apply border-2 border-transparent transition-all duration-200 rounded-xl;
   }
 
   .persona-option:hover, .persona-option.selected {
-    @apply border-primary bg-primary/10;
+    @apply border-primary bg-primary/5;
   }
 
   /* Instagram-style smooth scrolling */
@@ -70,22 +84,23 @@
 
   /* Enhanced text reading styles */
   .reading-font {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: var(--font-sans);
     font-feature-settings: 'liga' 1, 'kern' 1;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
+  /* Modern glow effects */
   .paragraph-glow {
     box-shadow: 
-      0 0 20px rgba(229, 9, 20, 0.1),
-      0 0 40px rgba(229, 9, 20, 0.05),
+      0 0 20px rgba(99, 102, 241, 0.1),
+      0 0 40px rgba(99, 102, 241, 0.05),
       inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 
   .text-shadow-reading {
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
 
   /* Producer page animations */
@@ -134,12 +149,21 @@
     }
   }
 
-  /* Custom glass effect */
+  /* Modern glass effect */
   .glass-effect {
-    background: rgba(17, 25, 40, 0.75);
+    background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.125);
+    border-radius: var(--border-radius);
+  }
+
+  .glass-effect-dark {
+    background: rgba(17, 24, 39, 0.75);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius);
   }
 
   /* Enhanced button hover effects */
@@ -149,8 +173,8 @@
 
   .button-glow:hover {
     box-shadow: 
-      0 0 20px rgba(229, 9, 20, 0.3),
-      0 0 40px rgba(229, 9, 20, 0.1);
+      0 0 20px rgba(59, 130, 246, 0.3),
+      0 0 40px rgba(59, 130, 246, 0.1);
     transform: translateY(-2px);
   }
 
@@ -168,17 +192,35 @@
   .scroll-smooth {
     scroll-behavior: smooth;
   }
+  
+  /* Modern card styles */
+  .modern-card {
+    @apply bg-white dark:bg-secondary rounded-2xl shadow-soft hover:shadow-hover transition-all duration-300;
+  }
+  
+  /* Scale utilities */
+  .scale-102 {
+    transform: scale(1.02);
+  }
 }
 
 /* Fallback direct classes in case Tailwind doesn't work */
 .bg-primary-direct {
-  background-color: #E50914 !important;
+  background-color: #3B82F6 !important;
 }
 
 .bg-secondary-direct {
-  background-color: #141414 !important;
+  background-color: #111827 !important;
 }
 
 .text-white-direct {
   color: #FFFFFF !important;
+}
+
+.text-primary-direct {
+  color: #3B82F6 !important;
+}
+
+.rounded-xl-direct {
+  border-radius: 0.75rem !important;
 }

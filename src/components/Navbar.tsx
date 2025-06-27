@@ -13,6 +13,7 @@ const Navbar = () => {
   const { user, logout } = useUser();
   const pathname = usePathname();
   const router = useRouter();
+
   // Handle scroll event to add background color when scrolled
   useEffect(() => {
     const handleScroll = () => {
@@ -64,22 +65,23 @@ const Navbar = () => {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 px-4 py-4 transition-all duration-300 ${
-        scrolled
-          ? "bg-secondary shadow-lg"
-          : "bg-gradient-to-b from-black to-transparent"
+        scrolled ? "bg-white dark:bg-secondary shadow-soft" : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Logo */}
         <Link href="/browse" className="flex items-center">
-          <span className="text-primary font-bold text-2xl">ComicReader</span>
+          <span className="text-primary font-bold text-2xl">Anon Reader</span>
         </Link>
+
         {/* Main Navigation */}
         <div className="hidden md:flex items-center space-x-8">
           <Link
             href="/browse"
             className={`text-sm font-medium hover:text-primary transition-colors ${
-              pathname === "/browse" ? "text-primary" : "text-gray-300"
+              pathname === "/browse"
+                ? "text-primary"
+                : "text-secondary dark:text-gray-300"
             }`}
           >
             Browse
@@ -87,15 +89,19 @@ const Navbar = () => {
           <Link
             href="/browse?category=trending"
             className={`text-sm font-medium hover:text-primary transition-colors ${
-              pathname.includes("trending") ? "text-primary" : "text-gray-300"
+              pathname.includes("trending")
+                ? "text-primary"
+                : "text-secondary dark:text-gray-300"
             }`}
           >
             Trending
-          </Link>{" "}
+          </Link>
           <Link
             href="/browse?category=new"
             className={`text-sm font-medium hover:text-primary transition-colors ${
-              pathname.includes("new") ? "text-primary" : "text-gray-300"
+              pathname.includes("new")
+                ? "text-primary"
+                : "text-secondary dark:text-gray-300"
             }`}
           >
             New Releases
@@ -104,22 +110,25 @@ const Navbar = () => {
             <Link
               href="/producer"
               className={`text-sm font-medium hover:text-primary transition-colors ${
-                pathname === "/producer" ? "text-primary" : "text-gray-300"
+                pathname === "/producer"
+                  ? "text-primary"
+                  : "text-secondary dark:text-gray-300"
               }`}
             >
               Create Story
             </Link>
           )}
-        </div>{" "}
+        </div>
+
         {/* User Menu */}
-        <div className="flex items-center">
-          <button className="bg-gray-800 rounded-full p-2 hover:bg-gray-700 transition-colors">
+        <div className="flex items-center space-x-4">
+          <button className="bg-gray-100 dark:bg-gray-800 rounded-full p-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              className="w-5 h-5"
+              className="w-5 h-5 text-secondary dark:text-gray-300"
             >
               <path
                 strokeLinecap="round"
@@ -131,54 +140,126 @@ const Navbar = () => {
           </button>
 
           {user ? (
-            <div className="ml-4 relative" ref={dropdownRef}>
+            <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-medium"
+                className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-medium shadow-soft hover:shadow-hover transition-all duration-300"
               >
                 {user.name ? user.name.charAt(0).toUpperCase() : "U"}
               </button>
 
               {dropdownOpen && (
-                <div className="absolute right-0 mt-2 py-2 w-48 bg-gray-900 rounded-md shadow-lg z-50">
-                  <div className="px-4 py-2 border-b border-gray-800">
-                    <p className="text-sm font-medium text-white">
+                <div className="absolute right-0 mt-2 py-2 w-56 bg-white dark:bg-secondary rounded-xl shadow-soft z-50 overflow-hidden">
+                  <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
+                    <p className="text-sm font-medium text-secondary dark:text-white">
                       {user.name || "User"}
                     </p>
-                    <p className="text-xs text-gray-400">{user.email}</p>
-                  </div>{" "}
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      {user.email}
+                    </p>
+                  </div>
                   <Link
                     href="/home"
-                    className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white"
+                    className="flex items-center px-4 py-2 text-sm text-secondary dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary"
                     onClick={() => setDropdownOpen(false)}
                   >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 mr-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                      />
+                    </svg>
                     Home Dashboard
                   </Link>
                   <Link
                     href="/profile"
-                    className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white"
+                    className="flex items-center px-4 py-2 text-sm text-secondary dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary"
                     onClick={() => setDropdownOpen(false)}
                   >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 mr-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                      />
+                    </svg>
                     Profile
                   </Link>
                   <Link
                     href="/favorites"
-                    className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white"
+                    className="flex items-center px-4 py-2 text-sm text-secondary dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary"
                     onClick={() => setDropdownOpen(false)}
                   >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 mr-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                      />
+                    </svg>
                     My Favorites
                   </Link>
                   <Link
                     href="/history"
-                    className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white"
+                    className="flex items-center px-4 py-2 text-sm text-secondary dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary"
                     onClick={() => setDropdownOpen(false)}
                   >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 mr-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
                     Reading History
                   </Link>
                   <button
-                    className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white border-t border-gray-800"
+                    className="flex items-center w-full text-left px-4 py-2 text-sm text-secondary dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary border-t border-gray-100 dark:border-gray-700"
                     onClick={handleLogout}
                   >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 mr-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                      />
+                    </svg>
                     Sign Out
                   </button>
                 </div>
@@ -187,7 +268,7 @@ const Navbar = () => {
           ) : (
             <Link
               href="/"
-              className="ml-4 bg-primary hover:bg-red-700 text-white rounded-md px-4 py-2 text-sm font-medium"
+              className="bg-primary hover:bg-primary/90 text-white rounded-xl px-5 py-2 text-sm font-medium shadow-soft hover:shadow-hover transition-all duration-300"
             >
               Sign In
             </Link>
