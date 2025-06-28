@@ -66,7 +66,7 @@ const Navbar = () => {
       className={`
         fixed
         top-2
-        w-[75vw]
+        w-[80vw]
         mx-auto
         left-0 
         right-0
