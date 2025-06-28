@@ -8,6 +8,7 @@ import AnimatedParagraph from "@/components/AnimatedParagraph";
 import { motion } from "framer-motion";
 import ComicSlider from "@/components/ComicSlider";
 import Footer from "@/components/Footer";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const router = useRouter();
@@ -84,7 +85,6 @@ export default function Home() {
       <div className="w-full flex justify-center">
         <nav
           className={`
-          
           fixed
           top-6
           w-[70vw]
@@ -106,55 +106,61 @@ export default function Home() {
             </h1>
           </div>
           <div className="hidden md:flex items-center space-x-8">
-            <Link
-              href="/studio"
-              className="text-white/70 hover:text-white transition-colors text-sm font-la-nord"
+            <Button
+              variant="ghost"
+              className="text-white/70 hover:text-white hover:bg-white/5"
+              asChild
             >
-              Studio
-            </Link>
-            <Link
-              href="/showcase"
-              className="text-white/70 hover:text-white transition-colors text-sm font-la-nord"
+              <Link href="/studio">Studio</Link>
+            </Button>
+            <Button
+              variant="ghost"
+              className="text-white/70 hover:text-white hover:bg-white/5"
+              asChild
             >
-              Showcase
-            </Link>
-            <Link
-              href="/pricing"
-              className="text-white/70 hover:text-white transition-colors text-sm font-la-nord"
+              <Link href="/showcase">Showcase</Link>
+            </Button>
+            <Button
+              variant="ghost"
+              className="text-white/70 hover:text-white hover:bg-white/5"
+              asChild
             >
-              Pricing
-            </Link>
-            <div className="relative group">
-              <button className="text-white/70 hover:text-white transition-colors text-sm font-la-nord flex items-center">
-                Resources
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 ml-1"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
-            </div>
+              <Link href="/pricing">Pricing</Link>
+            </Button>
+            <Button
+              variant="ghost"
+              className="text-white/70 hover:text-white hover:bg-white/5 flex items-center gap-1"
+            >
+              Resources
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </Button>
           </div>
           <div className="flex items-center gap-4">
-            <Link
-              href="/auth/login"
-              className="text-white/90 hover:text-white transition-colors text-sm font-la-nord"
+            <Button
+              variant="ghost"
+              className="text-white/90 hover:text-white hover:bg-white/5"
+              asChild
             >
-              Login
-            </Link>
-            <Link
-              href="/auth/signup"
-              className="px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition-all text-sm font-la-nord"
+              <Link href="/auth/login">Login</Link>
+            </Button>
+            <Button
+              variant="default"
+              className="bg-primary text-white hover:bg-primary/90"
+              asChild
             >
-              Get Started
-            </Link>
+              <Link href="/auth/signup">Get Started</Link>
+            </Button>
           </div>
         </nav>
       </div>
@@ -200,20 +206,29 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="flex flex-col sm:flex-row gap-6 justify-center mt-12"
             >
-              <button
-                className="px-8 py-4 rounded-xl bg-primary text-white text-lg font-medium hover:bg-primary/90 transition-all duration-300"
-                onClick={() => router.push("/auth/signup")}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+                className="flex flex-wrap justify-center gap-4"
               >
-                Get Started
-              </button>
-              <button
-                className="px-8 py-4 rounded-xl bg-morphic-gray text-white text-lg font-medium hover:bg-morphic-lightgray transition-all duration-300"
-                onClick={() =>
-                  window.open("https://discord.gg/yourdiscord", "_blank")
-                }
-              >
-                Join Discord
-              </button>
+                <Button
+                  variant="default"
+                  size="lg"
+                  className="bg-primary text-white hover:bg-primary/90"
+                  asChild
+                >
+                  <Link href="/auth/signup">Start Reading</Link>
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  className="bg-white/5 text-white hover:bg-white/10"
+                  asChild
+                >
+                  <Link href="/producer">Create Story</Link>
+                </Button>
+              </motion.div>
             </motion.div>
           </div>
         </section>

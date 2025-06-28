@@ -70,7 +70,7 @@ export default function SignupPage() {
     try {
       localStorage.setItem("user", JSON.stringify({ name, email }));
       router.push("/onboarding");
-    } catch (err) {
+    } catch {
       setError("Failed to create account. Please try again.");
     } finally {
       setIsLoading(false);
