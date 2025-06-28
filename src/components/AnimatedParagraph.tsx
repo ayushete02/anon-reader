@@ -15,21 +15,16 @@ export default function AnimatedParagraph({ paragraph }: ParagraphProps) {
   useEffect(() => {
     const checkIfInCenter = () => {
       if (!container.current) return;
-
       const rect = container.current.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
-
       // Check if element is in center of viewport (with some tolerance)
       const isCentered =
         rect.top <= viewportHeight / 2 && rect.bottom >= viewportHeight / 2;
-
       setIsInCenter(isCentered);
     };
-
     window.addEventListener("scroll", checkIfInCenter);
     // Initial check
     checkIfInCenter();
-
     return () => window.removeEventListener("scroll", checkIfInCenter);
   }, []);
 
@@ -40,12 +35,20 @@ export default function AnimatedParagraph({ paragraph }: ParagraphProps) {
 
   const words = paragraph.split(" ");
 
+  // Add enough bottom margin so the paragraph stays centered until animation is done
+  // You can tweak the value as needed (e.g., 60vh)
   return (
     <div
       ref={container}
       className={`text-2xl md:text-3xl lg:text-4xl max-w-4xl mx-auto mb-12 leading-relaxed min-h-[300px] py-12 will-change-transform font-medium transition-colors duration-500 ${
         isInCenter ? "text-primary" : "text-morphic-light"
       }`}
+      style={{
+        minHeight: "60vh", // Ensures enough space for the paragraph to stay centered
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+      }}
     >
       {words.map((word, i) => {
         const start = i / words.length;
@@ -72,10 +75,17 @@ interface WordProps {
   isInCenter: boolean;
 }
 
+const SCROLL_ANIMATION_RATIO = 1; // 3:1 ratio
+
 const Word = ({ children, progress, range, isInCenter }: WordProps) => {
   const amount = range[1] - range[0];
   const step = amount / children.length;
-  const opacity = useTransform(progress, [range[0], range[1]], [0.2, 1]);
+  // Slow down the animation by dividing progress
+  const slowProgress = useTransform(
+    progress,
+    (v) => v / SCROLL_ANIMATION_RATIO
+  );
+  const opacity = useTransform(slowProgress, [range[0], range[1]], [0.2, 1]);
 
   return (
     <motion.span
@@ -88,7 +98,7 @@ const Word = ({ children, progress, range, isInCenter }: WordProps) => {
         return (
           <Char
             key={`c_${i}`}
-            progress={progress}
+            progress={slowProgress}
             range={[start, end]}
             isInCenter={isInCenter}
           >
@@ -108,6 +118,7 @@ interface CharProps {
 }
 
 const Char = ({ children, progress, range, isInCenter }: CharProps) => {
+  // Use the slowed progress here as well
   const opacity = useTransform(progress, range, [0, 1]);
 
   return (

@@ -36,7 +36,8 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
+    /* Remove native smooth scroll to prevent conflicts with Lenis */
+    /* scroll-behavior: smooth; */
   }
   
   body {
