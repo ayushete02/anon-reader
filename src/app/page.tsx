@@ -68,7 +68,7 @@ export default function Home() {
       <div className="min-h-screen bg-morphic-dark flex justify-center items-center">
         <div className="text-center">
           <div className="relative">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-morphic-gray border-t-primary mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-morphic-gray border-t-[#030712] mx-auto mb-4"></div>
           </div>
           <p className="text-morphic-light text-lg font-medium">
             Loading your experience...
@@ -225,11 +225,11 @@ export default function Home() {
         >
           <div className="sticky top-0 left-0 right-0 h-24 bg-gradient-to-b from-morphic-dark to-transparent z-10 pointer-events-none"></div>
 
-          <div className="w-full max-w-5xl mx-auto z-10 overflow-y-auto scrollbar-hide py-16">
+          <div className="w-full max-w-5xl mx-auto z-10 overflow-y-auto scrollbar-hide ">
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 1 }}
               viewport={{ once: true, margin: "-100px" }}
               className="mb-16"
             >
