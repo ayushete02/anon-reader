@@ -20,62 +20,6 @@ const ComicRow: React.FC<ComicRowProps> = ({
 
   return (
     <div className="mb-16">
-      {/* Section Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <div className="flex items-center gap-4">
-          {/* Title Section */}
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-primary/20 via-purple-600/20 to-primary/20 rounded-xl flex items-center justify-center border border-primary/20">
-              <svg
-                className="w-6 h-6 text-primary"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
-            </div>
-            <div>
-              <h2 className="text-2xl font-bold text-white">{title}</h2>
-              {showCount && (
-                <p className="text-sm text-white/60 mt-1">
-                  {comics.length} stories available
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {comics.length > 6 && (
-          <Link
-            href="/browse"
-            className="flex items-center gap-3 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 hover:border-white/20 transition-all duration-300"
-          >
-            <span className="text-sm font-medium text-white/90 group-hover:text-white">
-              View All Stories
-            </span>
-            <svg
-              className="w-4 h-4 text-white/70 group-hover:text-white transition-all duration-300"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </Link>
-        )}
-      </div>
-
       {/* Comics Container */}
       <div className="relative">
         {/* Scroll Shadows */}

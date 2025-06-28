@@ -124,23 +124,6 @@ const Navbar = () => {
 
         {/* User Menu */}
         <div className="flex items-center space-x-4">
-          <button className="bg-gray-100 dark:bg-gray-800 rounded-full p-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              className="w-5 h-5 text-secondary dark:text-gray-300"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-          </button>
-
           {user ? (
             <div className="relative" ref={dropdownRef}>
               <button
@@ -269,7 +252,7 @@ const Navbar = () => {
             </div>
           ) : (
             <Link
-              href="/"
+              href="/auth/login"
               className="bg-primary hover:bg-primary/90 text-white rounded-xl px-5 py-2 text-sm font-medium shadow-soft hover:shadow-hover transition-all duration-300"
             >
               Sign In
