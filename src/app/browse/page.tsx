@@ -185,7 +185,10 @@ const BrowsePage = () => {
       </div>
 
       <Navbar />
-      {featuredComic && <HeroBanner comic={featuredComic} />}
+
+      {filteredComics.length > 0 && (
+        <HeroBanner comics={filteredComics.slice(0, 5)} />
+      )}
 
       <main className="max-w-[90rem] mx-auto px-4 pt-8 pb-20 relative z-10">
         {(!personaLoaded || !userPersona.personaType) && (
@@ -194,6 +197,40 @@ const BrowsePage = () => {
             <div className="absolute top-0 right-0 w-32 h-32 bg-gray-600/5 rounded-full blur-3xl"></div>
             <div className="absolute bottom-0 left-0 w-24 h-24 bg-slate-600/5 rounded-full blur-3xl"></div>
             <div className="relative z-10">
+              <div className="mb-6 p-4 bg-gray-900/30 rounded-lg border border-gray-800/50">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                    <svg
+                      className="w-4 h-4 text-blue-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="text-white font-medium mb-1">
+                      Want better recommendations?
+                    </h4>
+                    <p className="text-gray-400 text-sm leading-relaxed">
+                      Complete our quick personality quiz to get comics tailored
+                      specifically to your tastes and reading preferences.
+                      <Link
+                        href="/onboarding"
+                        className="text-red-400 hover:text-red-300 ml-1 underline"
+                      >
+                        Take the quiz
+                      </Link>
+                    </p>
+                  </div>
+                </div>
+              </div>
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-gradient-to-r from-gray-600 to-slate-600 rounded-xl flex items-center justify-center shadow-lg shadow-gray-600/25">
@@ -249,41 +286,6 @@ const BrowsePage = () => {
                 comics={personalizedComics}
                 showCount={false}
               />
-
-              <div className="mb-6 p-4 bg-gray-900/30 rounded-lg border border-gray-800/50">
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-blue-600/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                    <svg
-                      className="w-4 h-4 text-blue-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 className="text-white font-medium mb-1">
-                      Want better recommendations?
-                    </h4>
-                    <p className="text-gray-400 text-sm leading-relaxed">
-                      Complete our quick personality quiz to get comics tailored
-                      specifically to your tastes and reading preferences.
-                      <Link
-                        href="/onboarding"
-                        className="text-red-400 hover:text-red-300 ml-1 underline"
-                      >
-                        Take the quiz
-                      </Link>
-                    </p>
-                  </div>
-                </div>
-              </div>
             </div>
           </>
         )}
