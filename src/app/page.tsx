@@ -101,9 +101,7 @@ export default function Home() {
         `}
         >
           <div className="flex items-center">
-            <h1 className="text-2xl font-la-nord-bold text-white">
-              Anon Reader
-            </h1>
+            <h1 className="text-2xl font-display text-white">Anon Reader</h1>
           </div>
           <div className="hidden md:flex items-center space-x-8">
             <Button
@@ -111,39 +109,33 @@ export default function Home() {
               className="text-white/70 hover:text-white hover:bg-white/5"
               asChild
             >
-              <Link href="/studio">Studio</Link>
+              <Link href="#about">Reader</Link>
             </Button>
             <Button
               variant="ghost"
               className="text-white/70 hover:text-white hover:bg-white/5"
               asChild
             >
-              <Link href="/showcase">Showcase</Link>
-            </Button>
-            <Button
-              variant="ghost"
-              className="text-white/70 hover:text-white hover:bg-white/5"
-              asChild
-            >
-              <Link href="/pricing">Pricing</Link>
-            </Button>
-            <Button
-              variant="ghost"
-              className="text-white/70 hover:text-white hover:bg-white/5 flex items-center gap-1"
-            >
-              Resources
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                viewBox="0 0 20 20"
-                fill="currentColor"
+              <Link
+                href="#process"
+                scroll={false}
+                onClick={(e) => {
+                  e.preventDefault();
+                  const el = document.getElementById("process");
+                  if (el) {
+                    el.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
               >
-                <path
-                  fillRule="evenodd"
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
+                Stories
+              </Link>
+            </Button>
+            <Button
+              variant="ghost"
+              className="text-white/70 hover:text-white hover:bg-white/5"
+              asChild
+            >
+              <Link href="/browse">Showcase</Link>
             </Button>
           </div>
           <div className="flex items-center gap-4">
@@ -155,8 +147,8 @@ export default function Home() {
               <Link href="/auth/login">Login</Link>
             </Button>
             <Button
-              variant="default"
-              className="bg-primary text-white hover:bg-primary/90"
+              variant="outline"
+              className="bg-primary text-white hover:text-white hover:bg-primary/90"
               asChild
             >
               <Link href="/auth/signup">Get Started</Link>
@@ -218,7 +210,7 @@ export default function Home() {
                   className="bg-primary text-white hover:bg-primary/90"
                   asChild
                 >
-                  <Link href="/auth/signup">Start Reading</Link>
+                  <Link href="/auth/signup">Create Story</Link>
                 </Button>
                 <Button
                   variant="secondary"
@@ -226,7 +218,7 @@ export default function Home() {
                   className="bg-white/5 text-white hover:bg-white/10"
                   asChild
                 >
-                  <Link href="/producer">Create Story</Link>
+                  <Link href="/browse">Start Reading</Link>
                 </Button>
               </motion.div>
             </motion.div>
@@ -344,13 +336,13 @@ export default function Home() {
             </h2>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <button
-                className="px-8 py-4 rounded-xl bg-primary text-white text-lg font-la-nord hover:bg-primary/90 transition-all duration-300"
+                className="px-8 py-4 rounded-xl bg-primary text-white text-lg hover:bg-primary/90 transition-all duration-300"
                 onClick={() => router.push("/auth/signup")}
               >
                 Get Started
               </button>
               <button
-                className="px-8 py-4 rounded-xl bg-transparent border-2 border-white/30 text-white text-lg font-la-nord hover:border-white/60 transition-all duration-300"
+                className="px-8 py-4 rounded-xl bg-transparent border-2 border-white/30 text-white text-lg hover:border-white/60 transition-all duration-300"
                 onClick={() =>
                   window.open("https://discord.gg/yourdiscord", "_blank")
                 }

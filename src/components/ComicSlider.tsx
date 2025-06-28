@@ -35,7 +35,10 @@ export default function ComicSlider() {
 
   return (
     <>
-      <div className="empty h-screen flex flex-col items-center justify-center bg-morphic-dark">
+      <div
+        id="featured-stories"
+        className="empty h-screen flex flex-col items-center justify-center bg-morphic-dark"
+      >
         <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
           Featured Stories
         </h2>
@@ -50,7 +53,10 @@ export default function ComicSlider() {
           Start Reading
         </Link>
       </div>
-      <div className="process-wrap overflow-hidden bg-morphic-darker">
+      <div
+        id="process"
+        className="process-wrap overflow-hidden bg-morphic-darker"
+      >
         <div className="process w-[500%] pt-20 flex flex-nowrap self-center h-screen">
           {[1, 2, 3, 4, 5].map((num) => (
             <div
