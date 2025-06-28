@@ -7,7 +7,7 @@
 :root {
   --background: #ffffff;
   --foreground: #111827;
-  --primary: #3B82F6;
+  --primary: #5D5DFF;
   --secondary: #111827;
   --accent: #F9FAFB;
   --highlight: #6366F1;
@@ -15,6 +15,10 @@
   --success: #10B981;
   --warning: #FBBF24;
   --danger: #EF4444;
+  --morphic-dark: #0A0A0A;
+  --morphic-darker: #050505;
+  --morphic-gray: #1A1A1A;
+  --morphic-lightgray: #2A2A2A;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --border-radius: 0.75rem;
@@ -23,19 +27,52 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #111827;
+    --background: #0A0A0A;
     --foreground: #F9FAFB;
-    --accent: #1F2937;
+    --accent: #1A1A1A;
     --muted: #9CA3AF;
   }
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
   body {
     @apply bg-accent text-secondary;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  /* Modern card styles */
+  .modern-card {
+    @apply bg-white dark:bg-secondary rounded-2xl shadow-soft hover:shadow-hover transition-all duration-300;
+  }
+
+  /* Morphic style cards */
+  .morphic-card {
+    @apply bg-morphic-gray rounded-2xl hover:bg-morphic-lightgray transition-all duration-300;
+  }
+  
+  /* Morphic style inputs */
+  .morphic-input {
+    @apply w-full px-4 py-3 rounded-xl border border-white/10 bg-morphic-lightgray text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200;
+  }
+
+  /* Morphic style buttons */
+  .morphic-button-primary {
+    @apply px-4 py-3 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition-all duration-300;
+  }
+
+  .morphic-button-secondary {
+    @apply px-4 py-3 bg-morphic-lightgray text-white rounded-xl font-medium hover:bg-morphic-gray/90 transition-all duration-300;
+  }
+
+  .morphic-button-outline {
+    @apply px-4 py-3 bg-transparent border-2 border-white/30 text-white rounded-xl font-medium hover:border-white/60 transition-all duration-300;
   }
 
   .comic-card {
@@ -166,6 +203,15 @@
     border-radius: var(--border-radius);
   }
 
+  /* Morphic glass effect */
+  .morphic-glass {
+    background: rgba(26, 26, 26, 0.75);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius);
+  }
+
   /* Enhanced button hover effects */
   .button-glow {
     transition: all 0.3s ease;
@@ -173,8 +219,8 @@
 
   .button-glow:hover {
     box-shadow: 
-      0 0 20px rgba(59, 130, 246, 0.3),
-      0 0 40px rgba(59, 130, 246, 0.1);
+      0 0 20px rgba(93, 93, 255, 0.3),
+      0 0 40px rgba(93, 93, 255, 0.1);
     transform: translateY(-2px);
   }
 
@@ -193,24 +239,69 @@
     scroll-behavior: smooth;
   }
   
-  /* Modern card styles */
-  .modern-card {
-    @apply bg-white dark:bg-secondary rounded-2xl shadow-soft hover:shadow-hover transition-all duration-300;
-  }
-  
   /* Scale utilities */
   .scale-102 {
     transform: scale(1.02);
+  }
+  
+  /* Section snap scrolling */
+  .snap-container {
+    scroll-snap-type: y mandatory;
+    height: 100vh;
+    overflow-y: scroll;
+  }
+  
+  .snap-start {
+    scroll-snap-align: start;
+  }
+  
+  .snap-center {
+    scroll-snap-align: center;
+  }
+  
+  /* Improved scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: rgba(26, 26, 26, 0.2);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgba(93, 93, 255, 0.5);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(93, 93, 255, 0.7);
+  }
+  
+  /* Performance optimizations */
+  .will-change-transform {
+    will-change: transform;
+  }
+  
+  .will-change-opacity {
+    will-change: opacity;
   }
 }
 
 /* Fallback direct classes in case Tailwind doesn't work */
 .bg-primary-direct {
-  background-color: #3B82F6 !important;
+  background-color: #5D5DFF !important;
 }
 
 .bg-secondary-direct {
   background-color: #111827 !important;
+}
+
+.bg-morphic-dark-direct {
+  background-color: #0A0A0A !important;
+}
+
+.bg-morphic-gray-direct {
+  background-color: #1A1A1A !important;
 }
 
 .text-white-direct {
@@ -218,7 +309,7 @@
 }
 
 .text-primary-direct {
-  color: #3B82F6 !important;
+  color: #5D5DFF !important;
 }
 
 .rounded-xl-direct {
