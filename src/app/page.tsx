@@ -79,72 +79,88 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen w-full flex flex-col bg-morphic-dark font-sans relative overflow-hidden">
+    <div className="min-h-screen w-full flex flex-col bg-morphic-dark relative overflow-hidden">
       {/* Navigation */}
-      <nav
-        className={`w-full py-5 px-8 md:px-16 flex justify-between items-center fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled ? "bg-morphic-dark/90 backdrop-blur-md" : "bg-transparent"
-        }`}
-      >
-        <div className="flex items-center">
-          <h1 className="text-2xl font-bold text-white">Anon Reader</h1>
-        </div>
-        <div className="hidden md:flex items-center space-x-8">
-          <Link
-            href="/studio"
-            className="text-white/70 hover:text-white transition-colors text-sm"
-          >
-            Studio
-          </Link>
-          <Link
-            href="/showcase"
-            className="text-white/70 hover:text-white transition-colors text-sm"
-          >
-            Showcase
-          </Link>
-          <Link
-            href="/pricing"
-            className="text-white/70 hover:text-white transition-colors text-sm"
-          >
-            Pricing
-          </Link>
-          <div className="relative group">
-            <button className="text-white/70 hover:text-white transition-colors text-sm flex items-center">
-              Resources
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4 ml-1"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
+      <div className="w-full flex justify-center">
+        <nav
+          className={`
+          
+          fixed
+          top-6
+          w-[70vw]
+          flex justify-between items-center
+          px-6 py-3
+          rounded-2xl
+          bg-morphic-dark/80
+          backdrop-blur-lg
+          shadow-lg
+          z-50
+          transition-all duration-300
+          mx-auto
+          ${isScrolled ? "border border-white/10" : ""}
+        `}
+        >
+          <div className="flex items-center">
+            <h1 className="text-2xl font-la-nord-bold text-white">
+              Anon Reader
+            </h1>
           </div>
-        </div>
-        <div className="flex items-center gap-4">
-          <Link
-            href="/auth/login"
-            className="text-white/90 hover:text-white transition-colors text-sm"
-          >
-            Login
-          </Link>
-          <Link
-            href="/auth/signup"
-            className="px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition-all text-sm"
-          >
-            Get Started
-          </Link>
-        </div>
-      </nav>
-
+          <div className="hidden md:flex items-center space-x-8">
+            <Link
+              href="/studio"
+              className="text-white/70 hover:text-white transition-colors text-sm font-la-nord"
+            >
+              Studio
+            </Link>
+            <Link
+              href="/showcase"
+              className="text-white/70 hover:text-white transition-colors text-sm font-la-nord"
+            >
+              Showcase
+            </Link>
+            <Link
+              href="/pricing"
+              className="text-white/70 hover:text-white transition-colors text-sm font-la-nord"
+            >
+              Pricing
+            </Link>
+            <div className="relative group">
+              <button className="text-white/70 hover:text-white transition-colors text-sm font-la-nord flex items-center">
+                Resources
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4 ml-1"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/auth/login"
+              className="text-white/90 hover:text-white transition-colors text-sm font-la-nord"
+            >
+              Login
+            </Link>
+            <Link
+              href="/auth/signup"
+              className="px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition-all text-sm font-la-nord"
+            >
+              Get Started
+            </Link>
+          </div>
+        </nav>
+      </div>
       {/* Main content area */}
       <main className="flex-1 flex flex-col">
-        {/* Hero Section */}
+        {/* Hero Section - Removed La Nord font */}
         <section
           id="hero"
           className="relative min-h-screen flex flex-col items-center justify-center px-8 md:px-16 pt-24 pb-20 z-10"
@@ -313,13 +329,13 @@ export default function Home() {
             </h2>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <button
-                className="px-8 py-4 rounded-xl bg-primary text-white text-lg font-medium hover:bg-primary/90 transition-all duration-300"
+                className="px-8 py-4 rounded-xl bg-primary text-white text-lg font-la-nord hover:bg-primary/90 transition-all duration-300"
                 onClick={() => router.push("/auth/signup")}
               >
                 Get Started
               </button>
               <button
-                className="px-8 py-4 rounded-xl bg-transparent border-2 border-white/30 text-white text-lg font-medium hover:border-white/60 transition-all duration-300"
+                className="px-8 py-4 rounded-xl bg-transparent border-2 border-white/30 text-white text-lg font-la-nord hover:border-white/60 transition-all duration-300"
                 onClick={() =>
                   window.open("https://discord.gg/yourdiscord", "_blank")
                 }
@@ -331,7 +347,7 @@ export default function Home() {
         </section>
       </main>
 
-      {/* New Footer with clip-path reveal effect */}
+      {/* Footer */}
       <Footer />
     </div>
   );

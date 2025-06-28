@@ -35,11 +35,11 @@ const QuestionOptionsSelector: React.FC<QuestionOptionsSelectorProps> = ({
         return (
           <button
             key={option}
-            className={`w-full py-4 px-6 rounded-xl shadow-sm text-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50
+            className={`group w-full py-4 px-6 rounded-2xl text-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 border backdrop-blur-lg
               ${
                 selected
-                  ? "bg-primary text-white border-transparent"
-                  : "bg-white dark:bg-secondary/60 text-secondary dark:text-white border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-secondary"
+                  ? "bg-primary/20 border-primary/50 text-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]"
+                  : "bg-white/5 border-white/10 text-white/80 hover:bg-white/10 hover:border-white/20"
               }
               ${
                 isDisabled(option)
@@ -51,11 +51,13 @@ const QuestionOptionsSelector: React.FC<QuestionOptionsSelectorProps> = ({
             disabled={isDisabled(option)}
           >
             <div className="flex items-center justify-between">
-              <span>{option}</span>
+              <span className="group-hover:translate-x-1 transition-transform duration-300">
+                {option}
+              </span>
               {selected && (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
+                  className="h-5 w-5 text-primary"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                 >
@@ -72,7 +74,7 @@ const QuestionOptionsSelector: React.FC<QuestionOptionsSelectorProps> = ({
       })}
 
       {multiSelect && maxSelections > 0 && (
-        <div className="text-sm text-gray-500 dark:text-gray-400 mt-2 text-center">
+        <div className="text-sm text-white/60 mt-2 text-center">
           Select {maxSelections > 1 ? `up to ${maxSelections}` : "one"} option
           {maxSelections > 1 ? "s" : ""}
           {selectedOptions.length > 0 &&

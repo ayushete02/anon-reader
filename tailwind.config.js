@@ -12,7 +12,10 @@ module.exports = {
       fontFamily: {
         sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
         mono: ["var(--font-geist-mono)", "monospace"],
-        display: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
+        display: ["La Nord", "sans-serif"],
+        "la-nord": ["La Nord", "sans-serif"],
+        "la-nord-light": ["La Nord Light", "sans-serif"],
+        "la-nord-bold": ["La Nord Bold", "sans-serif"],
       },
       colors: {
         primary: "#5D5DFF", // Morphic primary color
@@ -40,6 +43,29 @@ module.exports = {
       boxShadow: {
         soft: "0 4px 20px rgba(0, 0, 0, 0.08)",
         hover: "0 10px 40px rgba(0, 0, 0, 0.12)",
+        glossy:
+          "0 0 0 1px rgba(255, 255, 255, 0.05), 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06), inset 0 1px 1px rgba(255, 255, 255, 0.1)",
+        glossyHover:
+          "0 0 0 1px rgba(255, 255, 255, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06), inset 0 2px 2px rgba(255, 255, 255, 0.1)",
+      },
+      animation: {
+        blob: "blob 7s infinite",
+      },
+      keyframes: {
+        blob: {
+          "0%": {
+            transform: "translate(0px, 0px) scale(1)",
+          },
+          "33%": {
+            transform: "translate(30px, -50px) scale(1.1)",
+          },
+          "66%": {
+            transform: "translate(-20px, 20px) scale(0.9)",
+          },
+          "100%": {
+            transform: "translate(0px, 0px) scale(1)",
+          },
+        },
       },
     },
   },

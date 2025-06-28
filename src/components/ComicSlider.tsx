@@ -51,13 +51,13 @@ export default function ComicSlider() {
         </Link>
       </div>
       <div className="process-wrap overflow-hidden bg-morphic-darker">
-        <div className="process w-[500%] flex flex-nowrap self-center h-screen">
+        <div className="process w-[500%] pt-20 flex flex-nowrap self-center h-screen">
           {[1, 2, 3, 4, 5].map((num) => (
             <div
               key={num}
               className="process__item flex items-center justify-center px-[100px]"
             >
-              <div className="relative w-[600px] h-[800px] rounded-2xl overflow-hidden group">
+              <div className="relative w-[48vw] max-w-[600px] h-[80vh] rounded-2xl overflow-hidden group">
                 <img
                   src="https://images.pexels.com/photos/4061662/pexels-photo-4061662.jpeg"
                   alt={`Process ${num}`}

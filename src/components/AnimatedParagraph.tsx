@@ -40,7 +40,7 @@ export default function AnimatedParagraph({ paragraph }: ParagraphProps) {
   return (
     <div
       ref={container}
-      className={`text-2xl md:text-3xl lg:text-4xl max-w-4xl mx-auto mb-12 leading-relaxed min-h-[300px] py-12 will-change-transform font-medium transition-colors duration-500 ${
+      className={`text-2xl md:text-3xl lg:text-4xl max-w-4xl mx-auto mb-12 leading-relaxed min-h-[300px] py-12 will-change-transform font-la-nord transition-colors duration-500 ${
         isInCenter ? "text-primary" : "text-morphic-light"
       }`}
       style={{
@@ -75,7 +75,7 @@ interface WordProps {
   isInCenter: boolean;
 }
 
-const SCROLL_ANIMATION_RATIO = 1; // 3:1 ratio
+const SCROLL_ANIMATION_RATIO = 0.8; // 3:1 ratio
 
 const Word = ({ children, progress, range, isInCenter }: WordProps) => {
   const amount = range[1] - range[0];

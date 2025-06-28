@@ -26,9 +26,9 @@ const OnboardingResultPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-indigo-950 flex flex-col justify-center items-center">
+      <div className="min-h-screen bg-morphic-dark flex flex-col justify-center items-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-        <p className="mt-4 text-secondary dark:text-white font-medium">
+        <p className="mt-4 text-white font-medium">
           Creating your unique profile...
         </p>
       </div>
@@ -37,20 +37,24 @@ const OnboardingResultPage = () => {
 
   return (
     <AuthGuard requireAuth={true}>
-      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-indigo-950 px-4 py-8">
-        <div className="w-full max-w-md bg-white dark:bg-secondary rounded-2xl shadow-soft hover:shadow-hover transition-all duration-300 flex flex-col px-8 py-10 relative items-center">
+      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-morphic-dark relative px-4 py-8 overflow-hidden">
+        {/* Background effects */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
+        <div className="absolute -inset-[500px] bg-[radial-gradient(circle_800px_at_100%_200px,rgba(93,93,255,0.1),transparent)] pointer-events-none" />
+
+        <div className="w-full max-w-md bg-morphic-gray/50 backdrop-blur-xl rounded-3xl border border-white/5 p-8 flex flex-col relative z-10 items-center">
           {/* Logo or Brand */}
           <div className="mb-6">
             <div className="text-2xl font-bold text-primary">Anon Reader</div>
           </div>
 
           {/* Persona Type Pill */}
-          <span className="inline-block bg-primary text-white text-base font-medium py-2 px-6 rounded-full mb-6">
+          <span className="inline-block bg-primary/20 border border-primary/30 text-white text-base font-medium py-2 px-6 rounded-full mb-6 backdrop-blur-sm">
             {persona.personaType || "Your Persona"}
           </span>
 
           {/* Main Text */}
-          <h1 className="text-2xl font-bold text-secondary dark:text-white text-center mb-4 leading-tight">
+          <h1 className="text-2xl font-bold text-white text-center mb-4 leading-tight">
             You&apos;re a{" "}
             {persona.personaType ? (
               <span className="text-primary">{persona.personaType}</span>
@@ -60,14 +64,14 @@ const OnboardingResultPage = () => {
             !
           </h1>
 
-          <p className="text-base text-gray-600 dark:text-gray-300 text-center mb-8">
+          <p className="text-base text-white/70 text-center mb-8">
             {getPersonaDescription(persona.personaType || "")}
           </p>
 
           {/* Explore Button */}
           <button
             onClick={handleContinue}
-            className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-xl transition-all duration-300 shadow-soft hover:shadow-hover flex items-center justify-center gap-2"
+            className="w-full bg-primary/20 hover:bg-primary/30 text-white font-medium py-3 px-6 rounded-xl transition-all duration-300 border border-primary/30 backdrop-blur-sm flex items-center justify-center gap-2 hover:border-primary/50"
           >
             <span>Explore Stories</span>
             <svg
@@ -85,7 +89,7 @@ const OnboardingResultPage = () => {
           </button>
 
           {/* Additional info */}
-          <p className="mt-6 text-sm text-gray-500 dark:text-gray-400 text-center">
+          <p className="mt-6 text-sm text-white/50 text-center">
             Your preferences have been saved and will be used to recommend
             stories
           </p>

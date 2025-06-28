@@ -64,18 +64,20 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 px-4 py-4 transition-all duration-300 ${
-        scrolled ? "bg-white dark:bg-secondary shadow-soft" : "bg-transparent"
+      className={`fixed mx-4 md:mx-8 lg:mx-12 mt-4 left-0 right-0 z-50 px-4 py-4 transition-all duration-300 rounded-2xl ${
+        scrolled ? "navbar-glass" : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Logo */}
         <Link href="/browse" className="flex items-center">
-          <span className="text-primary font-bold text-2xl">Anon Reader</span>
+          <span className="text-primary font-la-nord-bold text-2xl">
+            Anon Reader
+          </span>
         </Link>
 
         {/* Main Navigation */}
-        <div className="hidden md:flex items-center space-x-8">
+        <div className="hidden md:flex items-center space-x-8 font-la-nord">
           <Link
             href="/browse"
             className={`text-sm font-medium hover:text-primary transition-colors ${

@@ -14,11 +14,17 @@ const OnboardingLayout: React.FC<OnboardingLayoutProps> = ({
   children,
 }) => {
   return (
-    <div className="min-h-screen w-full flex flex-col justify-center items-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-indigo-950 px-4 py-12">
-      <div className="max-w-md w-full bg-white dark:bg-secondary rounded-2xl shadow-soft p-8 flex flex-col items-center">
+    <div className="min-h-screen w-full flex flex-col justify-center items-center bg-morphic-dark px-4 py-12 relative overflow-hidden">
+      {/* Background gradient effects */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent pointer-events-none" />
+      <div className="absolute -inset-[500px] bg-[radial-gradient(circle_800px_at_100%_200px,rgba(93,93,255,0.1),transparent)] pointer-events-none" />
+
+      <div className="max-w-md w-full bg-morphic-gray/50 backdrop-blur-xl rounded-3xl border border-white/5 p-8 flex flex-col items-center relative z-10">
         {/* Logo or Brand */}
-        <div className="mb-6">
-          <div className="text-3xl font-bold text-primary">Anon Reader</div>
+        <div className="mb-8">
+          <div className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 text-transparent bg-clip-text">
+            Anon Reader
+          </div>
         </div>
 
         {/* Progress Circles */}
@@ -31,13 +37,13 @@ const OnboardingLayout: React.FC<OnboardingLayoutProps> = ({
                   ? "bg-primary scale-125"
                   : idx + 1 < currentStep
                   ? "bg-primary/60"
-                  : "bg-gray-200 dark:bg-gray-700"
+                  : "bg-white/10"
               }`}
             />
           ))}
         </div>
 
-        <h1 className="text-3xl font-bold text-secondary dark:text-white text-center mb-8 leading-tight tracking-tight">
+        <h1 className="text-3xl font-bold text-white text-center mb-8 leading-tight tracking-tight">
           {title}
         </h1>
 
@@ -45,7 +51,7 @@ const OnboardingLayout: React.FC<OnboardingLayoutProps> = ({
       </div>
 
       {/* Footer */}
-      <div className="mt-6 text-sm text-gray-500 dark:text-gray-400">
+      <div className="mt-8 text-sm text-white/60">
         Discover your unique reading preferences
       </div>
     </div>
