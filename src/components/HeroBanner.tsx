@@ -9,7 +9,7 @@ interface HeroBannerProps {
 
 const HeroBanner: React.FC<HeroBannerProps> = ({ comic }) => {
   return (
-    <div className="relative w-full h-[70vh] mb-8">
+    <div className="relative w-full h-[75vh] mb-2">
       {/* Background Image with gradient overlay */}
       <div className="absolute inset-0">
         <div className="relative w-full h-full">
