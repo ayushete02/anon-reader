@@ -64,7 +64,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "www.com",
+        hostname: "lh3.googleusercontent.com",
         port: "",
         pathname: "/**",
       },

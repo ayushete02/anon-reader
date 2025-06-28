@@ -31,7 +31,7 @@ const ComicRow: React.FC<ComicRowProps> = ({
           {comics.slice(0, 12).map((comic, index) => (
             <div
               key={comic.id}
-              className="flex-shrink-0 w-[200px] sm:w-[220px] animate-fadeIn"
+              className="flex-shrink-0  animate-fadeIn"
               style={{
                 animationDelay: `${index * 0.1}s`,
               }}
