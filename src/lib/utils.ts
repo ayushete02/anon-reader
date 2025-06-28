@@ -1,5 +1,11 @@
 import { Comic, User, UserPersona } from "./types";
 import { MOCK_USERS } from "./mock-data";
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 // Auth Utilities
 export const saveUserToLocalStorage = (user: User): void => {
