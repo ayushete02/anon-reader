@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function ComicSlider() {
   useEffect(() => {
@@ -64,10 +65,12 @@ export default function ComicSlider() {
               className="process__item flex items-center justify-center px-[100px]"
             >
               <div className="relative w-[48vw] max-w-[600px] h-[80vh] rounded-2xl overflow-hidden group">
-                <img
+                <Image
                   src="https://images.pexels.com/photos/4061662/pexels-photo-4061662.jpeg"
                   alt={`Process ${num}`}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 48vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/80"></div>
                 <div className="absolute top-6 left-6 w-12 h-12 rounded-full bg-primary/90 flex items-center justify-center">

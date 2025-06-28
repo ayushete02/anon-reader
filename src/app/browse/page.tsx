@@ -18,10 +18,7 @@ const BrowsePage = () => {
   const [personaLoaded, setPersonaLoaded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [sortBy, setSortBy] = useState("rating");
-
-  // Get featured comic (highest rated one)
-  const featuredComic = comics.sort((a, b) => b.rating - a.rating)[0];
+  const [sortBy] = useState("rating");
 
   // Get all unique categories
   const allCategories = [

@@ -6,16 +6,10 @@ import { Comic } from "@/lib/types";
 import Link from "next/link";
 
 interface ComicRowProps {
-  title: string;
   comics: Comic[];
-  showCount?: boolean;
 }
 
-const ComicRow: React.FC<ComicRowProps> = ({
-  title,
-  comics,
-  showCount = false,
-}) => {
+const ComicRow: React.FC<ComicRowProps> = ({ comics }) => {
   if (comics.length === 0) return null;
 
   return (

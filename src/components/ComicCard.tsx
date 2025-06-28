@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Comic } from "@/lib/types";
