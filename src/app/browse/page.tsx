@@ -278,11 +278,7 @@ const BrowsePage = () => {
                 </div>
               </div>
 
-              <ComicRow
-                title=""
-                comics={personalizedComics}
-                showCount={false}
-              />
+              <ComicRow comics={personalizedComics} />
             </div>
           </>
         )}
@@ -413,11 +409,7 @@ const BrowsePage = () => {
                   </div>
                 </div>
               </div>{" "}
-              <ComicRow
-                title=""
-                comics={personalizedComics}
-                showCount={false}
-              />
+              <ComicRow comics={personalizedComics} />
             </div>
           </div>
         )}
@@ -509,7 +501,7 @@ const BrowsePage = () => {
         ) : (
           <div className="space-y-4">
             <div className="flex items-center gap-3 mb-6">
-              <ComicRow title="" comics={trendingComics} showCount={false} />
+              <ComicRow comics={trendingComics} />
             </div>{" "}
             {allCategories.slice(1).map((category, index) => {
               const categoryComics = getComicsByCategory(category);
@@ -548,11 +540,7 @@ const BrowsePage = () => {
                         </svg>
                       </button>
                     </div>
-                    <ComicRow
-                      title=""
-                      comics={categoryComics}
-                      showCount={false}
-                    />
+                    <ComicRow comics={categoryComics} />
                   </div>
                 </div>
               );
