@@ -1,12 +1,8 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { Comic } from "@/lib/types";
 import { useUser } from "@/context/UserContext";
+import { Comic } from "@/lib/types";
+import { motion } from "framer-motion";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import AnimatedParagraph from "./AnimatedParagraph";
 
 interface TextComicViewerProps {
   comic: Comic;
@@ -14,7 +10,6 @@ interface TextComicViewerProps {
 
 const TextComicViewer: React.FC<TextComicViewerProps> = ({ comic }) => {
   const [currentChapter, setCurrentChapter] = useState(0);
-  const textContainerRef = useRef<HTMLDivElement>(null);
   const { user, updateUser } = useUser();
   const textChapters = useMemo(
     () => comic.textContent || [],
@@ -59,13 +54,23 @@ const TextComicViewer: React.FC<TextComicViewerProps> = ({ comic }) => {
     return () => clearTimeout(saveTimeout);
   }, [saveReadingProgress]);
 
+  // Scroll to top when chapter changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentChapter]);
+
   const currentChapterData = textChapters[currentChapter];
+  const currentChapterFullText = useMemo(() => {
+    return currentChapterData
+      ? currentChapterData.paragraphs.join(" ")
+      : "\n\n";
+  }, [currentChapterData]);
   if (!currentChapterData) return null;
 
   return (
-    <div className="h-full bg-black relative flex flex-col">
+    <div className="min-h-screen w-full flex flex-col bg-morphic-dark relative overflow-hidden">
       {/* Header with chapter info */}
-      <div className="sticky top-0 z-20 backdrop-blur-xl bg-black/30 border-b border-white/10">
+      <div className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-black/30 border-b border-white/10">
         <div className="p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-4">
@@ -136,42 +141,45 @@ const TextComicViewer: React.FC<TextComicViewerProps> = ({ comic }) => {
           </div>
         </div>
       </div>
-      {/* Scrollable text content */}
-      <div ref={textContainerRef} className="flex-1 overflow-y-auto px-6 pb-24">
-        <div className="max-w-4xl mx-auto py-8">
-          {currentChapterData.paragraphs.map((paragraph, index) => (
-            <div key={index} className="mb-12">
-              <p
-                className="text-3xl md:text-4xl lg:text-5xl leading-relaxed text-white/90 font-light tracking-wide"
-                style={{
-                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
-                  letterSpacing: "0.025em",
-                  lineHeight: "1.6",
-                }}
-              >
-                {paragraph}
-              </p>
-            </div>
-          ))}
-          {/* Next Chapter Button */}
-          {currentChapter < textChapters.length - 1 && (
-            <div className="text-center py-12">
-              <button
-                onClick={() => setCurrentChapter(currentChapter + 1)}
-                className="bg-primary hover:bg-primary/80 text-white px-8 py-3 rounded-lg font-medium transition-all duration-300 shadow-lg"
-              >
-                Next Chapter
-              </button>
-            </div>
-          )}
-          {/* End of story indicator */}
-          {currentChapter === textChapters.length - 1 && (
-            <div className="text-center py-12">
-              <span className="text-gray-400 text-lg">End of story</span>
-            </div>
-          )}
-        </div>
-      </div>
+      <main className="flex-1 flex flex-col pt-24">
+        <section className="relative min-h-screen flex flex-col items-center justify-center px-8 md:px-16 py-16 z-10">
+          <div className="sticky top-0 left-0 right-0 h-24 bg-gradient-to-b from-morphic-dark to-transparent z-10 pointer-events-none"></div>
+
+          <div className="w-full max-w-5xl mx-auto z-10 overflow-y-auto scrollbar-hide ">
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1 }}
+              viewport={{ once: true, margin: "-100px" }}
+              className="mb-16"
+            >
+              <AnimatedParagraph paragraph={currentChapterFullText} />
+            </motion.div>
+
+            {/* Next Chapter Button */}
+            {currentChapter < textChapters.length - 1 && (
+              <div className="text-center py-12">
+                <button
+                  onClick={() => setCurrentChapter(currentChapter + 1)}
+                  className="bg-primary hover:bg-primary/80 text-white px-8 py-3 rounded-lg font-medium transition-all duration-300 shadow-lg"
+                >
+                  Next Chapter
+                </button>
+              </div>
+            )}
+
+            {/* End of story indicator */}
+            {currentChapter === textChapters.length - 1 && (
+              <div className="text-center py-12">
+                <span className="text-gray-400 text-lg">End of story</span>
+              </div>
+            )}
+          </div>
+
+          <div className="sticky bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-morphic-dark to-transparent z-10 pointer-events-none"></div>
+        </section>
+      </main>
+
       {/* Fixed bottom controls - always visible */}
       <div className="fixed bottom-0 left-0 right-0 z-30 bg-black/90 backdrop-blur-xl border-t border-white/10">
         <div className="max-w-4xl mx-auto px-6 py-4">

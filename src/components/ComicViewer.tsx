@@ -4,6 +4,8 @@ import { Comic } from "@/lib/types";
 import TextComicViewer from "./TextComicViewer";
 import ImageComicViewer from "./ImageComicViewer";
 import React from "react";
+import AnimatedParagraph from "./AnimatedParagraph";
+import { motion } from "framer-motion";
 
 interface ComicViewerProps {
   comic: Comic;
