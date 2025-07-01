@@ -40,7 +40,7 @@ export default function Home() {
       if (savedPersona) {
         try {
           const persona = JSON.parse(savedPersona);
-          if (persona.personaType) {
+          if (persona.personaType && typeof persona.personaType === "string") {
             // User has completed persona - redirect to browse
             router.push("/browse");
             return;
