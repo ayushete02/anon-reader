@@ -1,0 +1,33 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#16213e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f3460;stop-opacity:1" />
+    </linearGradient>
+    <pattern id="comics" x="0" y="0" width="200" height="300" patternUnits="userSpaceOnUse" opacity="0.1">
+      <rect x="10" y="10" width="80" height="120" fill="#3b82f6" rx="8"/>
+      <rect x="110" y="30" width="80" height="120" fill="#8b5cf6" rx="8"/>
+      <rect x="60" y="160" width="80" height="120" fill="#ef4444" rx="8"/>
+    </pattern>
+  </defs>
+  
+  <rect width="1920" height="1080" fill="url(#grad1)"/>
+  <rect width="1920" height="1080" fill="url(#comics)"/>
+  
+  <!-- Comic book style elements -->
+  <g opacity="0.3">
+    <!-- Speech bubbles -->
+    <ellipse cx="300" cy="200" rx="100" ry="60" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <ellipse cx="1600" cy="800" rx="120" ry="80" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+    
+    <!-- Action lines -->
+    <path d="M100 100 L250 50" stroke="#ef4444" stroke-width="3" opacity="0.5"/>
+    <path d="M100 120 L280 70" stroke="#ef4444" stroke-width="2" opacity="0.5"/>
+    <path d="M100 140 L270 90" stroke="#ef4444" stroke-width="3" opacity="0.5"/>
+    
+    <path d="M1700 300 L1550 250" stroke="#10b981" stroke-width="3" opacity="0.5"/>
+    <path d="M1720 320 L1530 270" stroke="#10b981" stroke-width="2" opacity="0.5"/>
+    <path d="M1710 340 L1540 290" stroke="#10b981" stroke-width="3" opacity="0.5"/>
+  </g>
+</svg>
