@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Comic } from "@/lib/types";
 import { useUser } from "@/context/UserContext";
 
@@ -10,22 +16,32 @@ const TextComicViewer: React.FC<TextComicViewerProps> = ({ comic }) => {
   const [currentChapter, setCurrentChapter] = useState(0);
   const textContainerRef = useRef<HTMLDivElement>(null);
   const { user, updateUser } = useUser();
-  const textChapters = useMemo(() => comic.textContent || [], [comic.textContent]);
+  const textChapters = useMemo(
+    () => comic.textContent || [],
+    [comic.textContent]
+  );
   const totalPages = textChapters.length;
-  const getCurrentTextPosition = useCallback(() => currentChapter, [currentChapter]);
+  const getCurrentTextPosition = useCallback(
+    () => currentChapter,
+    [currentChapter]
+  );
 
   // Save reading progress
   const saveReadingProgress = useCallback(() => {
     if (!user || !comic) return;
     const currentPosition = getCurrentTextPosition();
-    const progress = Math.round((currentPosition / Math.max(totalPages - 1, 1)) * 100);
+    const progress = Math.round(
+      (currentPosition / Math.max(totalPages - 1, 1)) * 100
+    );
     const historyItem = {
       comicId: comic.id,
       lastReadPage: currentPosition,
       lastReadAt: new Date().toISOString(),
       progress: Math.min(progress, 100),
     };
-    const existingHistoryIndex = user.history.findIndex((h) => h.comicId === comic.id);
+    const existingHistoryIndex = user.history.findIndex(
+      (h) => h.comicId === comic.id
+    );
     let newHistory;
     if (existingHistoryIndex >= 0) {
       newHistory = [...user.history];
@@ -54,17 +70,31 @@ const TextComicViewer: React.FC<TextComicViewerProps> = ({ comic }) => {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-gradient-to-br from-primary to-purple-600 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-lg">{currentChapter + 1}</span>
+                <span className="text-white font-bold text-lg">
+                  {currentChapter + 1}
+                </span>
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white mb-1">{currentChapterData.title}</h2>
+                <h2 className="text-2xl font-bold text-white mb-1">
+                  {currentChapterData.title}
+                </h2>
                 <p className="text-gray-400 text-sm">{comic.title}</p>
               </div>
             </div>
             {/* Reading progress circle */}
             <div className="relative w-16 h-16">
-              <svg className="w-16 h-16 transform -rotate-90" viewBox="0 0 64 64">
-                <circle cx="32" cy="32" r="28" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="4" />
+              <svg
+                className="w-16 h-16 transform -rotate-90"
+                viewBox="0 0 64 64"
+              >
+                <circle
+                  cx="32"
+                  cy="32"
+                  r="28"
+                  fill="none"
+                  stroke="rgba(255,255,255,0.1)"
+                  strokeWidth="4"
+                />
                 <circle
                   cx="32"
                   cy="32"
@@ -74,11 +104,20 @@ const TextComicViewer: React.FC<TextComicViewerProps> = ({ comic }) => {
                   strokeWidth="4"
                   strokeLinecap="round"
                   strokeDasharray={175.9}
-                  strokeDashoffset={175.9 * (1 - getCurrentTextPosition() / Math.max(totalPages - 1, 1))}
+                  strokeDashoffset={
+                    175.9 *
+                    (1 - getCurrentTextPosition() / Math.max(totalPages - 1, 1))
+                  }
                   className="transition-all duration-500"
                 />
                 <defs>
-                  <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <linearGradient
+                    id="progressGradient"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="0%"
+                  >
                     <stop offset="0%" stopColor="#E50914" />
                     <stop offset="100%" stopColor="#8B5CF6" />
                   </linearGradient>
@@ -86,7 +125,11 @@ const TextComicViewer: React.FC<TextComicViewerProps> = ({ comic }) => {
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className="text-white text-xs font-medium">
-                  {Math.round((getCurrentTextPosition() / Math.max(totalPages - 1, 1)) * 100)}%
+                  {Math.round(
+                    (getCurrentTextPosition() / Math.max(totalPages - 1, 1)) *
+                      100
+                  )}
+                  %
                 </span>
               </div>
             </div>
@@ -100,7 +143,11 @@ const TextComicViewer: React.FC<TextComicViewerProps> = ({ comic }) => {
             <div key={index} className="mb-12">
               <p
                 className="text-3xl md:text-4xl lg:text-5xl leading-relaxed text-white/90 font-light tracking-wide"
-                style={{ textShadow: "0 2px 4px rgba(0,0,0,0.3)", letterSpacing: "0.025em", lineHeight: "1.6" }}
+                style={{
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                  letterSpacing: "0.025em",
+                  lineHeight: "1.6",
+                }}
               >
                 {paragraph}
               </p>
@@ -142,11 +189,14 @@ const TextComicViewer: React.FC<TextComicViewerProps> = ({ comic }) => {
               <div className="text-white text-sm font-medium">
                 Chapter {currentChapter + 1} of {textChapters.length}
               </div>
-              <div className="text-gray-400 text-xs">{currentChapterData.title}</div>
+              <div className="text-gray-400 text-xs">
+                {currentChapterData.title}
+              </div>
             </div>
             <button
               onClick={() => {
-                if (currentChapter < textChapters.length - 1) setCurrentChapter(currentChapter + 1);
+                if (currentChapter < textChapters.length - 1)
+                  setCurrentChapter(currentChapter + 1);
               }}
               disabled={currentChapter === textChapters.length - 1}
               className="px-6 py-2 bg-white/10 hover:bg-white/20 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-white text-sm font-medium transition-all duration-200"
