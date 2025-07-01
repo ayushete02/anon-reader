@@ -213,7 +213,7 @@ const BrowsePage = () => {
         <HeroBanner comics={filteredComics.slice(0, 5)} />
       )}
 
-      <main className="max-w-[90rem] mx-auto px-4 pt-8 pb-20 relative z-10">
+      <main className="max-w-[90rem] mx-auto px-3 sm:px-4 lg:px-6 pt-8 pb-20 relative z-10">
         {(!personaLoaded || !userPersona.personaType) && (
           <>
             {" "}
@@ -254,11 +254,11 @@ const BrowsePage = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
+              <div className="flex flex-col sm:flex-row lg:items-center justify-between gap-4 mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-r from-gray-600 to-slate-600 rounded-xl flex items-center justify-center shadow-lg shadow-gray-600/25">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-gray-600 to-slate-600 rounded-xl flex items-center justify-center shadow-lg shadow-gray-600/25">
                     <svg
-                      className="w-6 h-6 text-white"
+                      className="w-5 h-5 sm:w-6 sm:h-6 text-white"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -272,8 +272,10 @@ const BrowsePage = () => {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-white">For You</h3>
-                    <p className="text-sm text-gray-400">
+                    <h3 className="text-xl sm:text-2xl font-bold text-white">
+                      For You
+                    </h3>
+                    <p className="text-xs sm:text-sm text-gray-400">
                       Top-rated comics to get you started
                     </p>
                   </div>
@@ -282,7 +284,7 @@ const BrowsePage = () => {
                 <div className="flex items-center gap-3">
                   <Link
                     href="/auth/login"
-                    className="flex items-center gap-2 bg-red-600/20 px-4 py-2 rounded-lg border border-red-600/30 text-red-400 hover:bg-red-600/30 hover:text-red-300 transition-all duration-300"
+                    className="flex items-center gap-2 bg-red-600/20 px-3 sm:px-4 py-2 rounded-lg border border-red-600/30 text-red-400 hover:bg-red-600/30 hover:text-red-300 transition-all duration-300"
                   >
                     <svg
                       className="w-4 h-4"
@@ -297,7 +299,7 @@ const BrowsePage = () => {
                         d="M13 10V3L4 14h7v7l9-11h-7z"
                       />
                     </svg>
-                    <span className="text-sm font-medium">
+                    <span className="text-xs sm:text-sm font-medium">
                       Get Personalized
                     </span>
                   </Link>
@@ -315,11 +317,11 @@ const BrowsePage = () => {
             <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-600/5 rounded-full blur-3xl"></div>
 
             <div className="relative z-10">
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
+              <div className="flex flex-col sm:flex-row lg:items-center justify-between gap-4 mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-r from-red-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-red-600/25">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-red-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-red-600/25">
                     <svg
-                      className="w-6 h-6 text-white"
+                      className="w-5 h-5 sm:w-6 sm:h-6 text-white"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
@@ -327,10 +329,10 @@ const BrowsePage = () => {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-white">
+                    <h3 className="text-xl sm:text-2xl font-bold text-white">
                       Recommended for You
                     </h3>
-                    <p className="text-sm text-gray-400">
+                    <p className="text-xs sm:text-sm text-gray-400">
                       Curated based on your
                       <span className="text-red-400 font-medium">
                         {userPersona.personaType}
@@ -343,14 +345,14 @@ const BrowsePage = () => {
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-2 bg-red-600/20 px-3 py-2 rounded-lg border border-red-600/30">
                     <div className="w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>
-                    <span className="text-red-400 text-sm font-medium">
+                    <span className="text-red-400 text-xs sm:text-sm font-medium">
                       {userPersona.personaType}
                     </span>
                   </div>
 
                   <Link
                     href="/onboarding"
-                    className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors bg-gray-800/50 px-3 py-2 rounded-lg border border-gray-700 hover:border-gray-600"
+                    className="flex items-center gap-2 text-xs sm:text-sm text-gray-400 hover:text-white transition-colors bg-gray-800/50 px-3 py-2 rounded-lg border border-gray-700 hover:border-gray-600"
                   >
                     <svg
                       className="w-4 h-4"
@@ -371,19 +373,20 @@ const BrowsePage = () => {
                         d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
                       />
                     </svg>
-                    Adjust Preferences
+                    <span className="hidden sm:inline">Adjust Preferences</span>
+                    <span className="sm:hidden">Adjust</span>
                   </Link>
                 </div>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                <div className="bg-red-600/10 rounded-lg p-3 border border-red-600/20">
-                  <div className="text-lg font-bold text-white">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
+                <div className="bg-red-600/10 rounded-lg p-2 sm:p-3 border border-red-600/20">
+                  <div className="text-base sm:text-lg font-bold text-white">
                     {comics.length}
                   </div>
                   <div className="text-xs text-gray-400">Matched Comics</div>
                 </div>
-                <div className="bg-purple-600/10 rounded-lg p-3 border border-purple-600/20">
-                  <div className="text-lg font-bold text-white">
+                <div className="bg-purple-600/10 rounded-lg p-2 sm:p-3 border border-purple-600/20">
+                  <div className="text-base sm:text-lg font-bold text-white">
                     {Math.round(
                       (comics.reduce((acc, comic) => acc + comic.rating, 0) /
                         comics.length) *
@@ -391,15 +394,17 @@ const BrowsePage = () => {
                     ) / 10}
                   </div>
                   <div className="text-xs text-gray-400">Avg Rating</div>
-                </div>{" "}
-                <div className="bg-blue-600/10 rounded-lg p-3 border border-blue-600/20">
-                  <div className="text-lg font-bold text-white">
+                </div>
+                <div className="bg-blue-600/10 rounded-lg p-2 sm:p-3 border border-blue-600/20">
+                  <div className="text-base sm:text-lg font-bold text-white">
                     {userPersona.vibes?.length || 0}
                   </div>
                   <div className="text-xs text-gray-400">Vibes</div>
                 </div>
-                <div className="bg-green-600/10 rounded-lg p-3 border border-green-600/20">
-                  <div className="text-lg font-bold text-white">98%</div>
+                <div className="bg-green-600/10 rounded-lg p-2 sm:p-3 border border-green-600/20">
+                  <div className="text-base sm:text-lg font-bold text-white">
+                    98%
+                  </div>
                   <div className="text-xs text-gray-400">Match Score</div>
                 </div>
               </div>
@@ -441,26 +446,27 @@ const BrowsePage = () => {
         )}
 
         {/* Quick Category Pills */}
-        <div className="my-8 ">
+        <div className="my-8">
           <div className="flex items-center gap-2 mb-4">
-            <h3 className="text-xl font-bold text-white">Quick Browse</h3>
+            <h3 className="text-lg sm:text-xl font-bold text-white">
+              Quick Browse
+            </h3>
           </div>
-          <div className="flex  overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          <div className="flex gap-2 overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {allCategories.map((category) => (
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-6 w-fit whitespace-nowrap py-2  text-sm font-medium transition-all duration-300 ${
+                className={`px-4 sm:px-6 w-fit whitespace-nowrap py-2 text-xs sm:text-sm font-medium transition-all duration-300 rounded-lg flex-shrink-0 ${
                   selectedCategory === category
-                    ? "border-b-[6px] border-white "
-                    : " text-zinc-400  "
+                    ? "bg-primary text-white"
+                    : "bg-gray-800/50 text-zinc-400 hover:bg-gray-700/50"
                 }`}
               >
                 {category}
               </button>
             ))}
           </div>
-          <div className="h-1 -mt-[5px] bg-zinc-800" />
         </div>
 
         {/* Content Sections */}
@@ -468,7 +474,7 @@ const BrowsePage = () => {
           /* Filtered Results */
           <div className="space-y-8">
             {filteredComics.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-6">
                 {filteredComics.map((comic) => (
                   <div key={comic.id} className="animate-fadeIn">
                     <ComicCard comic={comic} />

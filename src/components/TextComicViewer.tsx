@@ -71,25 +71,27 @@ const TextComicViewer: React.FC<TextComicViewerProps> = ({ comic }) => {
     <div className="min-h-screen w-full flex flex-col bg-morphic-dark relative overflow-hidden">
       {/* Header with chapter info */}
       <div className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-black/30 border-b border-white/10">
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-primary to-purple-600 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-lg">
+        <div className="p-3 sm:p-6">
+          <div className="flex items-center justify-between mb-2 sm:mb-4">
+            <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
+              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gradient-to-br from-primary to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="text-white font-bold text-sm sm:text-lg">
                   {currentChapter + 1}
                 </span>
               </div>
-              <div>
-                <h2 className="text-2xl font-bold text-white mb-1">
+              <div className="min-w-0 flex-1">
+                <h2 className="text-lg sm:text-2xl font-bold text-white mb-1 truncate">
                   {currentChapterData.title}
                 </h2>
-                <p className="text-gray-400 text-sm">{comic.title}</p>
+                <p className="text-gray-400 text-xs sm:text-sm truncate">
+                  {comic.title}
+                </p>
               </div>
             </div>
             {/* Reading progress circle */}
-            <div className="relative w-16 h-16">
+            <div className="relative w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0">
               <svg
-                className="w-16 h-16 transform -rotate-90"
+                className="w-12 h-12 sm:w-16 sm:h-16 transform -rotate-90"
                 viewBox="0 0 64 64"
               >
                 <circle
@@ -129,7 +131,7 @@ const TextComicViewer: React.FC<TextComicViewerProps> = ({ comic }) => {
                 </defs>
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-white text-xs font-medium">
+                <span className="text-white text-xs sm:text-xs font-medium">
                   {Math.round(
                     (getCurrentTextPosition() / Math.max(totalPages - 1, 1)) *
                       100
@@ -141,27 +143,27 @@ const TextComicViewer: React.FC<TextComicViewerProps> = ({ comic }) => {
           </div>
         </div>
       </div>
-      <main className="flex-1 flex flex-col pt-24">
-        <section className="relative min-h-screen flex flex-col items-center justify-center px-8 md:px-16 py-16 z-10">
-          <div className="sticky top-0 left-0 right-0 h-24 bg-gradient-to-b from-morphic-dark to-transparent z-10 pointer-events-none"></div>
+      <main className="flex-1 flex flex-col pt-16 sm:pt-24 pb-20 sm:pb-24">
+        <section className="relative min-h-screen flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 py-8 sm:py-16 z-10">
+          <div className="sticky top-0 left-0 right-0 h-12 sm:h-24 bg-gradient-to-b from-morphic-dark to-transparent z-10 pointer-events-none"></div>
 
-          <div className="w-full max-w-5xl mx-auto z-10 overflow-y-auto scrollbar-hide ">
+          <div className="w-full max-w-4xl lg:max-w-5xl mx-auto z-10 overflow-y-auto scrollbar-hide">
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 1 }}
               viewport={{ once: true, margin: "-100px" }}
-              className="mb-16"
+              className="mb-8 sm:mb-16"
             >
               <AnimatedParagraph paragraph={currentChapterFullText} />
             </motion.div>
 
             {/* Next Chapter Button */}
             {currentChapter < textChapters.length - 1 && (
-              <div className="text-center py-12">
+              <div className="text-center py-8 sm:py-12">
                 <button
                   onClick={() => setCurrentChapter(currentChapter + 1)}
-                  className="bg-primary hover:bg-primary/80 text-white px-8 py-3 rounded-lg font-medium transition-all duration-300 shadow-lg"
+                  className="bg-primary hover:bg-primary/80 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-medium transition-all duration-300 shadow-lg text-sm sm:text-base"
                 >
                   Next Chapter
                 </button>
@@ -170,34 +172,37 @@ const TextComicViewer: React.FC<TextComicViewerProps> = ({ comic }) => {
 
             {/* End of story indicator */}
             {currentChapter === textChapters.length - 1 && (
-              <div className="text-center py-12">
-                <span className="text-gray-400 text-lg">End of story</span>
+              <div className="text-center py-8 sm:py-12">
+                <span className="text-gray-400 text-base sm:text-lg">
+                  End of story
+                </span>
               </div>
             )}
           </div>
 
-          <div className="sticky bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-morphic-dark to-transparent z-10 pointer-events-none"></div>
+          <div className="sticky bottom-0 left-0 right-0 h-12 sm:h-24 bg-gradient-to-t from-morphic-dark to-transparent z-10 pointer-events-none"></div>
         </section>
       </main>
 
       {/* Fixed bottom controls - always visible */}
       <div className="fixed bottom-0 left-0 right-0 z-30 bg-black/90 backdrop-blur-xl border-t border-white/10">
-        <div className="max-w-4xl mx-auto px-6 py-4">
+        <div className="max-w-4xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <button
               onClick={() => {
                 if (currentChapter > 0) setCurrentChapter(currentChapter - 1);
               }}
               disabled={currentChapter === 0}
-              className="px-6 py-2 bg-white/10 hover:bg-white/20 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-white text-sm font-medium transition-all duration-200"
+              className="px-3 sm:px-6 py-2 bg-white/10 hover:bg-white/20 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-white text-xs sm:text-sm font-medium transition-all duration-200"
             >
-              Previous Chapter
+              <span className="hidden sm:inline">Previous Chapter</span>
+              <span className="sm:hidden">Previous</span>
             </button>
-            <div className="text-center">
-              <div className="text-white text-sm font-medium">
+            <div className="text-center flex-1 mx-2 sm:mx-4">
+              <div className="text-white text-xs sm:text-sm font-medium">
                 Chapter {currentChapter + 1} of {textChapters.length}
               </div>
-              <div className="text-gray-400 text-xs">
+              <div className="text-gray-400 text-xs truncate max-w-[120px] sm:max-w-none mx-auto">
                 {currentChapterData.title}
               </div>
             </div>
@@ -207,9 +212,10 @@ const TextComicViewer: React.FC<TextComicViewerProps> = ({ comic }) => {
                   setCurrentChapter(currentChapter + 1);
               }}
               disabled={currentChapter === textChapters.length - 1}
-              className="px-6 py-2 bg-white/10 hover:bg-white/20 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-white text-sm font-medium transition-all duration-200"
+              className="px-3 sm:px-6 py-2 bg-white/10 hover:bg-white/20 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-white text-xs sm:text-sm font-medium transition-all duration-200"
             >
-              Next Chapter
+              <span className="hidden sm:inline">Next Chapter</span>
+              <span className="sm:hidden">Next</span>
             </button>
           </div>
         </div>

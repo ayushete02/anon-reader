@@ -88,10 +88,10 @@ export default function Home() {
         <nav
           className={`
           fixed
-          top-6
-          w-[70vw]
+          top-2 sm:top-6
+          w-[95vw] sm:w-[85vw] lg:w-[70vw]
           flex justify-between items-center
-          px-6 py-3
+          px-3 sm:px-6 py-3
           rounded-2xl
           bg-morphic-dark/80
           backdrop-blur-lg
@@ -103,7 +103,9 @@ export default function Home() {
         `}
         >
           <div className="flex items-center">
-            <h1 className="text-2xl font-display text-white">Anon Reader</h1>
+            <h1 className="text-lg sm:text-2xl font-display text-white">
+              Anon Reader
+            </h1>
           </div>
           <div className="hidden md:flex items-center space-x-8">
             <Button
@@ -128,17 +130,17 @@ export default function Home() {
               <Link href="/browse">Library</Link>
             </Button>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <Button
               variant="ghost"
-              className="text-white/90 hover:text-white hover:bg-white/5"
+              className="text-white/90 hover:text-white hover:bg-white/5 text-sm sm:text-base px-2 sm:px-4"
               onClick={() => privyLogin()}
             >
               Login
             </Button>
             <Button
               variant="outline"
-              className="bg-primary text-white hover:text-white hover:bg-primary/90"
+              className="bg-primary text-white hover:text-white hover:bg-primary/90 text-sm sm:text-base px-2 sm:px-4"
               asChild
             >
               <Link href="/auth/signup">Get Started</Link>
