@@ -102,22 +102,40 @@ const ProducerPage = () => {
   };
 
   const handlePublishStory = async (finalStory: StoryDraft) => {
-    // In a real app, this would call an API to publish the story
-    console.log("Publishing story:", finalStory);
+    try {
+      console.log("Story generated successfully:", finalStory);
 
-    // Simulate API call delay
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Save the generated story to localStorage for viewing
+      const savedStories = localStorage.getItem("generatedStories");
+      let stories = [];
 
-    // Clear the draft from localStorage after successful publish
-    localStorage.removeItem("storyDraft");
+      if (savedStories) {
+        try {
+          stories = JSON.parse(savedStories);
+        } catch (error) {
+          console.error("Error parsing saved stories:", error);
+          stories = [];
+        }
+      }
 
-    // Show success message
-    alert(
-      "Story published successfully! Your comic is now available to readers."
-    );
+      // Add the new story to the list
+      stories.push(finalStory);
+      localStorage.setItem("generatedStories", JSON.stringify(stories));
 
-    // Redirect to browse page
-    router.push("/browse");
+      // Clear the draft from localStorage after successful generation
+      localStorage.removeItem("storyDraft");
+
+      // Redirect to the generated story viewer page
+      if (finalStory.id) {
+        router.push(`/story/generated/${finalStory.id}`);
+      } else {
+        console.error("No story ID found");
+        router.push("/browse");
+      }
+    } catch (error) {
+      console.error("Error handling published story:", error);
+      // Remove alert, handle error silently or show in UI
+    }
   };
 
   const handleBackStep = () => {

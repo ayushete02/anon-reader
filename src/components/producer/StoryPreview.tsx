@@ -29,20 +29,55 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
   const handlePublish = async () => {
     setIsPublishing(true);
 
-    // Add poster image to story draft
-    const finalStory = {
-      ...storyDraft,
-      posterImage: posterImage || "/comics/placeholder.jpg",
-      id: Date.now().toString(),
-      updatedAt: new Date().toISOString(),
-      status: "generating" as const,
-    };
+    try {
+      // Prepare the story data for API
+      const storyCreateData = {
+        title: storyDraft.title,
+        description: storyDraft.description,
+        plot: storyDraft.plot,
+        type: storyDraft.type,
+        categories: storyDraft.categories || [],
+        characters:
+          storyDraft.characters?.map((char) => ({
+            name: char.name,
+            type: char.type,
+            description: char.description,
+            image_url: char.imageUrl || "",
+          })) || [],
+      };
 
-    // Simulate some processing time
-    setTimeout(() => {
+      // Call the API to generate the story
+      const response = await fetch("/api/stories/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(storyCreateData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to generate story");
+      }
+
+      const generatedStory = await response.json();
+
+      // Add poster image to generated story
+      const finalStory: StoryDraft = {
+        ...storyDraft,
+        ...generatedStory,
+        posterImage: posterImage || "/comics/placeholder.jpg",
+        status: "published" as const,
+      };
+
       setIsPublishing(false);
       onPublish(finalStory);
-    }, 2000);
+    } catch (error) {
+      console.error("Error generating story:", error);
+      setIsPublishing(false);
+      // TODO: Show error in UI instead of alert
+      // You can add a toast notification here or show error state
+    }
   };
 
   const wordCount = storyDraft.plot?.trim().split(/\s+/).length || 0;
@@ -196,7 +231,7 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
         {/* Poster Image and Actions */}
         <div className="space-y-6">
           {/* Poster Image */}
-          <div className="bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 p-6">
+          {/* <div className="bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 p-6">
             <h3 className="text-xl font-semibold text-white mb-6 font-display">
               Story Poster
             </h3>
@@ -259,7 +294,7 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
                 className="hidden"
               />
             </label>
-          </div>
+          </div> */}
 
           {/* Action Buttons */}
           <div className="flex flex-col gap-4">
@@ -289,10 +324,10 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     />
                   </svg>
-                  Publishing...
+                  Generating Story...
                 </div>
               ) : (
-                "Publish Story"
+                "Generate Story"
               )}
             </button>
             <button

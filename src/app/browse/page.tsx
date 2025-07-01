@@ -11,19 +11,44 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const BrowsePage = () => {
-  const [comics, setComics] = useState<Comic[]>(MOCK_COMICS);
-  const [filteredComics, setFilteredComics] = useState<Comic[]>(MOCK_COMICS);
+  const [comics, setComics] = useState<Comic[]>([]);
+  const [filteredComics, setFilteredComics] = useState<Comic[]>([]);
   const [userPersona, setUserPersona] = useState<Partial<UserPersona>>({});
   const [loading, setLoading] = useState(true);
   const [personaLoaded, setPersonaLoaded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortBy] = useState("rating");
+  const [allComics, setAllComics] = useState<Comic[]>([]);
 
-  // Get all unique categories
+  // Load comics from mock data and localStorage
+  useEffect(() => {
+    const loadComics = () => {
+      let combinedComics = [...MOCK_COMICS];
+
+      // Load published stories from localStorage
+      const publishedStories = localStorage.getItem("publishedStories");
+      if (publishedStories) {
+        try {
+          const stories = JSON.parse(publishedStories);
+          combinedComics = [...combinedComics, ...stories];
+        } catch (error) {
+          console.error("Error parsing published stories:", error);
+        }
+      }
+
+      setAllComics(combinedComics);
+      setComics(combinedComics);
+      setFilteredComics(combinedComics);
+    };
+
+    loadComics();
+  }, []);
+
+  // Get all unique categories from all comics (including published)
   const allCategories = [
     "All",
-    ...Array.from(new Set(MOCK_COMICS.flatMap((comic) => comic.categories))),
+    ...Array.from(new Set(allComics.flatMap((comic) => comic.categories))),
   ];
 
   // Load user persona from localStorage
@@ -47,12 +72,14 @@ const BrowsePage = () => {
   useEffect(() => {
     if (personaLoaded && Object.keys(userPersona).length > 0) {
       const filteredByPersona = filterComicsByPersona(
-        MOCK_COMICS,
+        allComics,
         userPersona as UserPersona
       );
       setComics(filteredByPersona);
+    } else {
+      setComics(allComics);
     }
-  }, [personaLoaded, userPersona]);
+  }, [personaLoaded, userPersona, allComics]);
 
   // Apply filters and search
   useEffect(() => {
@@ -136,12 +163,12 @@ const BrowsePage = () => {
   const getPersonalizedRecommendations = () => {
     if (!personaLoaded || !userPersona.personaType) {
       // If no persona, return top-rated comics
-      return MOCK_COMICS.sort((a, b) => b.rating - a.rating).slice(0, 10);
+      return allComics.sort((a, b) => b.rating - a.rating).slice(0, 10);
     }
 
     // Filter and sort based on persona preferences
     const personalizedComics = filterComicsByPersona(
-      MOCK_COMICS,
+      allComics,
       userPersona as UserPersona
     );
 
@@ -161,9 +188,8 @@ const BrowsePage = () => {
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-    return MOCK_COMICS.filter(
-      (comic) => new Date(comic.releaseDate) >= thirtyDaysAgo
-    )
+    return allComics
+      .filter((comic) => new Date(comic.releaseDate) >= thirtyDaysAgo)
       .sort((a, b) => b.rating - a.rating)
       .slice(0, 8);
   };

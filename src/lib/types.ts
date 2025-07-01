@@ -259,10 +259,45 @@ export interface ChapterRead extends ChapterBase {
   id: string;
 }
 
-
 export interface Chapter {
   chapter_number: number;
   title: string;
   content: string;
+  reading_time_seconds: number;
+}
+
+// Generated Story Types (from API response)
+export interface GeneratedStory {
+  id: string;
+  title: string;
+  description: string;
+  plot: string;
+  type: "text" | "image";
+  categories: string[];
+  created_at: string;
+  updated_at: string;
+  generated_story: string;
+  characters: GeneratedCharacter[];
+  chapters: GeneratedChapter[];
+  posterImage?: string;
+  createdBy: string;
+  status: "draft" | "published" | "generating";
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GeneratedCharacter {
+  id: string;
+  name: string;
+  type: string;
+  description: string;
+  image_url: string;
+}
+
+export interface GeneratedChapter {
+  id: string;
+  title: string;
+  content: string;
+  chapter_number: number;
   reading_time_seconds: number;
 }
