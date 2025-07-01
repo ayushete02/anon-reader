@@ -1,14 +1,13 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import ClientProviders from "@/components/ClientProviders";
 
 const geist = Geist({
   subsets: ["latin"],
   variable: "--font-geist",
 });
 
-import "./globals.css";
-import UserProvider from "@/context/UserContext";
-import AuthProvider from "@/components/AuthProvider";
 
 export const metadata: Metadata = {
   title: "Comic Reader",
@@ -23,9 +22,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={geist.variable}>
       <body className="antialiased">
-        <AuthProvider>
-          <UserProvider>{children}</UserProvider>
-        </AuthProvider>
+        <ClientProviders>
+          {children}
+        </ClientProviders>
       </body>
     </html>
   );

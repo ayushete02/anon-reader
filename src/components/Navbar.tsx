@@ -5,13 +5,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
-import { signOutGoogle } from "@/lib/google-auth";
+// import { signOutGoogle } from "@/lib/google-auth";
 import { Button } from "./ui/button";
+import { usePrivy } from "@privy-io/react-auth";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { logout: privyLogout } = usePrivy();
   const { user, logout } = useUser();
   const pathname = usePathname();
   const router = useRouter();
@@ -51,7 +53,7 @@ const Navbar = () => {
 
   // Handle logout
   const handleLogout = async () => {
-    await signOutGoogle();
+    await privyLogout();
     logout();
     router.push("/");
   };
@@ -129,9 +131,8 @@ const Navbar = () => {
             <Button
               variant="ghost"
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className={`w-10 h-10 rounded-full bg-primary text-white hover:bg-primary/90 border border-white/10 ${
-                user.avatar ? "p-0" : ""
-              }`}
+              className={`w-10 h-10 rounded-full bg-primary text-white hover:bg-primary/90 border border-white/10 ${user.avatar ? "p-0" : ""
+                }`}
             >
               {user.avatar ? (
                 <Image
