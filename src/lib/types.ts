@@ -27,6 +27,7 @@ export interface User {
   id: string;
   email: string;
   name?: string;
+  walletAddress?: string;
   avatar?: string; // User profile image URL
   persona?: UserPersona;
   preferences?: UserPreferences; // User settings and preferences
@@ -202,3 +203,66 @@ export const STORY_CATEGORIES = [
   "Greater Good",
   "Personal Bond",
 ];
+
+// API Types for Story Generation
+export interface ChatMessage {
+  role: "system" | "user" | "assistant";
+  content: string;
+}
+
+export interface ChatCompletionRequest {
+  messages: ChatMessage[];
+}
+
+export interface StoryBase {
+  title: string;
+  description: string;
+  type: "text" | "image";
+  plot: string;
+  categories: string[];
+}
+
+export interface StoryCreate extends StoryBase {
+  characters: CharacterCreate[];
+}
+
+export interface StoryRead extends StoryBase {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  generated_story?: string;
+  characters: CharacterRead[];
+  chapters: ChapterRead[];
+}
+
+export interface CharacterBase {
+  name: string;
+  type: CharacterType;
+  description: string;
+  image_url?: string | null;
+}
+
+export type CharacterCreate = CharacterBase;
+
+export interface CharacterRead extends CharacterBase {
+  id: string;
+}
+
+export interface ChapterBase {
+  title: string;
+  content: string;
+  chapter_number: number;
+  reading_time_seconds: number;
+}
+
+export interface ChapterRead extends ChapterBase {
+  id: string;
+}
+
+
+export interface Chapter {
+  chapter_number: number;
+  title: string;
+  content: string;
+  reading_time_seconds: number;
+}

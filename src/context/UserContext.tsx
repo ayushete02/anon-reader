@@ -28,9 +28,9 @@ interface UserContextType {
 const UserContext = createContext<UserContextType>({
   user: null,
   loading: true,
-  login: () => {},
-  logout: () => {},
-  updateUser: () => {},
+  login: () => { },
+  logout: () => { },
+  updateUser: () => { },
 });
 
 export const useUser = () => useContext(UserContext);
