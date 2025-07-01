@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getUserFromLocalStorage } from "@/lib/utils";
 import Link from "next/link";
+import { usePrivy } from "@privy-io/react-auth";
 import AnimatedParagraph from "@/components/AnimatedParagraph";
 import { motion } from "framer-motion";
 import ComicSlider from "@/components/ComicSlider";
@@ -12,6 +13,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const router = useRouter();
+  const { login: privyLogin } = usePrivy();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -142,9 +144,9 @@ export default function Home() {
             <Button
               variant="ghost"
               className="text-white/90 hover:text-white hover:bg-white/5"
-              asChild
+              onClick={() => privyLogin()}
             >
-              <Link href="/auth/login">Login</Link>
+              Login
             </Button>
             <Button
               variant="outline"

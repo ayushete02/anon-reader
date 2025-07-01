@@ -27,6 +27,7 @@ export interface User {
   id: string;
   email: string;
   name?: string;
+  walletAddress?: string;
   avatar?: string; // User profile image URL
   persona?: UserPersona;
   preferences?: UserPreferences; // User settings and preferences
