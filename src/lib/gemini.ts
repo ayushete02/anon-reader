@@ -16,7 +16,7 @@ if (!process.env.LIGHTHOUSE_API_KEY) {
 const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export interface ChapterImage {
-    chapterNumber: number;
+    chapter_number: number;
     title: string;
     image: string; // Lighthouse IPFS link
 }
@@ -85,7 +85,7 @@ export async function generateChapterImage(
         const lighthouseUrl = await uploadToLighthouse(imageBytes);
 
         return {
-            chapterNumber: chapter.chapter_number,
+            chapter_number: chapter.chapter_number,
             title: chapter.title,
             image: lighthouseUrl // Lighthouse IPFS link
         };
@@ -116,7 +116,7 @@ export async function generateStoryImages(
             console.error(`Failed to generate image for chapter ${chapter.chapter_number}:`, error);
             // Return fallback object for failed chapters
             return {
-                chapterNumber: chapter.chapter_number,
+                chapter_number: chapter.chapter_number,
                 title: chapter.title,
                 image: '' // Empty string indicates failure
             };
@@ -127,7 +127,7 @@ export async function generateStoryImages(
     const chapterImages = await Promise.all(imagePromises);
 
     // Double-check sequential ordering
-    const sequentialChapterImages = chapterImages.sort((a, b) => a.chapterNumber - b.chapterNumber);
+    const sequentialChapterImages = chapterImages.sort((a, b) => a.chapter_number - b.chapter_number);
 
     console.log(`Completed generating ${sequentialChapterImages.length} chapter images in parallel (sequential order maintained)`);
     return sequentialChapterImages;
