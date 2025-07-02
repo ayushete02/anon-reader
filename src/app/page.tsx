@@ -197,7 +197,7 @@ export default function Home() {
               transition={{ duration: 0.8, ease: "easeOut" }}
               className="text-5xl md:text-7xl font-bold text-white leading-tight mb-8 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent"
             >
-              AI-Powered Comic Universe
+              Discover Stories That Understand You
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 30 }}
