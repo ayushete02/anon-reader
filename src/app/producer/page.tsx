@@ -1,17 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useUser } from "@/context/UserContext";
-import { StoryDraft, Character } from "@/lib/types";
-import StoryDetailsForm from "@/components/producer/StoryDetailsForm";
-import CharacterCreator from "@/components/producer/CharacterCreator";
-import StoryPreview from "@/components/producer/StoryPreview";
 import AuthGuard from "@/components/AuthGuard";
+import { CONTRACT_ABI, CONTRACT_ADDRESS } from "@/components/contract/contractDetails";
+import CharacterCreator from "@/components/producer/CharacterCreator";
+import StoryDetailsForm from "@/components/producer/StoryDetailsForm";
+import StoryPreview from "@/components/producer/StoryPreview";
+import { useUser } from "@/context/UserContext";
+import { Character, StoryDraft } from "@/lib/types";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useAccount, useChainId, useWriteContract } from "wagmi";
 
 type Step = "details" | "characters" | "preview";
 
 const ProducerPage = () => {
+  const { writeContract } = useWriteContract()
+
+  const chainId = useChainId()
+  const { address } = useAccount()
   const { user, loading } = useUser();
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState<Step>("details");
@@ -101,6 +107,17 @@ const ProducerPage = () => {
     setCurrentStep("preview");
   };
 
+  const publishStory = async (cid: string) => {
+    writeContract({
+      abi: CONTRACT_ABI,
+      address: CONTRACT_ADDRESS,
+      functionName: 'publishStory',
+      args: [
+        cid
+      ],
+    })
+  };
+
   const handlePublishStory = async (finalStory: StoryDraft) => {
     try {
       console.log("Story generated successfully:", finalStory);
@@ -184,6 +201,9 @@ const ProducerPage = () => {
   };
   return (
     <AuthGuard requireAuth={true}>
+      <button onClick={() => publishStory("https://gateway.lighthouse.storage/ipfs/bafkreidceczfcgbdbj7xsklj4e4z33uzqsoxjvaiwinvmvvk3ij6gkgccm")}>Publish</button>
+      <a>Helo: {chainId}</a>
+      <a>Address: {address}</a>
       <div className="min-h-screen bg-morphic-dark text-white relative overflow-hidden">
         {/* Enhanced glossy background effects */}
         <div className="absolute inset-0">

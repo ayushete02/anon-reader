@@ -2,6 +2,7 @@
 
 import ComicCard from "@/components/ComicCard";
 import ComicRow from "@/components/ComicRow";
+import { CONTRACT_ABI, CONTRACT_ADDRESS } from "@/components/contract/contractDetails";
 import HeroBanner from "@/components/HeroBanner";
 import Navbar from "@/components/Navbar";
 import { MOCK_COMICS } from "@/lib/mock-data";
@@ -9,11 +10,14 @@ import { Comic, UserPersona } from "@/lib/types";
 import { filterComicsByPersona } from "@/lib/utils";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { usePrivy } from "@privy-io/react-auth";
+import { Abi } from "viem";
+import { useReadContract, useReadContracts } from "wagmi";
 import { motion } from "framer-motion";
+import { usePrivy } from "@privy-io/react-auth";
 
 const BrowsePage = () => {
   const { login: privyLogin } = usePrivy();
+
   const [comics, setComics] = useState<Comic[]>([]);
   const [filteredComics, setFilteredComics] = useState<Comic[]>([]);
   const [userPersona, setUserPersona] = useState<Partial<UserPersona>>({});
@@ -23,6 +27,36 @@ const BrowsePage = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortBy] = useState("rating");
   const [allComics, setAllComics] = useState<Comic[]>([]);
+
+  const contractAddress = CONTRACT_ADDRESS as `0x${string}`;
+
+  console.log("contractAddress ;", contractAddress);
+  const { data: numberOfStories, isLoading: numberOfStoriesLoading } =
+    useReadContract({
+      abi: CONTRACT_ABI,
+      address: contractAddress,
+      functionName: "totalStories",
+    });
+
+  console.log("numberOfStories ;", numberOfStories);
+
+  const contractCalls = Array.from({ length: Number(numberOfStories) }).map(
+    (_, index) => ({
+      abi: CONTRACT_ABI as Abi,
+      address: contractAddress,
+      functionName: "getStory",
+      args: [index + 1],
+    })
+  );
+
+  console.log("contractCalls ;", contractCalls);
+
+  const { data: stories, isLoading: storiesLoading } = useReadContracts({
+    contracts: contractCalls,
+  });
+
+  console.log("stories ;", stories);
+
 
   // Load comics from mock data and localStorage
   useEffect(() => {
@@ -415,11 +449,10 @@ const BrowsePage = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-4 sm:px-6 w-fit whitespace-nowrap py-2 text-xs sm:text-sm font-medium transition-all duration-300 rounded-lg flex-shrink-0 backdrop-blur-sm ${
-                  selectedCategory === category
-                    ? "bg-primary text-white shadow-lg shadow-primary/25"
-                    : "bg-gray-800/50 text-zinc-400 hover:bg-gray-700/50 border border-gray-700/50"
-                }`}
+                className={`px-4 sm:px-6 w-fit whitespace-nowrap py-2 text-xs sm:text-sm font-medium transition-all duration-300 rounded-lg flex-shrink-0 backdrop-blur-sm ${selectedCategory === category
+                  ? "bg-primary text-white shadow-lg shadow-primary/25"
+                  : "bg-gray-800/50 text-zinc-400 hover:bg-gray-700/50 border border-gray-700/50"
+                  }`}
               >
                 {category}
               </motion.button>
