@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { StoryCreate, StoryRead, Chapter, ChatMessage, ChatCompletionRequest } from '@/lib/types';
+import { StoryCreate, StoryRead, Chapter, ChatMessage, ChatCompletionRequest, Character } from '@/lib/types';
 import { NearAIHelper } from '@/lib/near-ai';
 import { createStoryPrompt, SYSTEM_PROMPT } from '@/constants/prompts';
 import { STORY_CONFIG, FIELD_CONSTRAINTS } from '@/constants/constants';
+import { generateStoryImages, ChapterImage } from '@/lib/gemini';
 
 function parseStoryIntoChapters(storyText: string): Chapter[] {
     const chapters: Chapter[] = [];
@@ -144,7 +145,40 @@ export async function POST(request: NextRequest) {
                 );
             }
 
-            // Generate story response data
+            // Handle image generation for image type stories
+            if (storyData.type === "image") {
+                try {
+                    console.log('Generating images for story chapters...');
+
+                    // Convert characters to the right format for image generation
+                    const charactersForImageGen: Character[] = storyData.characters.map((char, index) => ({
+                        id: `char_temp_${index}`,
+                        name: char.name,
+                        description: char.description,
+                        type: char.type,
+                        imageUrl: char.image_url || undefined,
+                        isGenerated: false
+                    }));
+
+                    // Generate images for all chapters and upload directly to Lighthouse storage using buffer upload
+                    const chapterImages: ChapterImage[] = await generateStoryImages(chapters, charactersForImageGen);
+
+                    console.log(`Successfully generated and uploaded ${chapterImages.length} chapter images to Lighthouse`);
+
+                    // Return the image response format with Lighthouse IPFS links
+                    return NextResponse.json(chapterImages, { status: 201 });
+
+                } catch (imageError) {
+                    console.error('Image generation and upload error:', imageError);
+                    const errorMessage = imageError instanceof Error ? imageError.message : "Failed to generate and upload chapter images";
+                    return NextResponse.json(
+                        { error: errorMessage },
+                        { status: 500 }
+                    );
+                }
+            }
+
+            // For text type stories, return the standard format
             const storyResponse = generateStoryData(storyData, chapters, generatedContent);
 
             console.log(`Successfully generated story with ${chapters.length} chapters`);

@@ -15,7 +15,7 @@ export const NEAR_AI_CONFIG = {
 
 // Story Generation Configuration
 export const STORY_CONFIG = {
-    CHAPTERS_COUNT: 15,
+    CHAPTERS_COUNT: 10,
     WORDS_PER_CHAPTER: 175,
     WORDS_PER_MINUTE: 200,
     DEFAULT_READING_TIME: 30,
