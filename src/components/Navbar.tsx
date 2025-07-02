@@ -84,12 +84,20 @@ const Navbar = () => {
           flex justify-between items-center
           px-3 sm:px-6 py-3
           rounded-2xl
-          bg-morphic-dark/80
-          backdrop-blur-lg
-          shadow-lg
+          bg-morphic-dark/70
+          backdrop-blur-xl
+          shadow-2xl
+          border border-white/10
           z-50
-          transition-all duration-300
-          ${scrolled ? "border border-white/10" : ""}
+          transition-all duration-500
+          hover:bg-morphic-dark/80
+          hover:border-white/20
+          hover:shadow-3xl
+          ${
+            scrolled
+              ? "backdrop-blur-2xl bg-morphic-dark/90 shadow-3xl border-white/20"
+              : ""
+          }
         `}
       >
         {/* Logo */}

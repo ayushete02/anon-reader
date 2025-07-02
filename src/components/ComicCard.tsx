@@ -39,14 +39,15 @@ const ComicCard: React.FC<ComicCardProps> = ({ comic, priority = false }) => {
 
   return (
     <div
-      className={`group relative flex transition-all duration-300 cursor-pointer bg-morphic-gray rounded-2xl overflow-hidden`}
+      className={`group relative flex transition-all duration-500 cursor-pointer bg-morphic-gray/60 backdrop-blur-xl rounded-2xl overflow-hidden border border-white/10 hover:border-white/20 hover:bg-morphic-gray/80`}
       style={{
         width: hovered ? 440 : 200, // expanded width on hover
         minHeight: 300,
         boxShadow: hovered
-          ? "0 8px 32px 0 rgba(0,0,0,0.25)"
-          : "0 2px 8px 0 rgba(0,0,0,0.10)",
+          ? "0 20px 40px 0 rgba(0,0,0,0.4), 0 0 30px rgba(93,93,255,0.2)"
+          : "0 4px 16px 0 rgba(0,0,0,0.15)",
         zIndex: hovered ? 20 : 1,
+        transform: hovered ? "translateY(-8px)" : "translateY(0px)",
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}

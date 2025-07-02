@@ -3,7 +3,6 @@
 import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getUserFromLocalStorage } from "@/lib/utils";
-import Link from "next/link";
 import { usePrivy } from "@privy-io/react-auth";
 import AnimatedParagraph from "@/components/AnimatedParagraph";
 import { motion } from "framer-motion";
@@ -83,6 +82,12 @@ export default function Home() {
 
   return (
     <div className="min-h-screen w-full flex flex-col bg-morphic-dark relative overflow-hidden">
+      {/* Background blur effects */}
+      <div className="fixed inset-0 z-0">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-3/4 left-1/2 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl"></div>
+      </div>
       {/* Navigation */}
       <div className="w-full flex justify-center">
         <nav
@@ -93,13 +98,14 @@ export default function Home() {
           flex justify-between items-center
           px-3 sm:px-6 py-3
           rounded-2xl
-          bg-morphic-dark/80
-          backdrop-blur-lg
-          shadow-lg
+          bg-morphic-dark/70
+          backdrop-blur-xl
+          shadow-2xl
+          border border-white/10
           z-50
           transition-all duration-300
           mx-auto
-          ${isScrolled ? "border border-white/10" : ""}
+          ${isScrolled ? "backdrop-blur-2xl bg-morphic-dark/80 shadow-3xl" : ""}
         `}
         >
           <div className="flex items-center">
@@ -108,42 +114,51 @@ export default function Home() {
             </h1>
           </div>
           <div className="hidden md:flex items-center space-x-8">
-            <Button
-              variant="ghost"
-              className="text-white/70 hover:text-white hover:bg-white/5"
-              asChild
-            >
-              <Link href="#about">About</Link>
-            </Button>
-            <Button
-              variant="ghost"
-              className="text-white/70 hover:text-white hover:bg-white/5"
-              asChild
-            >
-              <Link href="#features">Features</Link>
-            </Button>
-            <Button
-              variant="ghost"
-              className="text-white/70 hover:text-white hover:bg-white/5"
-              asChild
-            >
-              <Link href="/browse">Library</Link>
-            </Button>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                variant="ghost"
+                className="text-white/70 hover:text-white hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
+                onClick={() => {
+                  document.getElementById("about")?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  });
+                }}
+              >
+                About
+              </Button>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                variant="ghost"
+                className="text-white/70 hover:text-white hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
+                onClick={() => {
+                  document.getElementById("features")?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  });
+                }}
+              >
+                Features
+              </Button>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                variant="ghost"
+                className="text-white/70 hover:text-white hover:bg-white/10 backdrop-blur-sm transition-all duration-300"
+                onClick={() => router.push("/browse")}
+              >
+                Library
+              </Button>
+            </motion.div>
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
             <Button
-              variant="ghost"
-              className="text-white/90 hover:text-white hover:bg-white/5 text-sm sm:text-base px-2 sm:px-4"
+              variant="outline"
+              className="bg-primary text-white  border-white/70 hover:text-white hover:bg-primary/90 text-sm sm:text-base px-2 sm:px-4"
               onClick={() => privyLogin()}
             >
               Login
-            </Button>
-            <Button
-              variant="outline"
-              className="bg-primary text-white hover:text-white hover:bg-primary/90 text-sm sm:text-base px-2 sm:px-4"
-              onClick={() => privyLogin()}
-            >
-              Get Started
             </Button>
           </div>
         </nav>
@@ -162,7 +177,7 @@ export default function Home() {
               loop
               muted
               playsInline
-              className="w-full h-full object-cover opacity-20"
+              className="w-full h-full object-cover opacity-30"
             >
               <source src="/hero-video.mp4" type="video/mp4" />
               <source
@@ -171,27 +186,27 @@ export default function Home() {
               />
               Your browser does not support the video tag.
             </video>
-            <div className="absolute inset-0 bg-gradient-to-b from-morphic-dark via-transparent to-morphic-dark"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-morphic-dark/80 via-morphic-dark/20 to-morphic-dark backdrop-blur-[1px]"></div>
+            <div className="absolute inset-0 bg-gradient-radial from-transparent via-morphic-dark/10 to-morphic-dark/50"></div>
           </div>
 
           <div className="w-full max-w-5xl mx-auto text-center z-10 mt-16">
             <motion.h1
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="text-5xl md:text-7xl font-bold text-white leading-tight mb-8"
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="text-5xl md:text-7xl font-bold text-white leading-tight mb-8 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent"
             >
-              Discover Stories That Understand You
+              AI-Powered Comic Universe
             </motion.h1>
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-xl md:text-2xl text-white/80 leading-relaxed max-w-4xl mx-auto mb-8"
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+              className="text-lg md:text-xl text-white/90 leading-relaxed max-w-2xl mx-auto mb-8"
             >
-              Experience personalized comic adventures tailored to your unique
-              preferences. From fantasy epics to slice-of-life stories, find
-              your perfect narrative match.
+              Discover personalized comic adventures with AI that learns your
+              taste and curates the perfect stories for you.
             </motion.p>
 
             <motion.div
@@ -209,18 +224,48 @@ export default function Home() {
                 <Button
                   variant="default"
                   size="lg"
-                  className="bg-primary text-white hover:bg-primary/90"
+                  className="bg-primary text-white hover:bg-primary/90 backdrop-blur-xl border border-primary/30 hover:border-primary/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-primary/30 transform-gpu group"
                   onClick={() => privyLogin()}
                 >
-                  Start Reading
+                  <span className="flex items-center gap-2">
+                    <svg
+                      className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                      />
+                    </svg>
+                    Start Reading
+                  </span>
                 </Button>
                 <Button
                   variant="secondary"
                   size="lg"
-                  className="bg-white/5 text-white hover:bg-white/10"
-                  asChild
+                  className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-xl border border-white/20 hover:border-white/40 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-white/20 transform-gpu group"
+                  onClick={() => router.push("/browse")}
                 >
-                  <Link href="/browse">Explore Library</Link>
+                  <span className="flex items-center gap-2">
+                    <svg
+                      className="w-5 h-5 group-hover:scale-110 transition-transform duration-300"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                      />
+                    </svg>
+                    Explore Library
+                  </span>
                 </Button>
               </motion.div>
             </motion.div>
@@ -232,9 +277,10 @@ export default function Home() {
           id="about"
           className="relative min-h-screen flex flex-col items-center justify-center px-8 md:px-16 py-16 z-10"
         >
-          <div className="sticky top-0 left-0 right-0 h-24 bg-gradient-to-b from-morphic-dark to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-morphic-dark/50 to-morphic-darker/50 backdrop-blur-sm"></div>
+          <div className="sticky top-0 left-0 right-0 h-24 bg-gradient-to-b from-morphic-dark via-morphic-dark/80 to-transparent backdrop-blur-lg z-10 pointer-events-none"></div>
 
-          <div className="w-full max-w-5xl mx-auto z-10 overflow-y-auto scrollbar-hide ">
+          <div className="w-full max-w-5xl mx-auto z-10 overflow-y-auto scrollbar-hide">
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -242,19 +288,20 @@ export default function Home() {
               viewport={{ once: true, margin: "-100px" }}
               className="mb-16"
             >
-              <AnimatedParagraph paragraph="Anon Reader revolutionizes how you discover and experience digital comics. Our intelligent recommendation system learns your preferences, story endings you love, and narrative styles that resonate with you. Whether you prefer tales of redemption, epic adventures, or intimate character studies, we curate the perfect reading experience tailored just for you. Join thousands of readers who have discovered their next favorite story through our personalized approach to digital storytelling." />
+              <AnimatedParagraph paragraph="Experience the future of storytelling with our intelligent AI engine that learns your reading patterns, understands your narrative preferences, and discovers your perfect comic matches. Our advanced machine learning algorithms analyze your choices and deliver personalized recommendations that evolve with your taste." />
             </motion.div>
           </div>
 
-          <div className="sticky bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-morphic-dark to-transparent z-10 pointer-events-none"></div>
+          <div className="sticky bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-morphic-dark via-morphic-dark/80 to-transparent backdrop-blur-lg z-10 pointer-events-none"></div>
         </section>
 
         {/* Features Section */}
         <section
           id="features"
-          className="w-full bg-morphic-darker py-24 px-8 md:px-16 z-10"
+          className="w-full bg-morphic-darker/80 backdrop-blur-sm py-24 px-8 md:px-16 z-10 relative"
         >
-          <div className="w-full max-w-6xl mx-auto">
+          <div className="absolute inset-0 bg-gradient-to-br from-morphic-darker via-morphic-dark/50 to-morphic-darker"></div>
+          <div className="w-full max-w-6xl mx-auto relative z-10">
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
                 Why Choose Anon Reader?
@@ -266,12 +313,18 @@ export default function Home() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Feature 1 - Personalized Recommendations */}
-              <div className="bg-morphic-dark rounded-2xl p-8 border border-white/5 hover:border-white/10 transition-all duration-300">
+              {/* Feature 1 - AI Recommendations */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                whileHover={{ scale: 1.02, y: -5 }}
+                className="bg-morphic-dark/60 backdrop-blur-xl rounded-2xl p-8 border border-white/10 hover:border-blue-500/40 transition-all duration-500 hover:bg-morphic-dark/80 hover:shadow-2xl hover:shadow-blue-500/20 group"
+              >
                 <div className="mb-6">
-                  <div className="w-16 h-16 bg-blue-500/20 rounded-2xl flex items-center justify-center mb-4">
+                  <div className="w-16 h-16 bg-blue-500/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4 border border-blue-500/30 group-hover:bg-blue-500/30 group-hover:border-blue-500/50 transition-all duration-300">
                     <svg
-                      className="w-8 h-8 text-blue-400"
+                      className="w-8 h-8 text-blue-400 group-hover:text-blue-300 transition-colors duration-300"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -280,27 +333,33 @@ export default function Home() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                        d="M13 10V3L4 14h7v7l9-11h-7z"
                       />
                     </svg>
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-3">
-                    Smart Recommendations
+                  <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-blue-200 transition-colors duration-300">
+                    AI-Powered Recommendations
                   </h3>
-                  <p className="text-white/70 leading-relaxed">
-                    Our AI learns your preferences through a personality quiz
-                    and reading history to suggest comics that match your taste
-                    perfectly.
+                  <p className="text-white/70 leading-relaxed group-hover:text-white/80 transition-colors duration-300">
+                    Advanced machine learning algorithms analyze your reading
+                    patterns, preferences, and favorite story elements to
+                    suggest comics you&apos;ll love.
                   </p>
                 </div>
-              </div>
+              </motion.div>
 
-              {/* Feature 2 - Immersive Reading */}
-              <div className="bg-morphic-dark rounded-2xl p-8 border border-white/5 hover:border-white/10 transition-all duration-300">
+              {/* Feature 2 - Personalized Discovery */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                whileHover={{ scale: 1.02, y: -5 }}
+                className="bg-morphic-dark/60 backdrop-blur-xl rounded-2xl p-8 border border-white/10 hover:border-green-500/40 transition-all duration-500 hover:bg-morphic-dark/80 hover:shadow-2xl hover:shadow-green-500/20 group"
+              >
                 <div className="mb-6">
-                  <div className="w-16 h-16 bg-green-500/20 rounded-2xl flex items-center justify-center mb-4">
+                  <div className="w-16 h-16 bg-green-500/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4 border border-green-500/30 group-hover:bg-green-500/30 group-hover:border-green-500/50 transition-all duration-300">
                     <svg
-                      className="w-8 h-8 text-green-400"
+                      className="w-8 h-8 text-green-400 group-hover:text-green-300 transition-colors duration-300"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -309,27 +368,33 @@ export default function Home() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                        d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                       />
                     </svg>
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-3">
-                    Rich Media Experience
+                  <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-green-200 transition-colors duration-300">
+                    Smart Discovery Engine
                   </h3>
-                  <p className="text-white/70 leading-relaxed">
-                    Enjoy comics with integrated audio narration, sound effects,
-                    and smooth page transitions for an immersive reading
-                    experience.
+                  <p className="text-white/70 leading-relaxed group-hover:text-white/80 transition-colors duration-300">
+                    Our AI understands narrative styles, character development,
+                    and plot structures to find stories that match your unique
+                    taste profile.
                   </p>
                 </div>
-              </div>
+              </motion.div>
 
-              {/* Feature 3 - Progress Tracking */}
-              <div className="bg-morphic-dark rounded-2xl p-8 border border-white/5 hover:border-white/10 transition-all duration-300">
+              {/* Feature 3 - Intelligent Reading */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                whileHover={{ scale: 1.02, y: -5 }}
+                className="bg-morphic-dark/60 backdrop-blur-xl rounded-2xl p-8 border border-white/10 hover:border-purple-500/40 transition-all duration-500 hover:bg-morphic-dark/80 hover:shadow-2xl hover:shadow-purple-500/20 group"
+              >
                 <div className="mb-6">
-                  <div className="w-16 h-16 bg-purple-500/20 rounded-2xl flex items-center justify-center mb-4">
+                  <div className="w-16 h-16 bg-purple-500/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4 border border-purple-500/30 group-hover:bg-purple-500/30 group-hover:border-purple-500/50 transition-all duration-300">
                     <svg
-                      className="w-8 h-8 text-purple-400"
+                      className="w-8 h-8 text-purple-400 group-hover:text-purple-300 transition-colors duration-300"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -342,29 +407,29 @@ export default function Home() {
                       />
                     </svg>
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-3">
-                    Track Your Journey
+                  <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-purple-200 transition-colors duration-300">
+                    Adaptive Learning
                   </h3>
-                  <p className="text-white/70 leading-relaxed">
-                    Never lose your place. Keep track of your reading progress,
-                    bookmark favorites, and discover new series based on your
-                    reading patterns.
+                  <p className="text-white/70 leading-relaxed group-hover:text-white/80 transition-colors duration-300">
+                    The more you read, the smarter our recommendations become.
+                    Track progress and discover new genres with intelligent
+                    bookmarking.
                   </p>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>
 
         {/* How It Works Section */}
-        <section className="w-full bg-morphic-dark py-24 px-8 md:px-16 z-10">
+        <section className="w-full bg-morphic-dark/80 backdrop-blur-sm py-24 px-8 md:px-16 z-10">
           <div className="w-full max-w-6xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
                 How It Works
               </h2>
               <p className="text-xl text-white/70 max-w-3xl mx-auto">
-                Get personalized comic recommendations in three simple steps
+                Get personalized recommendations in three simple steps
               </p>
             </div>
 
@@ -372,43 +437,39 @@ export default function Home() {
               {/* Step 1 */}
               <div className="text-center">
                 <div className="relative mb-8">
-                  <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-white/20">
                     <span className="text-3xl font-bold text-white">1</span>
                   </div>
-                  <div className="absolute top-1/2 left-full w-full h-0.5 bg-gradient-to-r from-blue-500/50 to-transparent hidden md:block transform -translate-y-1/2"></div>
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-4">
-                  Take the Quiz
+                  Take Quiz
                 </h3>
                 <p className="text-white/70 leading-relaxed">
-                  Complete our personality assessment to help us understand your
-                  storytelling preferences, favorite themes, and narrative
-                  styles.
+                  Quick personality assessment to understand your reading
+                  preferences.
                 </p>
               </div>
 
               {/* Step 2 */}
               <div className="text-center">
                 <div className="relative mb-8">
-                  <div className="w-24 h-24 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-24 h-24 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-white/20">
                     <span className="text-3xl font-bold text-white">2</span>
                   </div>
-                  <div className="absolute top-1/2 left-full w-full h-0.5 bg-gradient-to-r from-purple-500/50 to-transparent hidden md:block transform -translate-y-1/2"></div>
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-4">
-                  Get Recommendations
+                  Get Matches
                 </h3>
                 <p className="text-white/70 leading-relaxed">
-                  Our AI analyzes your responses and curates a personalized
-                  library of comics that match your unique taste and
-                  preferences.
+                  AI curates comics that perfectly match your taste and
+                  interests.
                 </p>
               </div>
 
               {/* Step 3 */}
               <div className="text-center">
                 <div className="relative mb-8">
-                  <div className="w-24 h-24 bg-gradient-to-br from-pink-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-24 h-24 bg-gradient-to-br from-pink-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-white/20">
                     <span className="text-3xl font-bold text-white">3</span>
                   </div>
                 </div>
@@ -416,9 +477,8 @@ export default function Home() {
                   Start Reading
                 </h3>
                 <p className="text-white/70 leading-relaxed">
-                  Dive into your personalized comic library with rich media
-                  experiences, progress tracking, and continuous recommendations
-                  as you read.
+                  Enjoy your personalized library with immersive reading
+                  experience.
                 </p>
               </div>
             </div>
@@ -428,220 +488,37 @@ export default function Home() {
         {/* Comic Slider Section */}
         <ComicSlider />
 
-        {/* Use Cases Section */}
-        <section
-          id="usecases"
-          className="w-full bg-morphic-darker py-24 px-8 md:px-16 z-10"
-        >
-          <div className="w-full max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Perfect for Every Reader
-              </h2>
-              <p className="text-xl text-white/70 max-w-3xl mx-auto">
-                Whether you&apos;re new to comics or a seasoned enthusiast, find
-                your perfect story
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-              {/* Use Case 1 - New Readers */}
-              <div className="relative overflow-hidden rounded-2xl transition-all duration-300 group h-[400px]">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent z-10"></div>
-                <div className="absolute inset-0 bg-blue-600/20 group-hover:bg-blue-600/30 transition-colors duration-300 z-0"></div>
-                <div className="relative h-full bg-morphic-gray z-0 flex items-center justify-center">
-                  <svg
-                    className="w-32 h-32 text-blue-400 opacity-30"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1}
-                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                    />
-                  </svg>
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 p-8 z-20">
-                  <h3 className="text-2xl font-bold text-white mb-2">
-                    New to Comics
-                  </h3>
-                  <p className="text-white/90">
-                    Discover the world of digital comics with curated starter
-                    collections and guided recommendations based on your
-                    interests.
-                  </p>
-                </div>
-              </div>
-
-              {/* Use Case 2 - Enthusiasts */}
-              <div className="relative overflow-hidden rounded-2xl transition-all duration-300 group h-[400px]">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent z-10"></div>
-                <div className="absolute inset-0 bg-green-600/20 group-hover:bg-green-600/30 transition-colors duration-300 z-0"></div>
-                <div className="relative h-full bg-morphic-gray z-0 flex items-center justify-center">
-                  <svg
-                    className="w-32 h-32 text-green-400 opacity-30"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1}
-                      d="M13 10V3L4 14h7v7l9-11h-7z"
-                    />
-                  </svg>
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 p-8 z-20">
-                  <h3 className="text-2xl font-bold text-white mb-2">
-                    Comic Enthusiasts
-                  </h3>
-                  <p className="text-white/90">
-                    Expand your reading horizons with AI-powered suggestions
-                    that discover hidden gems matching your sophisticated
-                    tastes.
-                  </p>
-                </div>
-              </div>
-
-              {/* Use Case 3 - Casual Readers */}
-              <div className="relative overflow-hidden rounded-2xl transition-all duration-300 group h-[400px]">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent z-10"></div>
-                <div className="absolute inset-0 bg-purple-600/20 group-hover:bg-purple-600/30 transition-colors duration-300 z-0"></div>
-                <div className="relative h-full bg-morphic-gray z-0 flex items-center justify-center">
-                  <svg
-                    className="w-32 h-32 text-purple-400 opacity-30"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1}
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                    />
-                  </svg>
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 p-8 z-20">
-                  <h3 className="text-2xl font-bold text-white mb-2">
-                    Casual Readers
-                  </h3>
-                  <p className="text-white/90">
-                    Find quick, engaging stories that fit your schedule. Perfect
-                    for commutes, lunch breaks, or relaxing evenings.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* FAQ Section */}
-        <section className="w-full bg-morphic-darker py-24 px-8 md:px-16 z-10">
-          <div className="w-full max-w-4xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Frequently Asked Questions
-              </h2>
-              <p className="text-xl text-white/70 max-w-3xl mx-auto">
-                Everything you need to know about Anon Reader
-              </p>
-            </div>
-
-            <div className="space-y-6">
-              <div className="bg-morphic-dark rounded-xl p-6 border border-white/5">
-                <h3 className="text-xl font-semibold text-white mb-3">
-                  How does the personalization work?
-                </h3>
-                <p className="text-white/70 leading-relaxed">
-                  Our AI analyzes your responses to our personality quiz,
-                  reading history, and preferences to recommend comics that
-                  match your unique taste. The more you read, the better our
-                  recommendations become.
-                </p>
-              </div>
-
-              <div className="bg-morphic-dark rounded-xl p-6 border border-white/5">
-                <h3 className="text-xl font-semibold text-white mb-3">
-                  Is Anon Reader free to use?
-                </h3>
-                <p className="text-white/70 leading-relaxed">
-                  Yes! You can start reading for free with access to our basic
-                  library. Premium features like exclusive content, enhanced
-                  audio experiences, and advanced recommendations are available
-                  with our subscription plans.
-                </p>
-              </div>
-
-              <div className="bg-morphic-dark rounded-xl p-6 border border-white/5">
-                <h3 className="text-xl font-semibold text-white mb-3">
-                  What types of comics are available?
-                </h3>
-                <p className="text-white/70 leading-relaxed">
-                  We offer a diverse library spanning fantasy, sci-fi, romance,
-                  horror, slice-of-life, action, mystery, and more. From epic
-                  adventures to intimate character studies, there&apos;s
-                  something for every reader.
-                </p>
-              </div>
-
-              <div className="bg-morphic-dark rounded-xl p-6 border border-white/5">
-                <h3 className="text-xl font-semibold text-white mb-3">
-                  Can I read offline?
-                </h3>
-                <p className="text-white/70 leading-relaxed">
-                  Yes! Premium subscribers can download comics for offline
-                  reading. Perfect for commutes, travel, or when you don&apos;t
-                  have internet access.
-                </p>
-              </div>
-
-              <div className="bg-morphic-dark rounded-xl p-6 border border-white/5">
-                <h3 className="text-xl font-semibold text-white mb-3">
-                  How accurate are the recommendations?
-                </h3>
-                <p className="text-white/70 leading-relaxed">
-                  Our AI has a 98% accuracy rate in matching readers with comics
-                  they love. Our recommendation engine continuously learns from
-                  your reading patterns to improve suggestions over time.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* CTA Section */}
         <section
           id="cta"
-          className="w-full bg-morphic-dark py-24 px-8 md:px-16 z-10 relative overflow-hidden"
+          className="w-full bg-morphic-dark/90 backdrop-blur-xl py-24 px-8 md:px-16 z-10 relative overflow-hidden"
         >
-          <div className="absolute inset-0 bg-gradient-radial from-primary/10 to-transparent opacity-50"></div>
+          <div className="absolute inset-0 bg-gradient-radial from-primary/20 via-primary/5 to-transparent opacity-50"></div>
+          <div className="absolute inset-0 backdrop-blur-sm"></div>
           <div className="w-full max-w-4xl mx-auto text-center relative z-10">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
-              Ready to discover your next favorite comic?
+            <h2 className="text-4xl md:text-6xl font-bold text-white mb-8">
+              Ready to Find Your Next Favorite Comic?
             </h2>
             <p className="text-xl text-white/70 mb-12 max-w-2xl mx-auto">
-              Join thousands of readers who have found their perfect stories
-              through our personalized recommendations. Start your journey
-              today.
+              Join thousands of readers discovering their perfect stories
+              through AI-powered recommendations.
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <button
-                className="px-8 py-4 rounded-xl bg-primary text-white text-lg hover:bg-primary/90 transition-all duration-300"
+              <Button
+                size="lg"
+                className="px-8 py-4 rounded-xl bg-primary/90 backdrop-blur-sm text-white text-lg hover:bg-primary transition-all duration-300 border border-primary/30 hover:scale-105 hover:shadow-lg hover:shadow-primary/25"
                 onClick={() => privyLogin()}
               >
                 Start Reading for Free
-              </button>
-              <button
-                className="px-8 py-4 rounded-xl bg-transparent border-2 border-white/30 text-white text-lg hover:border-white/60 transition-all duration-300"
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="px-8 py-4 rounded-xl bg-transparent backdrop-blur-sm border-2 border-white/30 text-white text-lg hover:border-white/60 hover:bg-white/5 transition-all duration-300 hover:scale-105"
                 onClick={() => router.push("/browse")}
               >
                 Explore Library
-              </button>
+              </Button>
             </div>
           </div>
         </section>
