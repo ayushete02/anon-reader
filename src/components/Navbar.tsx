@@ -15,7 +15,7 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
-  const { logout: privyLogout } = usePrivy();
+  const { logout: privyLogout, login: privyLogin } = usePrivy();
   const { user, logout } = useUser();
   const pathname = usePathname();
   const router = useRouter();
@@ -306,9 +306,9 @@ const Navbar = () => {
               <Button
                 variant="default"
                 className="text-white/90 hover:text-white hover:bg-white/5 text-sm sm:text-base px-2 sm:px-4"
-                asChild
+                onClick={() => privyLogin()}
               >
-                <Link href="/auth/login">Login</Link>
+                Login
               </Button>
             </>
           )}

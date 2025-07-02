@@ -9,8 +9,10 @@ import { Comic, UserPersona } from "@/lib/types";
 import { filterComicsByPersona } from "@/lib/utils";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { usePrivy } from "@privy-io/react-auth";
 
 const BrowsePage = () => {
+  const { login: privyLogin } = usePrivy();
   const [comics, setComics] = useState<Comic[]>([]);
   const [filteredComics, setFilteredComics] = useState<Comic[]>([]);
   const [userPersona, setUserPersona] = useState<Partial<UserPersona>>({});
@@ -282,8 +284,8 @@ const BrowsePage = () => {
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <Link
-                    href="/auth/login"
+                  <button
+                    onClick={() => privyLogin()}
                     className="flex items-center gap-2 bg-red-600/20 px-3 sm:px-4 py-2 rounded-lg border border-red-600/30 text-red-400 hover:bg-red-600/30 hover:text-red-300 transition-all duration-300"
                   >
                     <svg
@@ -302,7 +304,7 @@ const BrowsePage = () => {
                     <span className="text-xs sm:text-sm font-medium">
                       Get Personalized
                     </span>
-                  </Link>
+                  </button>
                 </div>
               </div>
 

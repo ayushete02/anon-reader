@@ -3,7 +3,8 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { getUserFromLocalStorage } from "@/lib/utils";
-import LoginForm from "./LoginForm";
+import { usePrivy } from "@privy-io/react-auth";
+import { Button } from "./ui/button";
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -56,6 +57,8 @@ interface LoginPopupProps {
 }
 
 export const LoginPopup: React.FC<LoginPopupProps> = ({ isOpen, onClose }) => {
+  const { login: privyLogin } = usePrivy();
+
   if (!isOpen) return null;
 
   return (
@@ -107,8 +110,18 @@ export const LoginPopup: React.FC<LoginPopupProps> = ({ isOpen, onClose }) => {
           </p>
         </div>
 
-        {/* Login Form */}
-        <LoginForm />
+        {/* Privy Login Button */}
+        <div className="text-center">
+          <Button
+            onClick={() => {
+              privyLogin();
+              onClose();
+            }}
+            className="w-full bg-primary text-white hover:bg-primary/90 py-3 text-lg"
+          >
+            Sign In to Continue
+          </Button>
+        </div>
       </div>
     </div>
   );

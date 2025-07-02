@@ -5,8 +5,11 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import Link from "next/link";
 import Image from "next/image";
+import { usePrivy } from "@privy-io/react-auth";
 
 export default function ComicSlider() {
+  const { login: privyLogin } = usePrivy();
+
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
@@ -153,12 +156,12 @@ export default function ComicSlider() {
           Our AI learns what you love and curates the perfect reading list.
           Every recommendation is tailored to your unique preferences.
         </p>
-        <Link
-          href="/auth/signup"
+        <button
+          onClick={() => privyLogin()}
           className="px-8 py-4 rounded-xl bg-primary text-white text-lg font-medium hover:bg-primary/90 transition-all duration-300"
         >
           Get Personalized Recommendations
-        </Link>
+        </button>
       </div>
     </>
   );

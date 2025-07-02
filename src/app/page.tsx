@@ -141,9 +141,9 @@ export default function Home() {
             <Button
               variant="outline"
               className="bg-primary text-white hover:text-white hover:bg-primary/90 text-sm sm:text-base px-2 sm:px-4"
-              asChild
+              onClick={() => privyLogin()}
             >
-              <Link href="/auth/signup">Get Started</Link>
+              Get Started
             </Button>
           </div>
         </nav>
@@ -210,9 +210,9 @@ export default function Home() {
                   variant="default"
                   size="lg"
                   className="bg-primary text-white hover:bg-primary/90"
-                  asChild
+                  onClick={() => privyLogin()}
                 >
-                  <Link href="/auth/signup">Start Reading</Link>
+                  Start Reading
                 </Button>
                 <Button
                   variant="secondary"
@@ -632,7 +632,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <button
                 className="px-8 py-4 rounded-xl bg-primary text-white text-lg hover:bg-primary/90 transition-all duration-300"
-                onClick={() => router.push("/auth/signup")}
+                onClick={() => privyLogin()}
               >
                 Start Reading for Free
               </button>
