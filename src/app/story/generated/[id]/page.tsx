@@ -1,13 +1,16 @@
 "use client";
 
-import AuthGuard from "@/components/AuthGuard";
-import { CONTRACT_ABI } from "@/components/contract/contractDetails";
-import { Comic, GeneratedStory } from "@/lib/types";
-import lighthouse from "@lighthouse-web3/sdk";
-import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
+import AuthGuard from "@/components/AuthGuard";
+import { GeneratedStory, Comic } from "@/lib/types";
+import {
+  CONTRACT_ABI,
+  CONTRACT_ADDRESS,
+} from "@/components/contract/contractDetails";
+import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import lighthouse from "@lighthouse-web3/sdk";
 
 const GeneratedStoryViewerPage = () => {
   const { writeContract, data: hash, error: writeError } = useWriteContract();
@@ -254,7 +257,7 @@ const GeneratedStoryViewerPage = () => {
       console.log("Publishing to blockchain with CID:", lighthouseCid);
       writeContract({
         abi: CONTRACT_ABI,
-        address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
+        address: CONTRACT_ADDRESS,
         functionName: "publishStory",
         args: [lighthouseCid],
       });
