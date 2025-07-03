@@ -60,11 +60,11 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
 
       // Handle image upload to Lighthouse for image-type stories
       let processedStoryData = generatedStoryData;
-      
+
       if (storyDraft.type === "image" && generatedStoryData.chapters) {
         console.log("Processing image uploads to Lighthouse...");
         setUploadingImages(true);
-        
+
         try {
           // Extract base64 images from chapters
           const imagesToUpload = generatedStoryData.chapters
@@ -76,29 +76,38 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
             }));
 
           if (imagesToUpload.length > 0) {
-            console.log(`Uploading ${imagesToUpload.length} images to Lighthouse...`);
-            
+            console.log(
+              `Uploading ${imagesToUpload.length} images to Lighthouse...`
+            );
+
             // Upload all images to Lighthouse
-            const uploadedImages = await uploadMultipleBase64ToLighthouse(imagesToUpload);
-            
+            const uploadedImages = await uploadMultipleBase64ToLighthouse(
+              imagesToUpload
+            );
+
             // Update chapters with Lighthouse URLs
             processedStoryData = {
               ...generatedStoryData,
-              chapters: generatedStoryData.chapters.map((chapter: GeneratedChapter) => {
-                const uploadedImage = uploadedImages.find(
-                  (img) => img.chapterNumber === chapter.chapter_number
-                );
-                return {
-                  ...chapter,
-                  image_url: uploadedImage?.imageUrl || chapter.image_url,
-                };
-              }),
+              chapters: generatedStoryData.chapters.map(
+                (chapter: GeneratedChapter) => {
+                  const uploadedImage = uploadedImages.find(
+                    (img) => img.chapterNumber === chapter.chapter_number
+                  );
+                  return {
+                    ...chapter,
+                    image_url: uploadedImage?.imageUrl || chapter.image_url,
+                  };
+                }
+              ),
             };
-            
+
             console.log("Successfully uploaded all images to Lighthouse!");
           }
         } catch (imageUploadError) {
-          console.error("Error uploading images to Lighthouse:", imageUploadError);
+          console.error(
+            "Error uploading images to Lighthouse:",
+            imageUploadError
+          );
           // Continue with base64 images if upload fails
           console.log("Continuing with base64 images...");
         } finally {
@@ -449,11 +458,11 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                       />
                     </svg>
-                    {uploadingImages ? (
-                      "Uploading Images to Lighthouse..."
-                    ) : (
-                      `Generating ${storyDraft.type === "image" ? "Images &" : ""} Story...`
-                    )}
+                    {uploadingImages
+                      ? "Uploading Images to Lighthouse..."
+                      : `Generating ${
+                          storyDraft.type === "image" ? "Images &" : ""
+                        } Story...`}
                   </div>
                 ) : (
                   `Generate ${
