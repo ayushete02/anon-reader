@@ -202,17 +202,6 @@ const ProducerPage = () => {
   };
   return (
     <AuthGuard requireAuth={true}>
-      <button
-        onClick={() =>
-          publishStory(
-            "https://gateway.lighthouse.storage/ipfs/bafkreidceczfcgbdbj7xsklj4e4z33uzqsoxjvaiwinvmvvk3ij6gkgccm"
-          )
-        }
-      >
-        Publish
-      </button>
-      <a>Helo: {chainId}</a>
-      <a>Address: {address}</a>
       <div className="min-h-screen bg-morphic-dark text-white relative overflow-hidden">
         {/* Enhanced glossy background effects */}
         <div className="absolute inset-0">

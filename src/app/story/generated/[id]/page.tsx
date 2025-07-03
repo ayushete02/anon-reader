@@ -5,8 +5,15 @@ import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import AuthGuard from "@/components/AuthGuard";
 import { GeneratedStory } from "@/lib/types";
+import {
+  CONTRACT_ABI,
+  CONTRACT_ADDRESS,
+} from "@/components/contract/contractDetails";
+import { useWriteContract } from "wagmi";
+import lighthouse from "@lighthouse-web3/sdk";
 
 const GeneratedStoryViewerPage = () => {
+  const { writeContract } = useWriteContract();
   const params = useParams();
   const router = useRouter();
   const [story, setStory] = useState<GeneratedStory | null>(null);
@@ -151,12 +158,60 @@ const GeneratedStoryViewerPage = () => {
     router.push("/producer");
   };
 
+  const publishStoryToBlockchain = async (lighthouseCid: string) => {
+    try {
+      await writeContract({
+        abi: CONTRACT_ABI,
+        address: CONTRACT_ADDRESS,
+        functionName: "publishStory",
+        args: [lighthouseCid],
+      });
+      console.log(
+        "Story published to blockchain successfully with Lighthouse CID:",
+        lighthouseCid
+      );
+    } catch (error) {
+      console.error("Error publishing to blockchain:", error);
+      throw error;
+    }
+  };
+
   const handlePublishStory = async () => {
     if (!story) return;
 
     setIsPublishing(true);
 
     try {
+      // Prepare story data for Lighthouse upload
+      const storyData = {
+        id: story.id,
+        title: story.title,
+        description: story.description,
+        chapters: story.chapters,
+        characters: story.characters,
+        categories: story.categories,
+        type: story.type,
+        created_at: story.created_at,
+      };
+
+      // Upload story data to Lighthouse
+      console.log("Uploading story to Lighthouse...");
+      const lighthouseResponse = await lighthouse.uploadText(
+        JSON.stringify(storyData),
+        process.env.NEXT_PUBLIC_LIGHTHOUSE_API_KEY!,
+        story.title
+      );
+
+      if (!lighthouseResponse.data?.Hash) {
+        throw new Error("Failed to get IPFS hash from Lighthouse response");
+      }
+
+      const lighthouseCid = lighthouseResponse.data.Hash;
+      console.log("Story uploaded to Lighthouse with CID:", lighthouseCid);
+
+      // Publish to blockchain first
+      await publishStoryToBlockchain(lighthouseCid);
+
       // Convert GeneratedStory to Comic format for browse page
       const publishedComic = {
         id: story.id,
@@ -173,6 +228,7 @@ const GeneratedStoryViewerPage = () => {
           title: chapter.title,
           paragraphs: chapter.content.split("\n").filter((p) => p.trim()),
         })),
+        blockchainCid: lighthouseCid, // Store the Lighthouse CID
       };
 
       // Save to published stories in localStorage
@@ -192,8 +248,13 @@ const GeneratedStoryViewerPage = () => {
       stories.push(publishedComic);
       localStorage.setItem("publishedStories", JSON.stringify(stories));
 
-      // Update the current story status to published
-      const updatedStory = { ...story, status: "published" as const };
+      // Update the current story status to published and add Lighthouse CID
+      const updatedStory = {
+        ...story,
+        status: "published" as const,
+        lighthouseCid: lighthouseCid,
+        publishedAt: new Date().toISOString(),
+      };
       setStory(updatedStory);
 
       // Update the story in generatedStories as well
@@ -214,9 +275,19 @@ const GeneratedStoryViewerPage = () => {
       }
 
       setIsPublishing(false);
+      console.log("Story published successfully to Lighthouse and blockchain!");
     } catch (error) {
       console.error("Error publishing story:", error);
       setIsPublishing(false);
+
+      // More specific error handling
+      if (error instanceof Error) {
+        if (error.message.includes("Lighthouse")) {
+          console.error("Lighthouse upload failed:", error.message);
+        } else if (error.message.includes("blockchain")) {
+          console.error("Blockchain publishing failed:", error.message);
+        }
+      }
     }
   };
 

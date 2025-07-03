@@ -155,7 +155,7 @@ export interface StoryDraft {
   categories: string[];
   posterImage?: string;
   createdBy: string; // User ID
-  status: "draft" | "published" | "generating" | 'generated';
+  status: "draft" | "published" | "generating" | "generated";
   createdAt: string;
   updatedAt: string;
   // Optional fields from API response
@@ -288,6 +288,8 @@ export interface GeneratedStory {
   status: "draft" | "published" | "generating";
   createdAt: string;
   updatedAt: string;
+  lighthouseCid?: string; // Lighthouse IPFS hash when published
+  publishedAt?: string; // ISO string when published
 }
 
 export interface GeneratedCharacter {
