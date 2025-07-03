@@ -104,9 +104,9 @@ export class NearAIHelper {
                                         yield content;
                                     }
                                 }
-                            } catch {
+                            } catch (jsonParseError) {
                                 console.warn(
-                                    `near::generate_completion_stream::Failed to parse line: ${line}`
+                                    `near::generate_completion_stream::Failed to parse line: ${line} - Error: ${jsonParseError}`
                                 );
                                 continue;
                             }
