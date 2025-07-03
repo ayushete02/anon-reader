@@ -290,7 +290,7 @@ const GeneratedStoryViewerPage = () => {
       console.log("Uploading story to Lighthouse...");
       const lighthouseResponse = await lighthouse.uploadText(
         JSON.stringify(storyData),
-        process.env.LIGHTHOUSE_API_KEY!,
+        process.env.NEXT_PUBLIC_LIGHTHOUSE_API_KEY!,
         story.title
       );
 
