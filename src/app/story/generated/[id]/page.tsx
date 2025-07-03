@@ -290,7 +290,7 @@ const GeneratedStoryViewerPage = () => {
       console.log("Uploading story to Lighthouse...");
       const lighthouseResponse = await lighthouse.uploadText(
         JSON.stringify(storyData),
-        process.env.NEXT_PUBLIC_LIGHTHOUSE_API_KEY!,
+        process.env.LIGHTHOUSE_API_KEY!,
         story.title
       );
 
@@ -587,11 +587,10 @@ const GeneratedStoryViewerPage = () => {
                       >
                         <div className="flex items-center space-x-4">
                           <div
-                            className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                              readingProgress[chapter.chapter_number]
+                            className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${readingProgress[chapter.chapter_number]
                                 ? "bg-green-500/20 border border-green-500/30 text-green-400"
                                 : "bg-primary/20 border border-primary/30 text-primary"
-                            }`}
+                              }`}
                           >
                             {readingProgress[chapter.chapter_number] ? (
                               <svg
@@ -621,11 +620,10 @@ const GeneratedStoryViewerPage = () => {
 
                         <div className="flex items-center space-x-2">
                           <svg
-                            className={`w-5 h-5 text-white/60 transition-transform duration-200 ${
-                              expandedChapter === chapter.chapter_number
+                            className={`w-5 h-5 text-white/60 transition-transform duration-200 ${expandedChapter === chapter.chapter_number
                                 ? "rotate-180"
                                 : ""
-                            }`}
+                              }`}
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -791,7 +789,7 @@ const GeneratedStoryViewerPage = () => {
             {/* Right Side - Content Viewer */}
             <div className="sticky top-6 h-fit w-[400px] flex-shrink-0">
               {story.type === "image" &&
-              story.chapters.some((ch) => ch.image_url) ? (
+                story.chapters.some((ch) => ch.image_url) ? (
                 /* Image Viewer */
                 <div className="bg-morphic-gray/30 backdrop-blur-xl w-[400px] md:fixed md:mr-6 border border-white/5 rounded-3xl p-8 shadow-glossy">
                   <div className="h-[calc(100vh-200px)]">
@@ -879,13 +877,12 @@ const GeneratedStoryViewerPage = () => {
                               className="flex-1 h-0.5 bg-white/30 rounded-full overflow-hidden"
                             >
                               <div
-                                className={`h-full bg-white transition-all duration-300 ${
-                                  index < currentImageIndex
+                                className={`h-full bg-white transition-all duration-300 ${index < currentImageIndex
                                     ? "w-full"
                                     : index === currentImageIndex
-                                    ? "w-full animate-pulse"
-                                    : "w-0"
-                                }`}
+                                      ? "w-full animate-pulse"
+                                      : "w-0"
+                                  }`}
                               />
                             </div>
                           ))}
@@ -899,9 +896,9 @@ const GeneratedStoryViewerPage = () => {
                 <div className="bg-morphic-gray/30 backdrop-blur-xl w-[400px] md:fixed md:mr-6 border border-white/5 rounded-3xl p-8 shadow-glossy">
                   <div className="h-[calc(100vh-200px)] flex flex-col">
                     {expandedChapter &&
-                    story.chapters.find(
-                      (ch) => ch.chapter_number === expandedChapter
-                    ) ? (
+                      story.chapters.find(
+                        (ch) => ch.chapter_number === expandedChapter
+                      ) ? (
                       <>
                         {/* Chapter Header */}
                         <div className="border-b border-white/10 pb-4 mb-6">

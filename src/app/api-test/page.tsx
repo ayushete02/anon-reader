@@ -1,3 +1,5 @@
+"use client";
+
 // Simple test to verify the API endpoint
 export default function APITest() {
   const testAPI = async () => {

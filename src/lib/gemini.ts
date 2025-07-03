@@ -21,7 +21,7 @@ if (!process.env.GEMINI_API_KEY) {
   );
 }
 
-if (!process.env.NEXT_PUBLIC_LIGHTHOUSE_API_KEY) {
+if (!process.env.LIGHTHOUSE_API_KEY) {
   throw new Error(
     "LIGHTHOUSE_API_KEY environment variable is required for image storage"
   );
@@ -49,7 +49,7 @@ async function uploadToLighthouse(base64Data: string): Promise<string> {
     // Upload buffer directly to Lighthouse
     const uploadResponse = await lighthouse.uploadBuffer(
       imageBuffer,
-      process.env.NEXT_PUBLIC_LIGHTHOUSE_API_KEY!
+      process.env.LIGHTHOUSE_API_KEY!
     );
 
     if (!uploadResponse.data?.Hash) {
@@ -62,8 +62,7 @@ async function uploadToLighthouse(base64Data: string): Promise<string> {
   } catch (error) {
     console.error("Error uploading to Lighthouse:", error);
     throw new Error(
-      `Failed to upload image to Lighthouse: ${
-        error instanceof Error ? error.message : "Unknown error"
+      `Failed to upload image to Lighthouse: ${error instanceof Error ? error.message : "Unknown error"
       }`
     );
   }
@@ -118,8 +117,7 @@ async function generateComicStrip(
       error
     );
     throw new Error(
-      `Failed to generate comic strip for chapter ${chapter.chapter_number}: ${
-        error instanceof Error ? error.message : "Unknown error"
+      `Failed to generate comic strip for chapter ${chapter.chapter_number}: ${error instanceof Error ? error.message : "Unknown error"
       }`
     );
   }
@@ -181,8 +179,7 @@ export async function generateChapterImage(
       error
     );
     throw new Error(
-      `Failed to generate image for chapter ${chapter.chapter_number}: ${
-        error instanceof Error ? error.message : "Unknown error"
+      `Failed to generate image for chapter ${chapter.chapter_number}: ${error instanceof Error ? error.message : "Unknown error"
       }`
     );
   }
