@@ -7,9 +7,17 @@ export interface Comic {
   type: "text" | "image"; // Story type - either text-based or image-based
   releaseDate: string;
   popularity: number;
-  rating: number;
-  pages?: ComicPage[]; // For image-based stories
-  textContent?: TextChapter[]; // For text-based stories
+  rating: string; // Changed to string to match generated data
+  // Unified format (use this for all new implementations)
+  chapters: GeneratedChapter[]; // For both image and text stories
+  characters: GeneratedCharacter[]; // Character information
+  // Blockchain/publishing related
+  blockchainCid?: string; // Lighthouse IPFS hash when published
+  publishedAt?: string; // ISO string when published
+  createdBy?: string; // User ID who created it
+  // Legacy format (DEPRECATED - only for backwards compatibility)
+  pages?: ComicPage[]; // DEPRECATED: For image-based stories
+  textContent?: TextChapter[]; // DEPRECATED: For text-based stories
 }
 
 export interface ComicPage {

@@ -4,16 +4,20 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import AuthGuard from "@/components/AuthGuard";
-import { GeneratedStory } from "@/lib/types";
+import { GeneratedStory, Comic } from "@/lib/types";
 import {
   CONTRACT_ABI,
   CONTRACT_ADDRESS,
 } from "@/components/contract/contractDetails";
-import { useWriteContract } from "wagmi";
+import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import lighthouse from "@lighthouse-web3/sdk";
 
 const GeneratedStoryViewerPage = () => {
-  const { writeContract } = useWriteContract();
+  const { writeContract, data: hash, error: writeError } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({
+      hash,
+    });
   const params = useParams();
   const router = useRouter();
   const [story, setStory] = useState<GeneratedStory | null>(null);
@@ -24,6 +28,12 @@ const GeneratedStoryViewerPage = () => {
     [key: number]: boolean;
   }>({});
   const [isPublishing, setIsPublishing] = useState(false);
+  const [publishingStage, setPublishingStage] = useState<
+    "idle" | "uploading" | "blockchain" | "confirming" | "completed"
+  >("idle");
+  const [pendingLighthouseCid, setPendingLighthouseCid] = useState<
+    string | null
+  >(null);
   const imageViewerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -57,6 +67,90 @@ const GeneratedStoryViewerPage = () => {
 
     setLoading(false);
   }, [params.id, router]);
+
+  // Handle transaction confirmation
+  useEffect(() => {
+    if (isConfirmed && pendingLighthouseCid && story) {
+      console.log("Transaction confirmed! Story published successfully.");
+
+      // Convert GeneratedStory to Comic format for browse page
+      const publishedComic: Comic = {
+        id: story.id,
+        title: story.title,
+        description: story.description,
+        posterImage: story.posterImage || "/comics/placeholder.jpg",
+        categories: story.categories,
+        type: story.type,
+        releaseDate: story.created_at,
+        popularity: Math.floor(Math.random() * 100), // Random popularity
+        rating: (4 + Math.random()).toFixed(1), // Rating as string
+        // Use new unified format
+        chapters: story.chapters,
+        characters: story.characters,
+        blockchainCid: pendingLighthouseCid, // Store the Lighthouse CID
+        publishedAt: new Date().toISOString(),
+        createdBy: story.createdBy,
+      };
+
+      // Save to published stories in localStorage (for now - until we fully migrate)
+      const publishedStories = localStorage.getItem("publishedStories");
+      let stories = [];
+
+      if (publishedStories) {
+        try {
+          stories = JSON.parse(publishedStories);
+        } catch (error) {
+          console.error("Error parsing published stories:", error);
+          stories = [];
+        }
+      }
+
+      // Add the new story to published stories
+      stories.push(publishedComic);
+      localStorage.setItem("publishedStories", JSON.stringify(stories));
+
+      // Update the current story status to published and add Lighthouse CID
+      const updatedStory = {
+        ...story,
+        status: "published" as const,
+        lighthouseCid: pendingLighthouseCid,
+        publishedAt: new Date().toISOString(),
+      };
+      setStory(updatedStory);
+
+      // Update the story in generatedStories as well
+      const savedStories = localStorage.getItem("generatedStories");
+      if (savedStories) {
+        try {
+          const generatedStories = JSON.parse(savedStories);
+          const updatedStories = generatedStories.map((s: GeneratedStory) =>
+            s.id === story.id ? updatedStory : s
+          );
+          localStorage.setItem(
+            "generatedStories",
+            JSON.stringify(updatedStories)
+          );
+        } catch (error) {
+          console.error("Error updating generated stories:", error);
+        }
+      }
+
+      // Reset publishing state
+      setIsPublishing(false);
+      setPublishingStage("completed");
+      setPendingLighthouseCid(null);
+    }
+  }, [isConfirmed, pendingLighthouseCid, story]);
+
+  // Handle transaction errors
+  useEffect(() => {
+    if (writeError && isPublishing) {
+      console.error("Blockchain transaction failed:", writeError);
+      setIsPublishing(false);
+      setPublishingStage("idle");
+      setPendingLighthouseCid(null);
+    }
+  }, [writeError, isPublishing]);
 
   const handleChapterToggle = (chapterNumber: number) => {
     const newExpandedChapter =
@@ -160,18 +254,15 @@ const GeneratedStoryViewerPage = () => {
 
   const publishStoryToBlockchain = async (lighthouseCid: string) => {
     try {
-      await writeContract({
+      console.log("Publishing to blockchain with CID:", lighthouseCid);
+      writeContract({
         abi: CONTRACT_ABI,
         address: CONTRACT_ADDRESS,
         functionName: "publishStory",
         args: [lighthouseCid],
       });
-      console.log(
-        "Story published to blockchain successfully with Lighthouse CID:",
-        lighthouseCid
-      );
     } catch (error) {
-      console.error("Error publishing to blockchain:", error);
+      console.error("Error calling writeContract:", error);
       throw error;
     }
   };
@@ -180,6 +271,7 @@ const GeneratedStoryViewerPage = () => {
     if (!story) return;
 
     setIsPublishing(true);
+    setPublishingStage("uploading");
 
     try {
       // Prepare story data for Lighthouse upload
@@ -209,76 +301,22 @@ const GeneratedStoryViewerPage = () => {
       const lighthouseCid = lighthouseResponse.data.Hash;
       console.log("Story uploaded to Lighthouse with CID:", lighthouseCid);
 
-      // Publish to blockchain first
+      // Store the CID and initiate blockchain transaction
+      setPendingLighthouseCid(lighthouseCid);
+      setPublishingStage("blockchain");
+
+      // Publish to blockchain (will trigger confirmation waiting)
       await publishStoryToBlockchain(lighthouseCid);
+      setPublishingStage("confirming");
 
-      // Convert GeneratedStory to Comic format for browse page
-      const publishedComic = {
-        id: story.id,
-        title: story.title,
-        description: story.description,
-        posterImage: story.posterImage || "/comics/placeholder.jpg",
-        categories: story.categories,
-        type: story.type,
-        releaseDate: story.created_at,
-        popularity: Math.floor(Math.random() * 100), // Random popularity
-        rating: (4 + Math.random()).toFixed(1), // Random rating between 4-5
-        textContent: story.chapters.map((chapter) => ({
-          id: chapter.chapter_number,
-          title: chapter.title,
-          paragraphs: chapter.content.split("\n").filter((p) => p.trim()),
-        })),
-        blockchainCid: lighthouseCid, // Store the Lighthouse CID
-      };
-
-      // Save to published stories in localStorage
-      const publishedStories = localStorage.getItem("publishedStories");
-      let stories = [];
-
-      if (publishedStories) {
-        try {
-          stories = JSON.parse(publishedStories);
-        } catch (error) {
-          console.error("Error parsing published stories:", error);
-          stories = [];
-        }
-      }
-
-      // Add the new story to published stories
-      stories.push(publishedComic);
-      localStorage.setItem("publishedStories", JSON.stringify(stories));
-
-      // Update the current story status to published and add Lighthouse CID
-      const updatedStory = {
-        ...story,
-        status: "published" as const,
-        lighthouseCid: lighthouseCid,
-        publishedAt: new Date().toISOString(),
-      };
-      setStory(updatedStory);
-
-      // Update the story in generatedStories as well
-      const savedStories = localStorage.getItem("generatedStories");
-      if (savedStories) {
-        try {
-          const generatedStories = JSON.parse(savedStories);
-          const updatedStories = generatedStories.map((s: GeneratedStory) =>
-            s.id === story.id ? updatedStory : s
-          );
-          localStorage.setItem(
-            "generatedStories",
-            JSON.stringify(updatedStories)
-          );
-        } catch (error) {
-          console.error("Error updating generated stories:", error);
-        }
-      }
-
-      setIsPublishing(false);
-      console.log("Story published successfully to Lighthouse and blockchain!");
+      console.log(
+        "Blockchain transaction submitted, waiting for confirmation..."
+      );
     } catch (error) {
       console.error("Error publishing story:", error);
       setIsPublishing(false);
+      setPublishingStage("idle");
+      setPendingLighthouseCid(null);
 
       // More specific error handling
       if (error instanceof Error) {
@@ -393,10 +431,10 @@ const GeneratedStoryViewerPage = () => {
                 {story.status !== "published" && (
                   <button
                     onClick={handlePublishStory}
-                    disabled={isPublishing}
+                    disabled={isPublishing || isConfirming}
                     className="px-4 py-2 bg-green-500/20 border border-green-500/30 rounded-xl text-green-400 hover:bg-green-500/30 hover:border-green-500/40 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
                   >
-                    {isPublishing ? (
+                    {isPublishing || isConfirming ? (
                       <div className="flex items-center gap-2">
                         <svg
                           className="animate-spin h-4 w-4"
@@ -417,7 +455,13 @@ const GeneratedStoryViewerPage = () => {
                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                           />
                         </svg>
-                        Publishing...
+                        {publishingStage === "uploading" &&
+                          "Uploading to IPFS..."}
+                        {publishingStage === "blockchain" &&
+                          "Sending to blockchain..."}
+                        {(publishingStage === "confirming" || isConfirming) &&
+                          "Waiting for confirmation..."}
+                        {publishingStage === "idle" && "Publishing..."}
                       </div>
                     ) : (
                       "Publish Story"
@@ -702,12 +746,21 @@ const GeneratedStoryViewerPage = () => {
                       <button
                         onClick={handlePublishStory}
                         className="px-8 py-4 bg-primary/20 border border-primary/30 rounded-xl text-primary hover:bg-primary/30 hover:border-primary/40 transition-all duration-150 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
-                        disabled={isPublishing}
+                        disabled={isPublishing || isConfirming}
                       >
-                        {isPublishing ? (
+                        {isPublishing || isConfirming ? (
                           <>
                             <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-primary/50 mr-2"></div>
-                            <span className="font-semibold">Publishing...</span>
+                            <span className="font-semibold">
+                              {publishingStage === "uploading" &&
+                                "Uploading to IPFS..."}
+                              {publishingStage === "blockchain" &&
+                                "Sending to blockchain..."}
+                              {(publishingStage === "confirming" ||
+                                isConfirming) &&
+                                "Waiting for confirmation..."}
+                              {publishingStage === "idle" && "Publishing..."}
+                            </span>
                           </>
                         ) : (
                           <>

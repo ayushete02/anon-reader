@@ -75,7 +75,7 @@ export const MOCK_COMICS: Comic[] = [
     type: "image",
     releaseDate: "2024-01-15",
     popularity: 95,
-    rating: 4.8,
+    rating: "4.8",
     pages: [
       {
         id: 0,

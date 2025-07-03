@@ -15,7 +15,17 @@ const ImageComicViewer: React.FC<ImageComicViewerProps> = ({
 }) => {
   const [currentPage, setCurrentPage] = useState(initialPage);
   const containerRef = useRef<HTMLDivElement>(null);
-  const imagePages = comic.pages || [];
+
+  // Handle both legacy pages format and new chapters format
+  const imagePages =
+    comic.pages ||
+    comic.chapters
+      ?.filter((ch) => ch.image_url)
+      .map((chapter, index) => ({
+        id: index,
+        imageUrl: chapter.image_url!,
+      })) ||
+    [];
 
   return (
     <div

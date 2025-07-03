@@ -11,10 +11,21 @@ interface TextComicViewerProps {
 const TextComicViewer: React.FC<TextComicViewerProps> = ({ comic }) => {
   const [currentChapter, setCurrentChapter] = useState(0);
   const { user, updateUser } = useUser();
-  const textChapters = useMemo(
-    () => comic.textContent || [],
-    [comic.textContent]
-  );
+
+  // Handle both legacy textContent format and new chapters format
+  const textChapters = useMemo(() => {
+    if (comic.chapters) {
+      // New format: convert chapters to TextChapter format
+      return comic.chapters.map((chapter) => ({
+        id: chapter.chapter_number,
+        title: chapter.title,
+        paragraphs: chapter.content.split("\n").filter((p) => p.trim()),
+      }));
+    }
+    // Legacy format
+    return comic.textContent || [];
+  }, [comic.textContent, comic.chapters]);
+
   const totalPages = textChapters.length;
   const getCurrentTextPosition = useCallback(
     () => currentChapter,

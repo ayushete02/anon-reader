@@ -21,7 +21,7 @@ if (!process.env.GEMINI_API_KEY) {
   );
 }
 
-if (!process.env.LIGHTHOUSE_API_KEY) {
+if (!process.env.NEXT_PUBLIC_LIGHTHOUSE_API_KEY) {
   throw new Error(
     "LIGHTHOUSE_API_KEY environment variable is required for image storage"
   );
@@ -35,6 +35,7 @@ export interface ChapterImage {
   title: string;
   image: string; // Lighthouse IPFS link
   comic_strip?: string; // Generated comic strip text
+  chapterNumber?: number; // Optional for compatibility
 }
 
 /**
@@ -48,7 +49,7 @@ async function uploadToLighthouse(base64Data: string): Promise<string> {
     // Upload buffer directly to Lighthouse
     const uploadResponse = await lighthouse.uploadBuffer(
       imageBuffer,
-      process.env.LIGHTHOUSE_API_KEY!
+      process.env.NEXT_PUBLIC_LIGHTHOUSE_API_KEY!
     );
 
     if (!uploadResponse.data?.Hash) {

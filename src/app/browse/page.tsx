@@ -120,21 +120,14 @@ const BrowsePage = () => {
                       Number(createdAt) * 1000
                     ).toISOString(),
                     popularity: Math.floor(Math.random() * 100),
-                    rating: parseFloat((4 + Math.random()).toFixed(1)),
-                    textContent:
-                      storyData.chapters?.map(
-                        (chapter: {
-                          chapter_number: number;
-                          title: string;
-                          content: string;
-                        }) => ({
-                          id: chapter.chapter_number,
-                          title: chapter.title,
-                          paragraphs: chapter.content
-                            .split("\n")
-                            .filter((p: string) => p.trim()),
-                        })
-                      ) || [],
+                    rating: (4 + Math.random()).toFixed(1), // String format
+                    // Use new unified format
+                    chapters: storyData.chapters || [],
+                    characters: storyData.characters || [],
+                    blockchainCid: lighthouseCid,
+                    publishedAt: new Date(
+                      Number(createdAt) * 1000
+                    ).toISOString(),
                   };
 
                   return blockchainComic;
@@ -242,7 +235,7 @@ const BrowsePage = () => {
     result.sort((a, b) => {
       switch (sortBy) {
         case "rating":
-          return b.rating - a.rating;
+          return parseFloat(b.rating) - parseFloat(a.rating);
         case "newest":
           return (
             new Date(b.releaseDate).getTime() -
@@ -300,7 +293,9 @@ const BrowsePage = () => {
   const getPersonalizedRecommendations = () => {
     if (!personaLoaded || !userPersona.personaType) {
       // If no persona, return top-rated comics
-      return allComics.sort((a, b) => b.rating - a.rating).slice(0, 10);
+      return allComics
+        .sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating))
+        .slice(0, 10);
     }
 
     // Filter and sort based on persona preferences
@@ -312,7 +307,7 @@ const BrowsePage = () => {
     // Sort by rating and recency for better recommendations
     return personalizedComics
       .sort((a, b) => {
-        const ratingDiff = b.rating - a.rating;
+        const ratingDiff = parseFloat(b.rating) - parseFloat(a.rating);
         const dateDiff =
           new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime();
         return ratingDiff * 0.7 + (dateDiff / (1000 * 60 * 60 * 24)) * 0.3; // Weight rating more than recency
@@ -327,7 +322,7 @@ const BrowsePage = () => {
 
     return allComics
       .filter((comic) => new Date(comic.releaseDate) >= thirtyDaysAgo)
-      .sort((a, b) => b.rating - a.rating)
+      .sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating))
       .slice(0, 8);
   };
 

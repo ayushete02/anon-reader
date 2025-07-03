@@ -3,11 +3,16 @@
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { MOCK_COMICS } from "@/lib/mock-data";
 import { Comic } from "@/lib/types";
 import { useUser } from "@/context/UserContext";
 import { useAuthGuard } from "@/components/AuthGuard";
 import { Button } from "@/components/ui/button";
+import {
+  CONTRACT_ABI,
+  CONTRACT_ADDRESS,
+} from "@/components/contract/contractDetails";
+import { useReadContract } from "wagmi";
+import { Abi } from "viem";
 
 const StoryDetailPage = () => {
   const params = useParams();
@@ -16,25 +21,112 @@ const StoryDetailPage = () => {
   const { requireAuth, LoginModal } = useAuthGuard();
   const [story, setStory] = useState<Comic | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const contractAddress = CONTRACT_ADDRESS as `0x${string}`;
+  const storyId = params.id as string;
+
+  // Get the story from the contract by ID
+  const {
+    data: contractStory,
+    isLoading: contractLoading,
+    error: contractError,
+  } = useReadContract({
+    abi: CONTRACT_ABI as Abi,
+    address: contractAddress,
+    functionName: "getStory",
+    args: [BigInt(storyId?.replace("blockchain-", "") || "0")],
+  });
 
   const readingProgress = user?.history.find((h) => h.comicId === params.id);
 
   useEffect(() => {
-    const storyId = params.id;
-    if (!storyId) {
-      router.push("/browse");
-      return;
-    }
+    const loadStory = async () => {
+      if (!storyId) {
+        router.push("/browse");
+        return;
+      }
 
-    const foundStory = MOCK_COMICS.find((c) => c.id === storyId);
-    if (foundStory) {
-      setStory(foundStory);
-    } else {
-      router.push("/browse");
-    }
+      if (contractLoading) {
+        setLoading(true);
+        return;
+      }
 
-    setLoading(false);
-  }, [params.id, router]);
+      if (contractError) {
+        console.error("Contract error:", contractError);
+        setError("Failed to load story from blockchain");
+        setLoading(false);
+        return;
+      }
+
+      if (!contractStory) {
+        router.push("/browse");
+        return;
+      }
+
+      try {
+        // Destructure the contract story data
+        const {
+          id: contractStoryId,
+          cid: ipfsCid,
+          publishedAt: createdAt,
+        } = contractStory as {
+          id: bigint;
+          cid: string;
+          publishedAt: bigint;
+          writer: string;
+        };
+
+        // Handle different CID formats
+        let lighthouseCid = ipfsCid;
+        if (ipfsCid.includes("gateway.lighthouse.storage/ipfs/")) {
+          lighthouseCid = ipfsCid.split("/ipfs/")[1];
+        } else if (ipfsCid.includes("ipfs/")) {
+          lighthouseCid = ipfsCid.split("ipfs/")[1];
+        }
+
+        // Fetch story data from Lighthouse
+        const response = await fetch(
+          `https://gateway.lighthouse.storage/ipfs/${lighthouseCid}`
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch story data for CID: ${lighthouseCid}`
+          );
+        }
+
+        const storyData = await response.json();
+
+        // Convert to Comic format
+        const storyComic: Comic = {
+          id: `blockchain-${contractStoryId.toString()}`,
+          title: storyData.title || `Story ${contractStoryId.toString()}`,
+          description: storyData.description || "A story from the blockchain",
+          posterImage: "/comics/placeholder.jpg", // Default poster
+          categories: storyData.categories || ["Blockchain"],
+          type: storyData.type || "text",
+          releaseDate: new Date(Number(createdAt) * 1000).toISOString(),
+          popularity: Math.floor(Math.random() * 100),
+          rating: (4 + Math.random()).toFixed(1), // String format
+          // Use new unified format
+          chapters: storyData.chapters || [],
+          characters: storyData.characters || [],
+          blockchainCid: lighthouseCid,
+          publishedAt: new Date(Number(createdAt) * 1000).toISOString(),
+        };
+
+        setStory(storyComic);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error loading story:", error);
+        setError("Failed to load story content");
+        setLoading(false);
+      }
+    };
+
+    loadStory();
+  }, [storyId, contractStory, contractLoading, contractError, router]);
 
   const handlePlay = () => {
     requireAuth(() => {
@@ -49,7 +141,27 @@ const StoryDetailPage = () => {
   if (loading || !story) {
     return (
       <div className="min-h-screen bg-morphic-dark flex justify-center items-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-2 border-morphic-gray border-t-primary mx-auto"></div>
+        <div className="text-center space-y-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-2 border-morphic-gray border-t-primary mx-auto"></div>
+          <p className="text-white/70">Loading story from blockchain...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-morphic-dark flex justify-center items-center">
+        <div className="text-center space-y-4 max-w-md">
+          <div className="text-red-400 text-xl">⚠️</div>
+          <h2 className="text-white text-lg font-semibold">
+            Failed to Load Story
+          </h2>
+          <p className="text-white/70">{error}</p>
+          <Button onClick={() => router.push("/browse")} variant="outline">
+            Back to Browse
+          </Button>
+        </div>
       </div>
     );
   }

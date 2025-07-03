@@ -121,11 +121,9 @@ const GeneratedStoryViewerPage = () => {
         releaseDate: story.created_at,
         popularity: Math.floor(Math.random() * 100), // Random popularity
         rating: (4 + Math.random()).toFixed(1), // Random rating between 4-5
-        textContent: story.chapters.map((chapter) => ({
-          id: chapter.chapter_number,
-          title: chapter.title,
-          paragraphs: chapter.content.split("\n").filter((p) => p.trim()),
-        })),
+        // Use unified format
+        chapters: story.chapters,
+        characters: story.characters,
       };
 
       // Save to published stories in localStorage

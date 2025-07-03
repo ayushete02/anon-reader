@@ -120,7 +120,8 @@ export default function HistoryPage() {
                           {" "}
                           <span className="text-sm text-gray-500">
                             Page {item.lastReadPage} of{" "}
-                            {item.comic!.pages?.length ||
+                            {item.comic!.chapters?.length ||
+                              item.comic!.pages?.length ||
                               item.comic!.textContent?.length ||
                               10}
                           </span>
