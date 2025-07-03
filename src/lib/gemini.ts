@@ -33,6 +33,36 @@ export interface ChapterImage {
 }
 
 /**
+ * Uploads base64 image data to Lighthouse storage and returns the IPFS link
+ */
+// async function uploadToLighthouse(base64Data: string): Promise<string> {
+//   try {
+//     // Convert base64 to buffer
+//     const imageBuffer = Buffer.from(base64Data, "base64");
+
+//     // Upload buffer directly to Lighthouse
+//     const uploadResponse = await lighthouse.uploadBuffer(
+//       imageBuffer,
+//       process.env.LIGHTHOUSE_API_KEY!
+//     );
+
+//     if (!uploadResponse.data?.Hash) {
+//       throw new Error("Failed to get IPFS hash from Lighthouse response");
+//     }
+
+//     // Return the IPFS gateway URL with filename
+//     const ipfsHash = uploadResponse.data.Hash;
+//     return `https://gateway.lighthouse.storage/ipfs/${ipfsHash}`;
+//   } catch (error) {
+//     console.error("Error uploading to Lighthouse:", error);
+//     throw new Error(
+//       `Failed to upload image to Lighthouse: ${error instanceof Error ? error.message : "Unknown error"
+//       }`
+//     );
+//   }
+// }
+
+/**
  * Generates a comic strip for a chapter using Near AI
  */
 async function generateComicStrip(

@@ -46,11 +46,8 @@ export async function uploadBase64ToLighthouse(
       );
     }
 
-    // Remove data URL prefix if present (e.g., "data:image/png;base64,")
-    const cleanBase64 = base64Data.replace(/^data:image\/[a-z]+;base64,/, "");
-
     // Convert base64 to buffer
-    const imageBuffer = Buffer.from(cleanBase64, "base64");
+    const imageBuffer = Buffer.from(base64Data, "base64");
 
     // Upload buffer directly to Lighthouse
     const uploadResponse = await lighthouse.uploadBuffer(imageBuffer, apiKey);
