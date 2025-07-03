@@ -1,16 +1,13 @@
 "use client";
 
 import ComicViewer from "@/components/ComicViewer";
+import { CONTRACT_ABI } from "@/components/contract/contractDetails";
 import { useUser } from "@/context/UserContext";
 import { Comic } from "@/lib/types";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import {
-  CONTRACT_ABI,
-  CONTRACT_ADDRESS,
-} from "@/components/contract/contractDetails";
-import { useReadContract } from "wagmi";
 import { Abi } from "viem";
+import { useReadContract } from "wagmi";
 
 const ComicReaderPage = () => {
   const params = useParams();
@@ -20,7 +17,8 @@ const ComicReaderPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const contractAddress = CONTRACT_ADDRESS as `0x${string}`;
+  const contractAddress = process.env
+    .NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`;
   const comicId = params.id as string;
 
   // Get the story from the contract by ID

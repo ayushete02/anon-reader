@@ -2,20 +2,17 @@
 
 import ComicCard from "@/components/ComicCard";
 import ComicRow from "@/components/ComicRow";
-import {
-  CONTRACT_ABI,
-  CONTRACT_ADDRESS,
-} from "@/components/contract/contractDetails";
+import { CONTRACT_ABI } from "@/components/contract/contractDetails";
 import HeroBanner from "@/components/HeroBanner";
 import Navbar from "@/components/Navbar";
 import { Comic, UserPersona } from "@/lib/types";
 import { filterComicsByPersona } from "@/lib/utils";
+import { usePrivy } from "@privy-io/react-auth";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Abi } from "viem";
 import { useReadContract, useReadContracts } from "wagmi";
-import { motion } from "framer-motion";
-import { usePrivy } from "@privy-io/react-auth";
 
 const BrowsePage = () => {
   const { login: privyLogin } = usePrivy();
@@ -31,7 +28,8 @@ const BrowsePage = () => {
   const [sortBy] = useState("rating");
   const [allComics, setAllComics] = useState<Comic[]>([]);
 
-  const contractAddress = CONTRACT_ADDRESS as `0x${string}`;
+  const contractAddress = process.env
+    .NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`;
 
   console.log("contractAddress ;", contractAddress);
   const { data: numberOfStories } = useReadContract({

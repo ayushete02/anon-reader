@@ -1,18 +1,15 @@
 "use client";
 
+import { useAuthGuard } from "@/components/AuthGuard";
+import { CONTRACT_ABI } from "@/components/contract/contractDetails";
+import { Button } from "@/components/ui/button";
+import { useUser } from "@/context/UserContext";
+import { Comic } from "@/lib/types";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Image from "next/image";
-import { Comic } from "@/lib/types";
-import { useUser } from "@/context/UserContext";
-import { useAuthGuard } from "@/components/AuthGuard";
-import { Button } from "@/components/ui/button";
-import {
-  CONTRACT_ABI,
-  CONTRACT_ADDRESS,
-} from "@/components/contract/contractDetails";
-import { useReadContract } from "wagmi";
 import { Abi } from "viem";
+import { useReadContract } from "wagmi";
 
 const StoryDetailPage = () => {
   const params = useParams();
@@ -23,7 +20,8 @@ const StoryDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const contractAddress = CONTRACT_ADDRESS as `0x${string}`;
+  const contractAddress = process.env
+    .NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`;
   const storyId = params.id as string;
 
   // Get the story from the contract by ID
