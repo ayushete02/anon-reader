@@ -257,6 +257,7 @@ export interface ChapterBase {
 
 export interface ChapterRead extends ChapterBase {
   id: string;
+  image_url?: string; // Optional image URL for image-based stories
 }
 
 export interface Chapter {
@@ -300,4 +301,5 @@ export interface GeneratedChapter {
   content: string;
   chapter_number: number;
   reading_time_seconds: number;
+  image_url?: string; // Optional image URL for image-based stories
 }

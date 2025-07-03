@@ -201,8 +201,30 @@ export async function POST(request: NextRequest) {
             `Successfully generated and uploaded ${chapterImages.length} chapter images to Lighthouse`
           );
 
-          // Return the image response format with Lighthouse IPFS links
-          return NextResponse.json(chapterImages, { status: 201 });
+          // Create a story response with image URLs included in chapters
+          const storyResponse = generateStoryData(
+            storyData,
+            chapters,
+            generatedContent
+          );
+
+          // Add image URLs to the corresponding chapters
+          storyResponse.chapters = storyResponse.chapters.map((chapter) => {
+            const chapterImage = chapterImages.find(
+              (img) => img.chapterNumber === chapter.chapter_number
+            );
+            return {
+              ...chapter,
+              image_url: chapterImage?.image || undefined,
+            };
+          });
+
+          console.log(
+            `Successfully generated story with ${chapters.length} chapters and ${chapterImages.length} images`
+          );
+
+          // Return the same format as text stories but with images included
+          return NextResponse.json(storyResponse, { status: 201 });
         } catch (imageError) {
           console.error("Image generation and upload error:", imageError);
           const errorMessage =
