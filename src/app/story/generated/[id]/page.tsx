@@ -257,7 +257,7 @@ const GeneratedStoryViewerPage = () => {
       console.log("Publishing to blockchain with CID:", lighthouseCid);
       writeContract({
         abi: CONTRACT_ABI,
-        address: CONTRACT_ADDRESS,
+        address: CONTRACT_ADDRESS as `0x${string}`,
         functionName: "publishStory",
         args: [lighthouseCid],
       });
