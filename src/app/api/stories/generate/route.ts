@@ -5,7 +5,7 @@ import {
     Chapter,
     ChatMessage,
     ChatCompletionRequest,
-    // Character,
+    Character,
 } from "@/lib/types";
 import { NearAIHelper } from "@/lib/near-ai";
 import { createStoryPrompt, SYSTEM_PROMPT } from "@/constants/prompts";
@@ -14,7 +14,7 @@ import {
     FIELD_CONSTRAINTS,
     NEAR_AI_CONFIG,
 } from "@/constants/constants";
-// import { generateStoryImages, ChapterImage } from "@/lib/gemini";
+import { generateStoryImages, ChapterImage } from "@/lib/gemini";
 
 function parseStoryIntoChapters(storyText: string): Chapter[] {
     const chapters: Chapter[] = [];
@@ -227,65 +227,69 @@ export async function POST(request: NextRequest) {
             }
 
             // Handle image generation for image type stories
-            // if (storyData.type === "image") {
-            //     try {
-            //         console.log("Generating images for story chapters...");
+            if (storyData.type === "image") {
+                try {
+                    console.log("Generating images for story chapters...");
 
-            //         // Convert characters to the right format for image generation
-            //         const charactersForImageGen: Character[] = storyData.characters.map(
-            //             (char, index) => ({
-            //                 id: `char_temp_${index}`,
-            //                 name: char.name,
-            //                 description: char.description,
-            //                 type: char.type,
-            //                 imageUrl: char.image_url || undefined,
-            //                 isGenerated: false,
-            //             })
-            //         );
+                    // Convert characters to the right format for image generation
+                    const charactersForImageGen: Character[] = storyData.characters.map(
+                        (char, index) => ({
+                            id: `char_temp_${index}`,
+                            name: char.name,
+                            description: char.description,
+                            type: char.type,
+                            imageUrl: char.image_url || undefined,
+                            isGenerated: false,
+                        })
+                    );
 
-            //         // Generate images for all chapters and upload directly to Lighthouse storage using buffer upload
-            //         const chapterImages: ChapterImage[] = await generateStoryImages(
-            //             chapters,
-            //             charactersForImageGen
-            //         );
+                    // Generate images for all chapters and upload directly to Lighthouse storage using buffer upload
+                    const chapterImages: ChapterImage[] = await generateStoryImages(
+                        chapters,
+                        charactersForImageGen
+                    );
 
-            //         console.log(
-            //             `Successfully generated and uploaded ${chapterImages.length} chapter images to Lighthouse`
-            //         );
+                    console.log("Chapter images:", chapterImages);
 
-            //         // Create a story response with image URLs included in chapters
-            //         const storyResponse = generateStoryData(
-            //             storyData,
-            //             chapters,
-            //             generatedContent
-            //         );
+                    console.log(
+                        `Successfully generated and uploaded ${chapterImages.length} chapter images to Lighthouse`
+                    );
 
-            //         // Add image URLs to the corresponding chapters
-            //         storyResponse.chapters = storyResponse.chapters.map((chapter) => {
-            //             const chapterImage = chapterImages.find(
-            //                 (img) => img.chapterNumber === chapter.chapter_number
-            //             );
-            //             return {
-            //                 ...chapter,
-            //                 image_url: chapterImage?.image || undefined,
-            //             };
-            //         });
+                    // Create a story response with image URLs included in chapters
+                    const storyResponse = generateStoryData(
+                        storyData,
+                        chapters,
+                        generatedContent
+                    );
 
-            //         console.log(
-            //             `Successfully generated story with ${chapters.length} chapters and ${chapterImages.length} images`
-            //         );
+                    console.log("Story response:", storyResponse);
 
-            //         // Return the same format as text stories but with images included
-            //         return NextResponse.json(storyResponse, { status: 201 });
-            //     } catch (imageError) {
-            //         console.error("Image generation and upload error:", imageError);
-            //         const errorMessage =
-            //             imageError instanceof Error
-            //                 ? imageError.message
-            //                 : "Failed to generate and upload chapter images";
-            //         return NextResponse.json({ error: errorMessage }, { status: 500 });
-            //     }
-            // }
+                    // Add image URLs to the corresponding chapters
+                    storyResponse.chapters = storyResponse.chapters.map((chapter) => {
+                        const chapterImage = chapterImages.find(
+                            (img) => img.chapterNumber === chapter.chapter_number
+                        );
+                        return {
+                            ...chapter,
+                            image_url: chapterImage?.image || undefined,
+                        };
+                    });
+
+                    console.log(
+                        `Successfully generated story with ${chapters.length} chapters and ${chapterImages.length} images`
+                    );
+
+                    // Return the same format as text stories but with images included
+                    return NextResponse.json(storyResponse, { status: 201 });
+                } catch (imageError) {
+                    console.error("Image generation and upload error:", imageError);
+                    const errorMessage =
+                        imageError instanceof Error
+                            ? imageError.message
+                            : "Failed to generate and upload chapter images";
+                    return NextResponse.json({ error: errorMessage }, { status: 500 });
+                }
+            }
 
             // For text type stories, return the standard format
             const storyResponse = generateStoryData(
