@@ -5,7 +5,7 @@ import { PrivyProvider } from "@privy-io/react-auth";
 import PrivySyncProvider from "@/components/PrivySyncProvider";
 import AuthProvider from "@/components/AuthProvider";
 import UserProvider from "@/context/UserContext";
-import { filecoinCalibration } from "viem/chains";
+import { filecoinCalibration, flowMainnet } from "viem/chains";
 import { createConfig } from '@privy-io/wagmi';
 import { http } from 'wagmi';
 import { WagmiProvider } from '@privy-io/wagmi';
@@ -16,9 +16,10 @@ interface Props {
 }
 
 export const config = createConfig({
-    chains: [filecoinCalibration], // Pass your required chains as an array
+    chains: [filecoinCalibration, flowMainnet], // Pass your required chains as an array
     transports: {
         [filecoinCalibration.id]: http(),
+        [flowMainnet.id]: http(),
         // For each of your required chains, add an entry to `transports` with
         // a key of the chain's `id` and a value of `http()`
     },
@@ -35,7 +36,7 @@ const ClientProviders: React.FC<Props> = ({ children }) => {
                 config={{
                     embeddedWallets: { createOnLogin: "users-without-wallets" },
                     defaultChain: filecoinCalibration,
-                    supportedChains: [filecoinCalibration]
+                    supportedChains: [filecoinCalibration, flowMainnet]
                 }}
             >
                 <UserProvider>
