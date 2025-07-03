@@ -1,11 +1,9 @@
 "use client";
 
 import { Comic } from "@/lib/types";
-import TextComicViewer from "./TextComicViewer";
-import ImageComicViewer from "./ImageComicViewer";
 import React from "react";
-import AnimatedParagraph from "./AnimatedParagraph";
-import { motion } from "framer-motion";
+import ImageComicViewer from "./ImageComicViewer";
+import TextComicViewer from "./TextComicViewer";
 
 interface ComicViewerProps {
   comic: Comic;
