@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { StoryDraft, StoryRead } from "@/lib/types";
+import { StoryDraft, StoryRead, GeneratedChapter } from "@/lib/types";
 import Image from "next/image";
+import { uploadMultipleBase64ToLighthouse } from "@/lib/lighthouse";
 
 interface StoryPreviewProps {
   storyDraft: StoryDraft;
@@ -19,6 +20,7 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
   const [showGeneratedPreview, setShowGeneratedPreview] = useState(false);
   const [generatedStoryData, setGeneratedStoryData] =
     useState<StoryRead | null>(null);
+  const [uploadingImages, setUploadingImages] = useState(false);
 
   const handlePublish = async () => {
     setIsPublishing(true);
@@ -56,19 +58,67 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
 
       const generatedStoryData = await response.json();
 
-      // Store the generated data for preview
-      setGeneratedStoryData(generatedStoryData);
+      // Handle image upload to Lighthouse for image-type stories
+      let processedStoryData = generatedStoryData;
+      
+      if (storyDraft.type === "image" && generatedStoryData.chapters) {
+        console.log("Processing image uploads to Lighthouse...");
+        setUploadingImages(true);
+        
+        try {
+          // Extract base64 images from chapters
+          const imagesToUpload = generatedStoryData.chapters
+            .filter((chapter: GeneratedChapter) => chapter.image_url)
+            .map((chapter: GeneratedChapter) => ({
+              base64: chapter.image_url!,
+              chapterNumber: chapter.chapter_number,
+              title: chapter.title,
+            }));
+
+          if (imagesToUpload.length > 0) {
+            console.log(`Uploading ${imagesToUpload.length} images to Lighthouse...`);
+            
+            // Upload all images to Lighthouse
+            const uploadedImages = await uploadMultipleBase64ToLighthouse(imagesToUpload);
+            
+            // Update chapters with Lighthouse URLs
+            processedStoryData = {
+              ...generatedStoryData,
+              chapters: generatedStoryData.chapters.map((chapter: GeneratedChapter) => {
+                const uploadedImage = uploadedImages.find(
+                  (img) => img.chapterNumber === chapter.chapter_number
+                );
+                return {
+                  ...chapter,
+                  image_url: uploadedImage?.imageUrl || chapter.image_url,
+                };
+              }),
+            };
+            
+            console.log("Successfully uploaded all images to Lighthouse!");
+          }
+        } catch (imageUploadError) {
+          console.error("Error uploading images to Lighthouse:", imageUploadError);
+          // Continue with base64 images if upload fails
+          console.log("Continuing with base64 images...");
+        } finally {
+          setUploadingImages(false);
+        }
+      }
+
+      // Store the processed data for preview
+      setGeneratedStoryData(processedStoryData);
       setShowGeneratedPreview(true);
 
       // Create the final story object with the unified structure
       const finalStory: StoryDraft = {
         ...storyDraft,
-        id: generatedStoryData.id,
-        generated_story: generatedStoryData.generated_story,
-        chapters: generatedStoryData.chapters, // This will include image_url for image stories
-        characters: generatedStoryData.chapters
+        id: processedStoryData.id,
+        generated_story: processedStoryData.generated_story,
+        chapters: processedStoryData.chapters, // This will include Lighthouse URLs for image stories
+        characters: processedStoryData.chapters
           ? storyDraft.characters
-          : generatedStoryData.characters,
+          : processedStoryData.characters,
         posterImage: "/comics/placeholder.jpg",
         status: "generated" as const,
         updatedAt: new Date().toISOString(),
@@ -399,8 +449,11 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                       />
                     </svg>
-                    Generating {storyDraft.type === "image" ? "Images &" : ""}{" "}
-                    Story...
+                    {uploadingImages ? (
+                      "Uploading Images to Lighthouse..."
+                    ) : (
+                      `Generating ${storyDraft.type === "image" ? "Images &" : ""} Story...`
+                    )}
                   </div>
                 ) : (
                   `Generate ${
@@ -427,7 +480,7 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
                     </svg>
                     Story generated successfully!
                     {storyDraft.type === "image" &&
-                      " Images created and uploaded."}
+                      " Images uploaded to Lighthouse IPFS."}
                   </div>
                 </div>
                 <button
@@ -437,7 +490,7 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
                         ...storyDraft,
                         id: generatedStoryData.id,
                         generated_story: generatedStoryData.generated_story,
-                        chapters: generatedStoryData.chapters,
+                        chapters: generatedStoryData.chapters, // This now contains Lighthouse URLs
                         characters: storyDraft.characters,
                         posterImage: "/comics/placeholder.jpg",
                         status: "generated" as const,
