@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { usePrivy } from "@privy-io/react-auth";
 import { useUser } from "@/context/UserContext";
 import { User } from "@/lib/types";
@@ -16,6 +17,7 @@ interface Props {
 const PrivySyncProvider: React.FC<Props> = ({ children }) => {
   const { ready, authenticated, user: privyUser } = usePrivy();
   const { user, login } = useUser();
+  const router = useRouter();
 
   useEffect(() => {
     if (ready && authenticated && privyUser && !user) {
@@ -35,8 +37,11 @@ const PrivySyncProvider: React.FC<Props> = ({ children }) => {
       } as unknown as User;
 
       login(mappedUser);
+
+      // Redirect to /browse after successful login
+      router.push("/browse");
     }
-  }, [ready, authenticated, privyUser, user, login]);
+  }, [ready, authenticated, privyUser, user, login, router]);
 
   return <>{children}</>;
 };
