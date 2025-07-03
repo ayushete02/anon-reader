@@ -9,7 +9,11 @@ import {
 } from "@/lib/types";
 import { NearAIHelper } from "@/lib/near-ai";
 import { createStoryPrompt, SYSTEM_PROMPT } from "@/constants/prompts";
-import { STORY_CONFIG, FIELD_CONSTRAINTS } from "@/constants/constants";
+import {
+  STORY_CONFIG,
+  FIELD_CONSTRAINTS,
+  NEAR_AI_CONFIG,
+} from "@/constants/constants";
 import { generateStoryImages, ChapterImage } from "@/lib/gemini";
 
 function parseStoryIntoChapters(storyText: string): Chapter[] {
@@ -87,9 +91,57 @@ function generateStoryData(
   };
 }
 
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    },
+  });
+}
+
+export async function GET() {
+  return NextResponse.json({
+    message: "Stories generate API is running",
+    methods: ["POST"],
+    timestamp: new Date().toISOString(),
+  });
+}
+
 export async function POST(request: NextRequest) {
+  console.log("POST /api/stories/generate called");
+  console.log("Request method:", request.method);
+  console.log("Request URL:", request.url);
+
   try {
-    const storyData: StoryCreate = await request.json();
+    let storyData: StoryCreate;
+
+    try {
+      storyData = await request.json();
+    } catch (jsonError) {
+      console.error("Failed to parse JSON:", jsonError);
+      return NextResponse.json(
+        { error: "Invalid JSON in request body" },
+        { status: 400 }
+      );
+    }
+
+    console.log("Story data received:", {
+      title: storyData.title,
+      type: storyData.type,
+      charactersCount: storyData.characters?.length,
+    });
+
+    // Check if NearAI configuration is available
+    if (!NEAR_AI_CONFIG.API_URL || !NEAR_AI_CONFIG.AUTH_HEADER) {
+      console.error("Missing NearAI configuration");
+      return NextResponse.json(
+        { error: "API configuration error" },
+        { status: 500 }
+      );
+    }
 
     // Validate required fields
     if (!storyData.title || !storyData.description || !storyData.plot) {

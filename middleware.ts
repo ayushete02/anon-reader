@@ -13,6 +13,14 @@ export default withAuth(
           return true;
         }
 
+        // Allow access to public API routes
+        const publicAPIPaths = ["/api/stories/generate"];
+        if (
+          publicAPIPaths.some((path) => req.nextUrl.pathname.startsWith(path))
+        ) {
+          return true;
+        }
+
         // For protected routes, check if user has a token
         return !!token;
       },
@@ -23,8 +31,6 @@ export default withAuth(
 export const config = {
   matcher: [
     // Skip all internal paths (_next)
-    "/((?!_next|api|favicon.ico).*)",
-    // Always run for API routes
-    "/api/(.*)",
+    "/((?!_next|api/stories/generate|api/auth|favicon.ico).*)",
   ],
 };
