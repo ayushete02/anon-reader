@@ -1,7 +1,10 @@
 "use client";
 
 import AuthGuard from "@/components/AuthGuard";
-import { CONTRACT_ABI, CONTRACT_ADDRESS } from "@/components/contract/contractDetails";
+import {
+  CONTRACT_ABI,
+  CONTRACT_ADDRESS,
+} from "@/components/contract/contractDetails";
 import CharacterCreator from "@/components/producer/CharacterCreator";
 import StoryDetailsForm from "@/components/producer/StoryDetailsForm";
 import StoryPreview from "@/components/producer/StoryPreview";
@@ -14,10 +17,10 @@ import { useAccount, useChainId, useWriteContract } from "wagmi";
 type Step = "details" | "characters" | "preview";
 
 const ProducerPage = () => {
-  const { writeContract } = useWriteContract()
+  const { writeContract } = useWriteContract();
 
-  const chainId = useChainId()
-  const { address } = useAccount()
+  const chainId = useChainId();
+  const { address } = useAccount();
   const { user, loading } = useUser();
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState<Step>("details");
@@ -111,11 +114,9 @@ const ProducerPage = () => {
     writeContract({
       abi: CONTRACT_ABI,
       address: CONTRACT_ADDRESS,
-      functionName: 'publishStory',
-      args: [
-        cid
-      ],
-    })
+      functionName: "publishStory",
+      args: [cid],
+    });
   };
 
   const handlePublishStory = async (finalStory: StoryDraft) => {
@@ -201,7 +202,15 @@ const ProducerPage = () => {
   };
   return (
     <AuthGuard requireAuth={true}>
-      <button onClick={() => publishStory("https://gateway.lighthouse.storage/ipfs/bafkreidceczfcgbdbj7xsklj4e4z33uzqsoxjvaiwinvmvvk3ij6gkgccm")}>Publish</button>
+      <button
+        onClick={() =>
+          publishStory(
+            "https://gateway.lighthouse.storage/ipfs/bafkreidceczfcgbdbj7xsklj4e4z33uzqsoxjvaiwinvmvvk3ij6gkgccm"
+          )
+        }
+      >
+        Publish
+      </button>
       <a>Helo: {chainId}</a>
       <a>Address: {address}</a>
       <div className="min-h-screen bg-morphic-dark text-white relative overflow-hidden">

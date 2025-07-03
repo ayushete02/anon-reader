@@ -155,9 +155,12 @@ export interface StoryDraft {
   categories: string[];
   posterImage?: string;
   createdBy: string; // User ID
-  status: "draft" | "published" | "generating";
+  status: "draft" | "published" | "generating" | 'generated';
   createdAt: string;
   updatedAt: string;
+  // Optional fields from API response
+  generated_story?: string;
+  chapters?: ChapterRead[];
 }
 
 export interface PublishedStory extends Comic {

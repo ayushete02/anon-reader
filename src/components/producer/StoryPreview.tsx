@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { StoryDraft } from "@/lib/types";
+import { StoryDraft, StoryRead } from "@/lib/types";
 import Image from "next/image";
 
 interface StoryPreviewProps {
@@ -16,15 +16,9 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
   onBack,
 }) => {
   const [isPublishing, setIsPublishing] = useState(false);
-  const [posterImage, setPosterImage] = useState<string>("");
-
-  const handlePosterImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setPosterImage(imageUrl);
-    }
-  };
+  const [showGeneratedPreview, setShowGeneratedPreview] = useState(false);
+  const [generatedStoryData, setGeneratedStoryData] =
+    useState<StoryRead | null>(null);
 
   const handlePublish = async () => {
     setIsPublishing(true);
@@ -60,14 +54,24 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
         throw new Error(errorData.error || "Failed to generate story");
       }
 
-      const generatedStory = await response.json();
+      const generatedStoryData = await response.json();
 
-      // Add poster image to generated story
+      // Store the generated data for preview
+      setGeneratedStoryData(generatedStoryData);
+      setShowGeneratedPreview(true);
+
+      // Create the final story object with the unified structure
       const finalStory: StoryDraft = {
         ...storyDraft,
-        ...generatedStory,
-        posterImage: posterImage || "/comics/placeholder.jpg",
-        status: "published" as const,
+        id: generatedStoryData.id,
+        generated_story: generatedStoryData.generated_story,
+        chapters: generatedStoryData.chapters, // This will include image_url for image stories
+        characters: generatedStoryData.chapters
+          ? storyDraft.characters
+          : generatedStoryData.characters,
+        posterImage: "/comics/placeholder.jpg",
+        status: "generated" as const,
+        updatedAt: new Date().toISOString(),
       };
 
       setIsPublishing(false);
@@ -128,9 +132,16 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
                   <label className="block text-sm font-medium text-white/80 mb-2">
                     Type
                   </label>
-                  <p className="text-white/80 capitalize">
-                    {storyDraft.type}-based Story
-                  </p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-white/80 capitalize">
+                      {storyDraft.type}-based Story
+                    </p>
+                    {storyDraft.type === "image" && (
+                      <span className="px-2 py-1 bg-blue-500/20 border border-blue-500/30 rounded-full text-xs font-medium text-blue-400">
+                        Images will be generated
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-white/80 mb-2">
@@ -226,6 +237,69 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
               <p className="text-white/60">No characters added</p>
             )}
           </div>
+
+          {/* Generated Story Preview */}
+          {showGeneratedPreview && generatedStoryData && (
+            <div className="bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 p-6">
+              <h3 className="text-xl font-semibold text-white mb-6 font-display">
+                Generated Story Preview (
+                {generatedStoryData.chapters?.length || 0} chapters)
+              </h3>
+
+              {storyDraft.type === "image" && generatedStoryData.chapters ? (
+                <div className="space-y-6">
+                  <p className="text-white/60 text-sm mb-4">
+                    Showing first 3 chapters with generated images:
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {generatedStoryData.chapters.slice(0, 3).map((chapter) => (
+                      <div
+                        key={chapter.id}
+                        className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-4"
+                      >
+                        {chapter.image_url && (
+                          <div className="aspect-[4/3] bg-white/5 rounded-lg overflow-hidden mb-3">
+                            <Image
+                              src={chapter.image_url}
+                              alt={chapter.title}
+                              width={400}
+                              height={300}
+                              className="object-cover w-full h-full"
+                            />
+                          </div>
+                        )}
+                        <h4 className="font-semibold text-white text-sm mb-2">
+                          Chapter {chapter.chapter_number}: {chapter.title}
+                        </h4>
+                        <p className="text-xs text-white/60 line-clamp-3">
+                          {chapter.content.substring(0, 150)}...
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <p className="text-white/60 text-sm mb-4">
+                    Showing first 2 chapters:
+                  </p>
+                  {generatedStoryData.chapters?.slice(0, 2).map((chapter) => (
+                    <div
+                      key={chapter.id}
+                      className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-4"
+                    >
+                      <h4 className="font-semibold text-white mb-2">
+                        Chapter {chapter.chapter_number}: {chapter.title}
+                      </h4>
+                      <p className="text-white/70 text-sm line-clamp-4">
+                        {chapter.content.substring(0, 300)}...
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Poster Image and Actions */}
@@ -298,38 +372,95 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
 
           {/* Action Buttons */}
           <div className="flex flex-col gap-4">
-            <button
-              onClick={handlePublish}
-              disabled={isPublishing}
-              className="w-full px-6 py-4 bg-primary/20 border border-primary/30 rounded-xl text-white font-medium backdrop-blur-sm hover:bg-primary/30 hover:border-primary/40 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isPublishing ? (
-                <div className="flex items-center justify-center gap-2">
-                  <svg
-                    className="animate-spin h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
+            {!showGeneratedPreview ? (
+              <button
+                onClick={handlePublish}
+                disabled={isPublishing}
+                className="w-full px-6 py-4 bg-primary/20 border border-primary/30 rounded-xl text-white font-medium backdrop-blur-sm hover:bg-primary/30 hover:border-primary/40 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isPublishing ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <svg
+                      className="animate-spin h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
+                    </svg>
+                    Generating {storyDraft.type === "image" ? "Images &" : ""}{" "}
+                    Story...
+                  </div>
+                ) : (
+                  `Generate ${
+                    storyDraft.type === "image" ? "Images &" : ""
+                  } Story`
+                )}
+              </button>
+            ) : (
+              <div className="space-y-3">
+                <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-xl">
+                  <div className="flex items-center gap-2 text-green-400 text-sm">
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
                       stroke="currentColor"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    />
-                  </svg>
-                  Generating Story...
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    Story generated successfully!
+                    {storyDraft.type === "image" &&
+                      " Images created and uploaded."}
+                  </div>
                 </div>
-              ) : (
-                "Generate Story"
-              )}
-            </button>
+                <button
+                  onClick={() => {
+                    if (generatedStoryData) {
+                      const finalStory: StoryDraft = {
+                        ...storyDraft,
+                        id: generatedStoryData.id,
+                        generated_story: generatedStoryData.generated_story,
+                        chapters: generatedStoryData.chapters,
+                        characters: storyDraft.characters,
+                        posterImage: "/comics/placeholder.jpg",
+                        status: "generated" as const,
+                        updatedAt: new Date().toISOString(),
+                      };
+                      onPublish(finalStory);
+                    }
+                  }}
+                  className="w-full px-6 py-4 bg-primary/20 border border-primary/30 rounded-xl text-white font-medium backdrop-blur-sm hover:bg-primary/30 hover:border-primary/40 transition-all duration-150"
+                >
+                  View Full Story
+                </button>
+                <button
+                  onClick={() => {
+                    setShowGeneratedPreview(false);
+                    setGeneratedStoryData(null);
+                  }}
+                  className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl text-white/80 backdrop-blur-sm hover:bg-white/10 hover:border-white/20 transition-all duration-150"
+                >
+                  Generate Again
+                </button>
+              </div>
+            )}
             <button
               onClick={onBack}
               className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl text-white/80 backdrop-blur-sm hover:bg-white/10 hover:border-white/20 transition-all duration-150"

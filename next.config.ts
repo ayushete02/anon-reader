@@ -70,7 +70,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "www..com",
+        hostname: "gateway.lighthouse.storage",
         port: "",
         pathname: "/**",
       },
