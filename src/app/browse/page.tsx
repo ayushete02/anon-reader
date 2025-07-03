@@ -2,10 +2,12 @@
 
 import ComicCard from "@/components/ComicCard";
 import ComicRow from "@/components/ComicRow";
-import { CONTRACT_ABI, CONTRACT_ADDRESS } from "@/components/contract/contractDetails";
+import {
+  CONTRACT_ABI,
+  CONTRACT_ADDRESS,
+} from "@/components/contract/contractDetails";
 import HeroBanner from "@/components/HeroBanner";
 import Navbar from "@/components/Navbar";
-import { MOCK_COMICS } from "@/lib/mock-data";
 import { Comic, UserPersona } from "@/lib/types";
 import { filterComicsByPersona } from "@/lib/utils";
 import Link from "next/link";
@@ -22,6 +24,7 @@ const BrowsePage = () => {
   const [filteredComics, setFilteredComics] = useState<Comic[]>([]);
   const [userPersona, setUserPersona] = useState<Partial<UserPersona>>({});
   const [loading, setLoading] = useState(true);
+  const [comicsLoading, setComicsLoading] = useState(true);
   const [personaLoaded, setPersonaLoaded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -31,12 +34,11 @@ const BrowsePage = () => {
   const contractAddress = CONTRACT_ADDRESS as `0x${string}`;
 
   console.log("contractAddress ;", contractAddress);
-  const { data: numberOfStories, isLoading: numberOfStoriesLoading } =
-    useReadContract({
-      abi: CONTRACT_ABI,
-      address: contractAddress,
-      functionName: "totalStories",
-    });
+  const { data: numberOfStories } = useReadContract({
+    abi: CONTRACT_ABI,
+    address: contractAddress,
+    functionName: "totalStories",
+  });
 
   console.log("numberOfStories ;", numberOfStories);
 
@@ -57,30 +59,125 @@ const BrowsePage = () => {
 
   console.log("stories ;", stories);
 
-
-  // Load comics from mock data and localStorage
+  // Load comics from blockchain contract only
   useEffect(() => {
-    const loadComics = () => {
-      let combinedComics = [...MOCK_COMICS];
+    const loadComics = async () => {
+      setComicsLoading(true);
+      let combinedComics: Comic[] = [];
 
-      // Load published stories from localStorage
-      const publishedStories = localStorage.getItem("publishedStories");
-      if (publishedStories) {
+      // Load stories from blockchain if available
+      if (stories && stories.length > 0) {
         try {
-          const stories = JSON.parse(publishedStories);
-          combinedComics = [...combinedComics, ...stories];
+          const blockchainComics = await Promise.all(
+            stories
+              .filter((story) => story.status === "success" && story.result) // Only process successful calls
+              .map(async (story, index) => {
+                try {
+                  // Updated destructuring to match the actual contract response structure
+                  const {
+                    id: storyId,
+                    cid: ipfsCid,
+                    publishedAt: createdAt,
+                  } = story.result as {
+                    id: bigint;
+                    cid: string;
+                    publishedAt: bigint;
+                    writer: string;
+                  };
+
+                  // Handle different CID formats - some might be full URLs, others just CIDs
+                  let lighthouseCid = ipfsCid;
+                  if (ipfsCid.includes("gateway.lighthouse.storage/ipfs/")) {
+                    // Extract CID from full URL
+                    lighthouseCid = ipfsCid.split("/ipfs/")[1];
+                  } else if (ipfsCid.includes("ipfs/")) {
+                    // Extract CID from partial URL
+                    lighthouseCid = ipfsCid.split("ipfs/")[1];
+                  }
+
+                  // Fetch story data from Lighthouse using the IPFS CID
+                  const response = await fetch(
+                    `https://gateway.lighthouse.storage/ipfs/${lighthouseCid}`
+                  );
+                  if (!response.ok) {
+                    throw new Error(
+                      `Failed to fetch story data for CID: ${lighthouseCid}`
+                    );
+                  }
+
+                  const storyData = await response.json();
+
+                  // Convert to Comic format
+                  const blockchainComic: Comic = {
+                    id: `blockchain-${storyId.toString()}`,
+                    title: storyData.title || `Story ${storyId.toString()}`,
+                    description:
+                      storyData.description || "A story from the blockchain",
+                    posterImage: "/comics/placeholder.jpg", // Default poster
+                    categories: storyData.categories || ["Blockchain"],
+                    type: storyData.type || "text",
+                    releaseDate: new Date(
+                      Number(createdAt) * 1000
+                    ).toISOString(),
+                    popularity: Math.floor(Math.random() * 100),
+                    rating: parseFloat((4 + Math.random()).toFixed(1)),
+                    textContent:
+                      storyData.chapters?.map(
+                        (chapter: {
+                          chapter_number: number;
+                          title: string;
+                          content: string;
+                        }) => ({
+                          id: chapter.chapter_number,
+                          title: chapter.title,
+                          paragraphs: chapter.content
+                            .split("\n")
+                            .filter((p: string) => p.trim()),
+                        })
+                      ) || [],
+                  };
+
+                  return blockchainComic;
+                } catch (error) {
+                  console.error(
+                    `Error processing blockchain story ${index}:`,
+                    error
+                  );
+                  return null; // Return null for failed stories
+                }
+              })
+          );
+
+          // Filter out null values and add to combined comics
+          const validBlockchainComics = blockchainComics.filter(
+            (comic): comic is Comic => comic !== null
+          );
+          combinedComics = validBlockchainComics;
+
+          console.log(
+            `Loaded ${validBlockchainComics.length} stories from blockchain`
+          );
         } catch (error) {
-          console.error("Error parsing published stories:", error);
+          console.error("Error loading stories from blockchain:", error);
         }
       }
 
       setAllComics(combinedComics);
       setComics(combinedComics);
       setFilteredComics(combinedComics);
+      setComicsLoading(false);
     };
 
-    loadComics();
-  }, []);
+    // Only load comics when we have contract data or when there are no stories
+    if (
+      !storiesLoading &&
+      ((stories && stories.length > 0) || numberOfStories === BigInt(0))
+    ) {
+      loadComics();
+    } else if (storiesLoading) {
+      setComicsLoading(true);
+    }
+  }, [stories, storiesLoading, numberOfStories]);
 
   // Get all unique categories from all comics (including published)
   const allCategories = [
@@ -166,14 +263,7 @@ const BrowsePage = () => {
     setFilteredComics(result);
   }, [comics, searchQuery, selectedCategory, sortBy]);
 
-  // Group comics by category
-  const getComicsByCategory = (category: string) => {
-    return filteredComics.filter((comic) =>
-      comic.categories.includes(category)
-    );
-  };
-
-  if (loading) {
+  if (loading || comicsLoading || storiesLoading) {
     return (
       <div className="min-h-screen bg-morphic-dark text-white flex items-center justify-center relative overflow-hidden">
         {/* Enhanced Background effects */}
@@ -197,7 +287,9 @@ const BrowsePage = () => {
             </div>
           </div>
           <p className="text-xl text-white/80 font-medium">
-            Discovering amazing AI-powered stories...
+            {storiesLoading || comicsLoading
+              ? "Loading stories from blockchain..."
+              : "Discovering amazing AI-powered stories..."}
           </p>
         </div>
       </div>
@@ -442,6 +534,18 @@ const BrowsePage = () => {
               Quick Browse
             </h3>
           </div>
+
+          {/* Search Bar */}
+          <div className="mb-4">
+            <input
+              type="text"
+              placeholder="Search stories..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full px-4 py-2 bg-morphic-gray/30 backdrop-blur-xl border border-white/10 rounded-xl text-white placeholder-white/60 focus:border-primary/50 focus:outline-none transition-all duration-300"
+            />
+          </div>
+
           <div className="flex gap-2 overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {allCategories.map((category) => (
               <motion.button
@@ -449,10 +553,11 @@ const BrowsePage = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-4 sm:px-6 w-fit whitespace-nowrap py-2 text-xs sm:text-sm font-medium transition-all duration-300 rounded-lg flex-shrink-0 backdrop-blur-sm ${selectedCategory === category
-                  ? "bg-primary text-white shadow-lg shadow-primary/25"
-                  : "bg-gray-800/50 text-zinc-400 hover:bg-gray-700/50 border border-gray-700/50"
-                  }`}
+                className={`px-4 sm:px-6 w-fit whitespace-nowrap py-2 text-xs sm:text-sm font-medium transition-all duration-300 rounded-lg flex-shrink-0 backdrop-blur-sm ${
+                  selectedCategory === category
+                    ? "bg-primary text-white shadow-lg shadow-primary/25"
+                    : "bg-gray-800/50 text-zinc-400 hover:bg-gray-700/50 border border-gray-700/50"
+                }`}
               >
                 {category}
               </motion.button>
