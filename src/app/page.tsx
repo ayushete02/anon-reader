@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { getUserFromLocalStorage } from "@/lib/utils";
 import { usePrivy } from "@privy-io/react-auth";
 import AnimatedParagraph from "@/components/AnimatedParagraph";
@@ -9,13 +10,90 @@ import { motion } from "framer-motion";
 import ComicSlider from "@/components/ComicSlider";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-
+import { useAccount, useBalance, useChainId } from "wagmi";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 export default function Home() {
   const router = useRouter();
+  const { address } = useAccount();
+  const chainId = useChainId();
+  const { data: balance } = useBalance({
+    address: address,
+  });
   const { login: privyLogin, ready, authenticated, user, logout } = usePrivy();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const disableLogout = !ready || (ready && !authenticated);
+
+  // Function to get chain icon and name
+  const getChainInfo = (chainId: number) => {
+    const chains = {
+      1: {
+        name: "Ethereum",
+        icon: "https://cryptologos.cc/logos/ethereum-eth-logo.svg",
+        color: "text-blue-400",
+      },
+      137: {
+        name: "Polygon",
+        icon: "https://cryptologos.cc/logos/polygon-matic-logo.svg",
+        color: "text-purple-400",
+      },
+      56: {
+        name: "BSC",
+        icon: "https://cryptologos.cc/logos/binance-coin-bnb-logo.svg",
+        color: "text-yellow-400",
+      },
+      43114: {
+        name: "Avalanche",
+        icon: "https://cryptologos.cc/logos/avalanche-avax-logo.svg",
+        color: "text-red-400",
+      },
+      250: {
+        name: "Fantom",
+        icon: "https://cryptologos.cc/logos/fantom-ftm-logo.svg",
+        color: "text-blue-300",
+      },
+      42161: {
+        name: "Arbitrum",
+        icon: "https://cryptologos.cc/logos/arbitrum-arb-logo.svg",
+        color: "text-blue-500",
+      },
+      10: {
+        name: "Optimism",
+        icon: "https://cryptologos.cc/logos/optimism-ethereum-op-logo.svg",
+        color: "text-red-500",
+      },
+      8453: {
+        name: "Base",
+        icon: "https://www.coinbase.com/img/assets/crypto/base/base_logo.svg",
+        color: "text-blue-600",
+      },
+      747: {
+        name: "Flow",
+        icon: "https://cdn.prod.website-files.com/5f734f4dbd95382f4fdfa0ea/67e1750c3eb15026e1ca6618_Flow_Icon_Color.svg",
+        color: "text-green-500",
+      },
+      545: {
+        name: "Flow",
+        icon: "https://cdn.prod.website-files.com/5f734f4dbd95382f4fdfa0ea/67e1750c3eb15026e1ca6618_Flow_Icon_Color.svg",
+        color: "text-green-500",
+      },
+    };
+    return (
+      chains[chainId as keyof typeof chains] || {
+        name: "Unknown",
+        icon: "https://cdn-icons-png.flaticon.com/512/4213/4213891.png",
+        color: "text-gray-400",
+      }
+    );
+  };
+
+  const chainInfo = getChainInfo(chainId);
+
   const login = () => {
     if (ready && !authenticated) {
       privyLogin();
@@ -103,23 +181,60 @@ export default function Home() {
 
           <div className="flex items-center gap-2 sm:gap-4">
             {user ? (
-              <>
-                <div className="text-white">
-                  <button disabled={disableLogout} onClick={logout}>
-                    {user?.id}
-                  </button>
-                </div>
-              </>
+              <div className="flex items-center gap-3">
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    {" "}
+                    {address && (
+                      <>
+                        <div className="flex items-center  gap-2 bg-white/10 rounded-lg px-3 py-1.5 backdrop-blur-sm">
+                          {/* Chain icon */}
+                          <Image
+                            src={chainInfo.icon}
+                            alt={chainInfo.name}
+                            width={20}
+                            height={20}
+                            className="w-5 h-5 rounded-full"
+                            title={chainInfo.name}
+                          />
+                          {/* Balance */}
+                          {balance && (
+                            <span className="text-white text-xs sm:text-sm font-medium">
+                              {parseFloat(balance.formatted).toFixed(2)}{" "}
+                              {balance.symbol}
+                            </span>
+                          )}
+                          <span
+                            className="text-white text-xs sm:text-sm truncate max-w-[100px] sm:max-w-[180px]"
+                            title={address}
+                          >
+                            {address
+                              ? `${address.slice(0, 6)}...${address.slice(-4)}`
+                              : "Connected"}
+                          </span>
+                        </div>
+                      </>
+                    )}
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="bg-black/90 border border-white/20 backdrop-blur-lg rounded-lg shadow-lg">
+                    <DropdownMenuItem
+                      onClick={logout}
+                      className="border-white/40  text-white bg-black hover:text-white hover:bg-black/80 "
+                      disabled={disableLogout}
+                    >
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             ) : (
-              <>
-                <Button
-                  variant="outline"
-                  className="bg-primary text-white  border-white/70 hover:text-white hover:bg-primary/90 text-sm sm:text-base px-2 sm:px-4"
-                  onClick={() => login()}
-                >
-                  Login
-                </Button>
-              </>
+              <Button
+                variant="outline"
+                className="bg-primary text-white border-white/70 hover:text-white hover:bg-primary/90 text-sm sm:text-base px-2 sm:px-4"
+                onClick={login}
+              >
+                Login
+              </Button>
             )}
           </div>
         </nav>
@@ -239,7 +354,7 @@ export default function Home() {
         {/* CTA Section */}
         <section
           id="cta"
-          className="w-full bg-morphic-dark/90 backdrop-blur-xl py-24 px-8 md:px-16 z-10 relative overflow-hidden"
+          className="w-full bg-morphic-dark/90 backdrop-blur-xl pt-24 px-8 md:px-16 z-10 relative overflow-hidden"
         >
           <div className="absolute inset-0 bg-gradient-radial from-primary/20 via-primary/5 to-transparent opacity-50"></div>
           <div className="absolute inset-0 backdrop-blur-sm"></div>
@@ -262,11 +377,12 @@ export default function Home() {
               </Button>
             </div>
           </div>
+          <div className="w-full  mx-auto text-center relative z-10">
+            {/* Footer */}
+            <Footer />
+          </div>
         </section>
       </main>
-
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

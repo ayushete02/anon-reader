@@ -3,7 +3,7 @@ import FooterContent from "./FooterContent";
 
 export default function Footer() {
   return (
-    <footer className="bg-morphic-darker py-24">
+    <footer className=" py-24">
       <FooterContent />
     </footer>
   );
