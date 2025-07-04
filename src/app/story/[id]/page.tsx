@@ -266,7 +266,7 @@ const StoryDetailPage = () => {
               {/* Title and Meta */}
               <div className="space-y-4">
                 <div>
-                  <h1 className="text-3xl lg:text-4xl font-bold font-display bg-gradient-to-r from-white via-white/90 to-white/80 bg-clip-text text-transparent leading-tight">
+                  <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-white via-white/90 to-white/80 bg-clip-text text-transparent leading-tight">
                     {story.title}
                   </h1>
                 </div>
@@ -341,7 +341,7 @@ const StoryDetailPage = () => {
               </div>
               {/* Description */}
               <div className="space-y-3">
-                <h2 className="text-lg font-semibold text-white font-display">
+                <h2 className="text-lg font-semibold text-white">
                   Story Description
                 </h2>
                 <div className="morphic-glass rounded-lg p-4 border border-white/10 shadow-glossy">

@@ -243,7 +243,7 @@ const GeneratedStoryViewerPage = () => {
                   <span className="font-medium">Back to Creator</span>
                 </button>
                 <div>
-                  <h1 className="text-2xl font-bold text-white font-display">
+                  <h1 className="text-2xl font-bold text-white">
                     Story Review: {story.title}
                   </h1>
                   <p className="text-white/60 text-sm">
@@ -328,7 +328,7 @@ const GeneratedStoryViewerPage = () => {
                   <div className="bg-morphic-gray/30 backdrop-blur-xl border border-white/5 rounded-3xl p-8 mb-8 shadow-glossy">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div className="md:col-span-2">
-                        <h2 className="text-xl font-semibold text-white mb-4 font-display">
+                        <h2 className="text-xl font-semibold text-white mb-4">
                           Story Description
                         </h2>
                         <p className="text-white/80 leading-relaxed mb-6">
@@ -348,7 +348,7 @@ const GeneratedStoryViewerPage = () => {
                       </div>
 
                       <div>
-                        <h3 className="text-lg font-semibold text-white mb-4 font-display">
+                        <h3 className="text-lg font-semibold text-white mb-4">
                           Characters ({story.characters.length})
                         </h3>
                         <div className="space-y-3">
@@ -408,7 +408,7 @@ const GeneratedStoryViewerPage = () => {
 
                   {/* Chapters Accordion */}
                   <div className="bg-morphic-gray/30 backdrop-blur-xl border border-white/5 rounded-3xl p-8 shadow-glossy">
-                    <h2 className="text-2xl font-bold text-white mb-6 font-display">
+                    <h2 className="text-2xl font-bold text-white mb-6">
                       Story Chapters
                     </h2>
 
@@ -627,7 +627,7 @@ const GeneratedStoryViewerPage = () => {
               <div className="bg-morphic-gray/30 backdrop-blur-xl border border-white/5 rounded-3xl p-8 mb-8 shadow-glossy">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="md:col-span-2">
-                    <h2 className="text-xl font-semibold text-white mb-4 font-display">
+                    <h2 className="text-xl font-semibold text-white mb-4">
                       Story Description
                     </h2>
                     <p className="text-white/80 leading-relaxed mb-6">
@@ -647,7 +647,7 @@ const GeneratedStoryViewerPage = () => {
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold text-white mb-4 font-display">
+                    <h3 className="text-lg font-semibold text-white mb-4">
                       Characters ({story.characters.length})
                     </h3>
                     <div className="space-y-3">
@@ -707,7 +707,7 @@ const GeneratedStoryViewerPage = () => {
 
               {/* Chapters Accordion */}
               <div className="bg-morphic-gray/30 backdrop-blur-xl border border-white/5 rounded-3xl p-8 shadow-glossy">
-                <h2 className="text-2xl font-bold text-white mb-6 font-display">
+                <h2 className="text-2xl font-bold text-white mb-6">
                   Story Chapters
                 </h2>
 

@@ -199,12 +199,10 @@ const ProducerPage = () => {
             <div className="flex justify-between items-center">
               <div className="flex items-center space-x-4">
                 <div className="w-10 h-10 bg-primary/20 backdrop-blur-xl border border-primary/30 rounded-xl flex items-center justify-center">
-                  <span className="text-white font-bold text-lg font-display">
-                    S
-                  </span>
+                  <span className="text-white font-bold text-lg">S</span>
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-white font-display">
+                  <h1 className="text-2xl font-bold text-white">
                     Story Creator
                   </h1>
                   <p className="text-white/60 text-sm">

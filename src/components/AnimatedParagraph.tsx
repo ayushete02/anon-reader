@@ -40,7 +40,7 @@ export default function AnimatedParagraph({ paragraph }: ParagraphProps) {
   return (
     <div
       ref={container}
-      className={`text-3xl md:text-5xl lg:text-6xl max-w-4xl mx-auto mb-12 leading-relaxed min-h-[300px] py-12 will-change-transform font-la-nord transition-colors duration-500 ${
+      className={`text-3xl md:text-5xl lg:text-6xl max-w-4xl mx-auto mb-12 leading-relaxed min-h-[300px] py-12 will-change-transform  transition-colors duration-500 ${
         isInCenter ? "text-white" : "text-morphic-light"
       }`}
       style={{

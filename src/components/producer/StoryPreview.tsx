@@ -149,9 +149,7 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
     <div className="space-y-8 animate-fadeIn">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold text-white mb-2 font-display">
-            Story Preview
-          </h2>
+          <h2 className="text-3xl font-bold text-white mb-2">Story Preview</h2>
           <p className="text-white/60">
             Review your story details before publishing
           </p>
@@ -163,7 +161,7 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
         <div className="lg:col-span-2 space-y-6">
           {/* Basic Info */}
           <div className="bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 p-6">
-            <h3 className="text-xl font-semibold text-white mb-6 font-display">
+            <h3 className="text-xl font-semibold text-white mb-6">
               Story Information
             </h3>
 
@@ -230,9 +228,7 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
 
           {/* Plot Preview */}
           <div className="bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 p-6">
-            <h3 className="text-xl font-semibold text-white mb-6 font-display">
-              Plot
-            </h3>
+            <h3 className="text-xl font-semibold text-white mb-6">Plot</h3>
             <div className="max-h-60 overflow-y-auto text-white/80 leading-relaxed scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-white/5 pr-4">
               {storyDraft.plot}
             </div>
@@ -240,7 +236,7 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
 
           {/* Characters */}
           <div className="bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 p-6">
-            <h3 className="text-xl font-semibold text-white mb-6 font-display">
+            <h3 className="text-xl font-semibold text-white mb-6">
               Characters ({storyDraft.characters?.length || 0})
             </h3>
 
@@ -300,7 +296,7 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
           {/* Generated Story Preview */}
           {showGeneratedPreview && generatedStoryData && (
             <div className="bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 p-6">
-              <h3 className="text-xl font-semibold text-white mb-6 font-display">
+              <h3 className="text-xl font-semibold text-white mb-6">
                 Generated Story Preview (
                 {generatedStoryData.chapters?.length || 0} chapters)
               </h3>
@@ -365,7 +361,7 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
         <div className="space-y-6">
           {/* Poster Image */}
           {/* <div className="bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 p-6">
-            <h3 className="text-xl font-semibold text-white mb-6 font-display">
+            <h3 className="text-xl font-semibold text-white mb-6">
               Story Poster
             </h3>
 

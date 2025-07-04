@@ -103,7 +103,7 @@ const Navbar = () => {
         {/* Logo */}
         <div className="flex items-center">
           <Link href="/browse">
-            <h1 className="text-lg sm:text-xl lg:text-2xl font-display text-white">
+            <h1 className="text-lg sm:text-xl lg:text-2xl text-white">
               Anon Reader
             </h1>
           </Link>

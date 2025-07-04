@@ -109,9 +109,7 @@ export default function Home() {
         `}
         >
           <div className="flex items-center">
-            <h1 className="text-lg sm:text-2xl font-display text-white">
-              Anon Reader
-            </h1>
+            <h1 className="text-lg sm:text-2xl text-white">Anon Reader</h1>
           </div>
           <div className="hidden md:flex items-center space-x-8">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>

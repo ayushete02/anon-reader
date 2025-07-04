@@ -13,10 +13,6 @@ module.exports = {
       fontFamily: {
         sans: ["var(--font-geist)", "Geist", "system-ui", "sans-serif"],
         mono: ["var(--font-geist-mono)", "monospace"],
-        display: ["La Nord", "sans-serif"],
-        "la-nord": ["La Nord", "sans-serif"],
-        "la-nord-light": ["La Nord Light", "sans-serif"],
-        "la-nord-bold": ["La Nord Bold", "sans-serif"],
       },
       colors: {
         primary: {

@@ -68,7 +68,7 @@ const StoryDetailsForm: React.FC<StoryDetailsFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
-      <h2 className="text-2xl font-bold mb-8 font-display">Story Details</h2>
+      <h2 className="text-2xl font-bold mb-8">Story Details</h2>
 
       {/* Title */}
       <div>

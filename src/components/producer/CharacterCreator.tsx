@@ -99,7 +99,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
       {/* Enhanced Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold text-white mb-2 font-display">
+          <h2 className="text-3xl font-bold text-white mb-2">
             Character Creator
           </h2>
           <p className="text-white/60">
@@ -150,7 +150,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
       {characters.length > 0 ? (
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <h3 className="text-xl font-semibold text-white font-display">
+            <h3 className="text-xl font-semibold text-white">
               Your Characters
             </h3>
             <span className="text-sm text-white/60">
@@ -191,7 +191,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
               />
             </svg>
           </div>
-          <h3 className="text-xl font-semibold text-white mb-2 font-display">
+          <h3 className="text-xl font-semibold text-white mb-2">
             No characters yet
           </h3>
           <p className="text-white/60 mb-6 max-w-md mx-auto">
@@ -224,7 +224,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="bg-morphic-gray/95 backdrop-blur-2xl border-white/10 text-white">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-display">
+            <DialogTitle className="text-2xl">
               {editingCharacter?.id ? "Edit Character" : "Create New Character"}
             </DialogTitle>
             <DialogDescription className="text-white/60">
