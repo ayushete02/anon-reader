@@ -401,7 +401,7 @@ const GeneratedStoryViewerPage = () => {
                   <span className="font-medium">Back to Creator</span>
                 </button>
                 <div>
-                  <h1 className="text-2xl font-bold text-white">
+                  <h1 className="text-2xl font-bold text-white font-display">
                     Story Review: {story.title}
                   </h1>
                   <p className="text-white/60 text-sm">
@@ -456,7 +456,7 @@ const GeneratedStoryViewerPage = () => {
                           />
                         </svg>
                         {publishingStage === "uploading" &&
-                          "Uploading to IPFS..."}
+                          "Uploading to Filecoin..."}
                         {publishingStage === "blockchain" &&
                           "Sending to blockchain..."}
                         {(publishingStage === "confirming" || isConfirming) &&
@@ -488,7 +488,7 @@ const GeneratedStoryViewerPage = () => {
               <div className="bg-morphic-gray/30 backdrop-blur-xl border  border-white/5 rounded-3xl p-8 mb-8 shadow-glossy">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="md:col-span-2">
-                    <h2 className="text-xl font-semibold text-white mb-4">
+                    <h2 className="text-xl font-semibold text-white mb-4 font-display">
                       Story Description
                     </h2>
                     <p className="text-white/80 leading-relaxed mb-6">
@@ -508,7 +508,7 @@ const GeneratedStoryViewerPage = () => {
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold text-white mb-4">
+                    <h3 className="text-lg font-semibold text-white mb-4 font-display">
                       Characters ({story.characters.length})
                     </h3>
                     <div className="space-y-3">
@@ -568,7 +568,7 @@ const GeneratedStoryViewerPage = () => {
 
               {/* Chapters Accordion */}
               <div className="bg-morphic-gray/30 backdrop-blur-xl border border-white/5 rounded-3xl p-8 shadow-glossy">
-                <h2 className="text-2xl font-bold text-white mb-6">
+                <h2 className="text-2xl font-bold text-white mb-6 font-display">
                   Story Chapters
                 </h2>
 
@@ -753,7 +753,7 @@ const GeneratedStoryViewerPage = () => {
                             <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-primary/50 mr-2"></div>
                             <span className="font-semibold">
                               {publishingStage === "uploading" &&
-                                "Uploading to IPFS..."}
+                                "Uploading to Filecoin..."}
                               {publishingStage === "blockchain" &&
                                 "Sending to blockchain..."}
                               {(publishingStage === "confirming" ||
@@ -812,9 +812,10 @@ const GeneratedStoryViewerPage = () => {
                             {/* Image container */}
                             <div className="relative w-full h-full flex items-center justify-center">
                               {chapter.image_url ? (
-                                <Image
+                                <img
                                   src={chapter.image_url}
                                   alt={`${story.title} - Chapter ${chapter.chapter_number}`}
+                                  fill
                                   className="object-contain"
                                   priority={
                                     index === currentImageIndex ||

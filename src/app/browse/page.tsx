@@ -330,7 +330,7 @@ const BrowsePage = () => {
   const trendingComics = getTrendingComics();
 
   return (
-    <div className="min-h-screen bg-morphic-dark text-white relative overflow-hidden">
+    <div className="min-h-screen bg-morphic-dark text-white relative overflow-hidden pt-32">
       {/* Enhanced Background blur effects */}
       <div className="fixed inset-0 z-0">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
@@ -442,7 +442,7 @@ const BrowsePage = () => {
               </div>
               <div>
                 <h3 className="text-xl sm:text-2xl font-bold text-white">
-                  🤖 AI Curated For You
+                  AI Curated For You
                 </h3>
                 <p className="text-xs sm:text-sm text-white/60">
                   {!personaLoaded || !userPersona.personaType
@@ -507,7 +507,7 @@ const BrowsePage = () => {
             </div>
             <div>
               <h3 className="text-xl sm:text-2xl font-bold text-white">
-                🔥 Trending Now
+                Trending Now
               </h3>
               <p className="text-xs sm:text-sm text-white/60">
                 AI-detected popular comics this month
@@ -515,68 +515,6 @@ const BrowsePage = () => {
             </div>
           </div>
           <ComicRow comics={trendingComics} />
-        </motion.div>
-
-        {/* Quick Category Pills */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="my-8"
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <h3 className="text-lg sm:text-xl font-bold text-white">
-              Quick Browse
-            </h3>
-          </div>
-
-          {/* Search Bar */}
-          <div className="mb-4">
-            <input
-              type="text"
-              placeholder="Search stories..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-2 bg-morphic-gray/30 backdrop-blur-xl border border-white/10 rounded-xl text-white placeholder-white/60 focus:border-primary/50 focus:outline-none transition-all duration-300"
-            />
-          </div>
-
-          <div className="flex gap-2 overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-            {allCategories.map((category) => (
-              <motion.button
-                key={category}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 sm:px-6 w-fit whitespace-nowrap py-2 text-xs sm:text-sm font-medium transition-all duration-300 rounded-lg flex-shrink-0 backdrop-blur-sm ${
-                  selectedCategory === category
-                    ? "bg-primary text-white shadow-lg shadow-primary/25"
-                    : "bg-gray-800/50 text-zinc-400 hover:bg-gray-700/50 border border-gray-700/50"
-                }`}
-              >
-                {category}
-              </motion.button>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Content Grid */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-6"
-        >
-          {filteredComics.map((comic, index) => (
-            <motion.div
-              key={comic.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: index * 0.05 }}
-            >
-              <ComicCard comic={comic} />
-            </motion.div>
-          ))}
         </motion.div>
 
         {/* Create Your Story CTA */}

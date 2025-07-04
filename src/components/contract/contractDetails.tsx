@@ -1,5 +1,4 @@
-export const CONTRACT_ADDRESS = process.env
-  .NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`;
+export const CONTRACT_ADDRESS = "0x66D9a5b952a0daFA310cBE7ea2aB2863Af75616E";
 
 export const CONTRACT_ABI = [
   {

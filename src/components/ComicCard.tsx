@@ -47,7 +47,6 @@ const ComicCard: React.FC<ComicCardProps> = ({ comic, priority = false }) => {
           ? "0 20px 40px 0 rgba(0,0,0,0.4), 0 0 30px rgba(93,93,255,0.2)"
           : "0 4px 16px 0 rgba(0,0,0,0.15)",
         zIndex: hovered ? 20 : 1,
-        transform: hovered ? "translateY(-8px)" : "translateY(0px)",
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -63,13 +62,16 @@ const ComicCard: React.FC<ComicCardProps> = ({ comic, priority = false }) => {
           flexShrink: 0,
         }}
       >
-        <Image
-          src={comic.posterImage}
+        <img
+          src="https://gateway.lighthouse.storage/ipfs/bafybeiebxwuqgfvubckt5qtgifzvs752npdxvbcpui4pvtqiqw7ybyr5pi"
           alt={comic.title}
-          fill
-          sizes="(max-width: 768px) 40vw, 20vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-          priority={priority}
+          style={{
+            objectFit: "cover",
+            width: "100%",
+            height: "100%",
+            transition: "transform 0.5s",
+            ...(hovered ? { transform: "scale(1.05)" } : {}),
+          }}
         />
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
@@ -86,30 +88,6 @@ const ComicCard: React.FC<ComicCardProps> = ({ comic, priority = false }) => {
             {comic.rating}
           </span>
         </div>
-        {/* Favorite Button */}
-        <button
-          onClick={toggleFavorite}
-          className={`absolute top-3 right-3 p-2 rounded-lg backdrop-blur-sm transition-all duration-300 z-10 ${
-            isFavorite
-              ? "bg-red-500/30 text-red-400 border border-red-500/30"
-              : "bg-black/30 text-white/70 border border-white/10"
-          }`}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            fill={isFavorite ? "currentColor" : "none"}
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-            />
-          </svg>
-        </button>
       </div>
 
       {/* Expanded Content (only visible on hover) */}
@@ -124,6 +102,8 @@ const ComicCard: React.FC<ComicCardProps> = ({ comic, priority = false }) => {
           maxWidth: hovered ? 240 : 0,
         }}
       >
+        {/* Title */}
+        <h3 className="text-xl font-bold text-white mb-2">{comic.title}</h3>
         {/* Top: Categories */}
         <div className="flex flex-wrap gap-1 mb-2">
           {comic.categories.slice(0, 2).map((category) => (
@@ -135,8 +115,6 @@ const ComicCard: React.FC<ComicCardProps> = ({ comic, priority = false }) => {
             </span>
           ))}
         </div>
-        {/* Title */}
-        <h3 className="text-xl font-bold text-white mb-2">{comic.title}</h3>
         {/* Description */}
         <p className="text-sm text-white/80 mb-4 line-clamp-3">
           {comic.description}

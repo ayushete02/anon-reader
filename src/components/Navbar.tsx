@@ -103,7 +103,7 @@ const Navbar = () => {
         {/* Logo */}
         <div className="flex items-center">
           <Link href="/browse">
-            <h1 className="text-lg sm:text-xl lg:text-2xl text-white">
+            <h1 className="text-lg sm:text-xl lg:text-2xl font-display text-white">
               Anon Reader
             </h1>
           </Link>
@@ -124,13 +124,6 @@ const Navbar = () => {
             asChild
           >
             <Link href="/browse?category=trending">Trending</Link>
-          </Button>
-          <Button
-            variant="ghost"
-            className="text-white/70 hover:text-white hover:bg-white/5 text-sm lg:text-base px-2 lg:px-4"
-            asChild
-          >
-            <Link href="/browse?category=new">New Releases</Link>
           </Button>
           {user && (
             <Button
@@ -202,90 +195,6 @@ const Navbar = () => {
                       {user.email}
                     </p>
                   </div>
-                  <Link
-                    href="/home"
-                    className="flex items-center px-4 py-2 text-sm text-white/70 hover:bg-white/5 hover:text-white"
-                    onClick={() => setDropdownOpen(false)}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 mr-3"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                      />
-                    </svg>
-                    Home Dashboard
-                  </Link>
-                  <Link
-                    href="/profile"
-                    className="flex items-center px-4 py-2 text-sm text-white/70 hover:bg-white/5 hover:text-white"
-                    onClick={() => setDropdownOpen(false)}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 mr-3"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                      />
-                    </svg>
-                    Profile
-                  </Link>
-                  <Link
-                    href="/favorites"
-                    className="flex items-center px-4 py-2 text-sm text-white/70 hover:bg-white/5 hover:text-white"
-                    onClick={() => setDropdownOpen(false)}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 mr-3"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                      />
-                    </svg>
-                    My Favorites
-                  </Link>
-                  <Link
-                    href="/history"
-                    className="flex items-center px-4 py-2 text-sm text-white/70 hover:bg-white/5 hover:text-white"
-                    onClick={() => setDropdownOpen(false)}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 mr-3"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    Reading History
-                  </Link>
                   <button
                     className="flex items-center w-full text-left px-4 py-2 text-sm text-white/70 hover:bg-white/5 hover:text-white border-t border-white/10"
                     onClick={handleLogout}
@@ -377,26 +286,6 @@ const Navbar = () => {
                   />
                 </svg>
                 Trending
-              </Link>
-              <Link
-                href="/browse?category=new"
-                className="flex items-center px-6 py-3 text-white/70 hover:bg-white/5 hover:text-white transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <svg
-                  className="w-5 h-5 mr-3"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"
-                  />
-                </svg>
-                New Releases
               </Link>
               <Link
                 href="/producer"

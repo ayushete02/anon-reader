@@ -154,9 +154,9 @@ const TextComicViewer: React.FC<TextComicViewerProps> = ({ comic }) => {
           </div>
         </div>
       </div>
-      <main className="flex-1 flex flex-col pt-16 sm:pt-24 pb-20 sm:pb-24">
+      <div className="flex-1 flex flex-col pt-16 sm:pt-24 sm:pb-24 h-full">
         <section className="relative min-h-screen flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 py-8 sm:py-16 z-10">
-          <div className="sticky top-0 left-0 right-0 h-12 sm:h-24 bg-gradient-to-b from-morphic-dark to-transparent z-10 pointer-events-none"></div>
+          {/* <div className="sticky top-0 left-0 right-0 h-12 sm:h-24 bg-gradient-to-b from-morphic-dark to-transparent z-10 pointer-events-none"></div> */}
 
           <div className="w-full max-w-4xl lg:max-w-5xl mx-auto z-10 overflow-y-auto scrollbar-hide">
             <motion.div
@@ -168,18 +168,6 @@ const TextComicViewer: React.FC<TextComicViewerProps> = ({ comic }) => {
             >
               <AnimatedParagraph paragraph={currentChapterFullText} />
             </motion.div>
-
-            {/* Next Chapter Button */}
-            {currentChapter < textChapters.length - 1 && (
-              <div className="text-center py-8 sm:py-12">
-                <button
-                  onClick={() => setCurrentChapter(currentChapter + 1)}
-                  className="bg-primary hover:bg-primary/80 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-medium transition-all duration-300 shadow-lg text-sm sm:text-base"
-                >
-                  Next Chapter
-                </button>
-              </div>
-            )}
 
             {/* End of story indicator */}
             {currentChapter === textChapters.length - 1 && (
@@ -193,7 +181,7 @@ const TextComicViewer: React.FC<TextComicViewerProps> = ({ comic }) => {
 
           <div className="sticky bottom-0 left-0 right-0 h-12 sm:h-24 bg-gradient-to-t from-morphic-dark to-transparent z-10 pointer-events-none"></div>
         </section>
-      </main>
+      </div>
 
       {/* Fixed bottom controls - always visible */}
       <div className="fixed bottom-0 left-0 right-0 z-30 bg-black/90 backdrop-blur-xl border-t border-white/10">

@@ -74,6 +74,12 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "letsenhance.io",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };

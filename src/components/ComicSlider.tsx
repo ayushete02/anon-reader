@@ -40,24 +40,6 @@ export default function ComicSlider() {
   return (
     <>
       <div
-        id="featured-stories"
-        className="empty h-screen flex flex-col items-center justify-center bg-morphic-dark"
-      >
-        <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-          Featured Comics
-        </h2>
-        <p className="text-xl text-white/70 max-w-2xl text-center mb-8">
-          Discover incredible stories across every genre. From fantasy epics to
-          intimate dramas, find comics that speak to your unique taste.
-        </p>
-        <Link
-          href="/browse"
-          className="px-8 py-4 rounded-xl bg-primary text-white text-lg font-medium hover:bg-primary/90 transition-all duration-300"
-        >
-          Explore Library
-        </Link>
-      </div>
-      <div
         id="process"
         className="process-wrap overflow-hidden bg-morphic-darker"
       >
@@ -147,21 +129,6 @@ export default function ComicSlider() {
             </div>
           ))}
         </div>
-      </div>
-      <div className="empty h-screen flex flex-col items-center justify-center bg-morphic-dark">
-        <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-          Personalized for You
-        </h2>
-        <p className="text-xl text-white/70 max-w-2xl text-center mb-8">
-          Our AI learns what you love and curates the perfect reading list.
-          Every recommendation is tailored to your unique preferences.
-        </p>
-        <button
-          onClick={() => privyLogin()}
-          className="px-8 py-4 rounded-xl bg-primary text-white text-lg font-medium hover:bg-primary/90 transition-all duration-300"
-        >
-          Get Personalized Recommendations
-        </button>
       </div>
     </>
   );

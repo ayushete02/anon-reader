@@ -5,12 +5,11 @@ import lighthouse from "@lighthouse-web3/sdk";
  */
 export async function uploadToLighthouse(base64Data: string): Promise<string> {
   try {
-    // Convert base64 to buffer
-    const imageBuffer = Buffer.from(base64Data, "base64");
+    // Convert base64 to PNG buffer using Jimp
 
-    // Upload buffer directly to Lighthouse
+    // Upload PNG buffer directly to Lighthouse
     const uploadResponse = await lighthouse.uploadBuffer(
-      imageBuffer,
+      "pngBuffer",
       process.env.LIGHTHOUSE_API_KEY!
     );
 
@@ -45,13 +44,13 @@ export async function uploadBase64ToLighthouse(
         "NEXT_PUBLIC_LIGHTHOUSE_API_KEY environment variable is required"
       );
     }
-    console.log("Uploading image to Lighthouse...", base64Data);
+
     // Convert base64 to buffer
     const imageBuffer = Buffer.from(base64Data, "base64");
-    console.log("Image buffer created successfully", imageBuffer);
+
     // Upload buffer directly to Lighthouse
     const uploadResponse = await lighthouse.uploadBuffer(imageBuffer, apiKey);
-    console.log("Lighthouse upload response:", uploadResponse);
+
     if (!uploadResponse.data?.Hash) {
       throw new Error("Failed to get IPFS hash from Lighthouse response");
     }
@@ -78,6 +77,7 @@ export async function uploadMultipleBase64ToLighthouse(
 ): Promise<{ chapterNumber: number; title: string; imageUrl: string }[]> {
   try {
     const uploadPromises = images.map(async (item) => {
+      console.log(item);
       const imageUrl = await uploadBase64ToLighthouse(item.base64);
       return {
         chapterNumber: item.chapterNumber,

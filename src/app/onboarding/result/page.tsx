@@ -37,7 +37,7 @@ const OnboardingResultPage = () => {
 
   return (
     <AuthGuard requireAuth={true}>
-      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-morphic-dark relative px-4 py-8 overflow-hidden">
+      <div className="text-white min-h-screen w-full flex flex-col items-center justify-center bg-morphic-dark relative px-4 py-8 overflow-hidden">
         {/* Background effects */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
         <div className="absolute -inset-[500px] bg-[radial-gradient(circle_800px_at_100%_200px,rgba(93,93,255,0.1),transparent)] pointer-events-none" />
