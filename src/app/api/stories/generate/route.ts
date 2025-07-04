@@ -8,7 +8,7 @@ import {
   Character,
 } from "@/lib/types";
 import { NearAIHelper } from "@/lib/near-ai";
-import { createStoryPrompt, SYSTEM_PROMPT } from "@/constants/prompts";
+import { createStoryPrompt, createPosterImagePrompt, SYSTEM_PROMPT } from "@/constants/prompts";
 import {
   STORY_CONFIG,
   FIELD_CONSTRAINTS,
@@ -57,7 +57,8 @@ function parseStoryIntoChapters(storyText: string): Chapter[] {
 function generateStoryData(
   storyData: StoryCreate,
   chapters: Chapter[],
-  generatedStory: string
+  generatedStory: string,
+  posterImageBase64?: string
 ): StoryRead {
   const now = new Date().toISOString();
   const storyId = `story_${Date.now()}_${Math.random()
@@ -74,6 +75,7 @@ function generateStoryData(
     created_at: now,
     updated_at: now,
     generated_story: generatedStory,
+    poster_image: posterImageBase64,
     characters: storyData.characters.map((char, index) => ({
       id: `char_${storyId}_${index}`,
       name: char.name,
@@ -255,11 +257,25 @@ export async function POST(request: NextRequest) {
             `Successfully generated and uploaded ${chapterImages.length} chapter images to Lighthouse`
           );
 
+          // Generate poster image for the story
+          let posterImageBase64: string | undefined;
+          try {
+            console.log("Generating poster image...");
+            const posterPrompt = createPosterImagePrompt(storyData);
+            console.log("Poster prompt:", posterPrompt);
+            posterImageBase64 = await NearAIHelper.generateImage(posterPrompt);
+            console.log("Successfully generated poster image");
+          } catch (posterError) {
+            console.error("Failed to generate poster image:", posterError);
+            // Continue without poster image
+          }
+
           // Create a story response with image URLs included in chapters
           const storyResponse = generateStoryData(
             storyData,
             chapters,
-            generatedContent
+            generatedContent,
+            posterImageBase64
           );
 
           console.log("Story response:", storyResponse);
@@ -291,11 +307,24 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      // For text type stories, return the standard format
+      // For text type stories, generate poster image and return the standard format
+      let posterImageBase64: string | undefined;
+      try {
+        console.log("Generating poster image for text story...");
+        const posterPrompt = createPosterImagePrompt(storyData);
+        console.log("Poster prompt:", posterPrompt);
+        posterImageBase64 = await NearAIHelper.generateImage(posterPrompt);
+        console.log("Successfully generated poster image for text story");
+      } catch (posterError) {
+        console.error("Failed to generate poster image for text story:", posterError);
+        // Continue without poster image
+      }
+
       const storyResponse = generateStoryData(
         storyData,
         chapters,
-        generatedContent
+        generatedContent,
+        posterImageBase64
       );
 
       console.log(

@@ -1,5 +1,5 @@
 //prompts.ts
-import { Chapter, Character, StoryCreate } from "@/lib/types";
+import { Chapter, Character, StoryCreate, StoryRead } from "@/lib/types";
 import { STORY_CONFIG } from "./constants";
 
 export const SYSTEM_PROMPT = `You are a master storyteller. Create engaging, well-structured stories that captivate readers. Follow the user's requirements exactly, especially regarding chapter count and structure.`;
@@ -12,6 +12,40 @@ export const COMIC_STRIP_SYSTEM_PROMPT = `You are a professional comic book writ
 - Maximum 3 panels per comic strip for better readability
 
 Keep dialogue simple and natural. Avoid complex words or long sentences.`;
+
+export function createPosterImagePrompt(storyData: StoryCreate | StoryRead): string {
+  // Handle both StoryCreate and generated story formats
+  const title = storyData.title;
+  const description = storyData.description;
+  const categories = Array.isArray(storyData.categories) ? storyData.categories.join(", ") : "";
+  const type = storyData.type;
+
+  // Build character descriptions for the poster
+  const characters = storyData.characters || [];
+  const characterDescriptions = characters
+    .map((char: StoryCreate['characters'][0] | StoryRead['characters'][0]) => `${char.name} (${char.type || 'character'}): ${char.description}`)
+    .join(", ");
+
+  return `Create a professional movie poster style image for a ${type} story with the following details:
+
+**Story Title:** ${title}
+**Description:** ${description}
+**Genre/Categories:** ${categories}
+**Main Characters:** ${characterDescriptions}
+
+**Design Requirements:**
+- Movie poster style layout with dramatic composition
+- Professional, high-quality artwork
+- Include key characters prominently in the poster
+- Reflect the story's genre and mood through color scheme and atmosphere
+- Dynamic and engaging visual that would attract readers
+- No text or title overlay needed - just the visual artwork
+- Cinematic quality with proper lighting and composition
+- Show the main characters in a way that hints at the story's plot
+- 'Comic book art style with vibrant colors'
+
+Create a compelling poster image that captures the essence of this story and would make people want to read it.`;
+}
 
 export function createStoryPrompt(storyData: StoryCreate): string {
   // Build character descriptions
@@ -76,9 +110,8 @@ export function createComicStripPrompt(
       : chapter.content;
 
   return `
-Create a simple comic strip for Chapter ${chapter.chapter_number}: "${
-    chapter.title
-  }"
+Create a simple comic strip for Chapter ${chapter.chapter_number}: "${chapter.title
+    }"
 
 **What happens in this chapter:**
 ${chapterSummary}
@@ -87,9 +120,8 @@ ${chapterSummary}
 ${characterAppearanceGuide}
 
 **RULES:**
-- The chapter title "${
-    chapter.title
-  }" MUST be displayed prominently at the top of the comic page
+- The chapter title "${chapter.title
+    }" MUST be displayed prominently at the top of the comic page
 - Only 2 panels (Panel 1 and Panel 2)
 - Simple English dialogue only
 - Maximum 8 words per speech bubble
@@ -108,9 +140,8 @@ Panel 1: [Simple description of what we see - who is where, what they're doing]
 Panel 2: [Simple description of what happens next]
 
 Dialogue:
-${
-  characters.length > 0 ? characters[0].name : "Character"
-}: "[Short, simple dialogue]"
+${characters.length > 0 ? characters[0].name : "Character"
+    }: "[Short, simple dialogue]"
 ${characters.length > 1 ? characters[1].name : "Character"}: "[Short response]"
 
 **Remember:** 

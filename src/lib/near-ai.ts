@@ -13,6 +13,27 @@ interface RequestBody {
     }>;
 }
 
+interface ImageGenerationRequest {
+    prompt: string;
+    model: string;
+    provider: string;
+    init_image?: string;
+    image_strength?: number;
+    control_image?: string;
+    control_net_name?: string;
+    conditioning_scale?: number;
+    cfg_scale?: number;
+    sampler?: string;
+    steps?: number;
+    seed?: number;
+}
+
+interface ImageGenerationResponse {
+    data: Array<{
+        b64_json: string;
+    }>;
+}
+
 export class NearAIHelper {
     private static buildRequestBody(request: ChatCompletionRequest): RequestBody {
         const messages = request.messages.map(message => ({
@@ -28,6 +49,67 @@ export class NearAIHelper {
             stream: NEAR_AI_CONFIG.STREAM,
             messages,
         };
+    }
+
+    private static buildImageRequestBody(prompt: string): ImageGenerationRequest {
+        return {
+            prompt,
+            model: NEAR_AI_CONFIG.IMAGE_MODEL,
+            provider: NEAR_AI_CONFIG.PROVIDER,
+        };
+    }
+
+    static async generateImage(prompt: string): Promise<string> {
+        console.log(`near::generate_image::Generating image with prompt: ${prompt.substring(0, 100)}...`);
+
+        const requestBody = this.buildImageRequestBody(prompt);
+
+        try {
+            const response = await fetch(NEAR_AI_CONFIG.IMAGE_API_URL, {
+                method: 'POST',
+                headers: NEAR_AI_CONFIG.AUTH_HEADER,
+                body: JSON.stringify(requestBody),
+                signal: AbortSignal.timeout(NEAR_AI_CONFIG.TIMEOUT),
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error(`near::generate_image::NearAI API error: ${response.status} - ${errorText}`);
+                throw new Error(`Error from NearAI Image API: ${errorText}`);
+            }
+
+            const result: ImageGenerationResponse = await response.json();
+
+            if (!result.data || result.data.length === 0) {
+                throw new Error('No images generated from Near AI');
+            }
+
+            const base64Image = result.data[0].b64_json;
+            if (!base64Image) {
+                throw new Error('Generated image does not contain base64 data');
+            }
+
+            console.log('near::generate_image::Successfully generated image');
+            return base64Image;
+        } catch (error) {
+            if (error instanceof Error) {
+                if (error.name === 'TimeoutError') {
+                    console.error('near::generate_image::Request timeout');
+                    throw new Error("Request to NearAI Image API timed out");
+                }
+
+                if (error.message.includes('fetch')) {
+                    console.error(`near::generate_image::Network error: ${error.message}`);
+                    throw new Error("Failed to connect to NearAI Image API");
+                }
+
+                console.error(`near::generate_image::Error: ${error.message}`);
+                throw error;
+            }
+
+            console.error(`near::generate_image::Unexpected error: ${error}`);
+            throw new Error("Failed to generate image from Near AI");
+        }
     }
 
     static async *generateCompletionStream(

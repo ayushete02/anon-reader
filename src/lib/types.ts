@@ -242,6 +242,7 @@ export interface StoryRead extends StoryBase {
   created_at: string;
   updated_at: string;
   generated_story?: string;
+  poster_image?: string;
   characters: CharacterRead[];
   chapters: ChapterRead[];
 }
