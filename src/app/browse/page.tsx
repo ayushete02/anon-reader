@@ -1,6 +1,5 @@
 "use client";
 
-import ComicCard from "@/components/ComicCard";
 import ComicRow from "@/components/ComicRow";
 import {
   CONTRACT_ABI,
@@ -26,8 +25,8 @@ const BrowsePage = () => {
   const [loading, setLoading] = useState(true);
   const [comicsLoading, setComicsLoading] = useState(true);
   const [personaLoaded, setPersonaLoaded] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchQuery] = useState("");
+  const [selectedCategory] = useState("All");
   const [sortBy] = useState("rating");
   const [allComics, setAllComics] = useState<Comic[]>([]);
 
@@ -171,12 +170,6 @@ const BrowsePage = () => {
       setComicsLoading(true);
     }
   }, [stories, storiesLoading, numberOfStories]);
-
-  // Get all unique categories from all comics (including published)
-  const allCategories = [
-    "All",
-    ...Array.from(new Set(allComics.flatMap((comic) => comic.categories))),
-  ];
 
   // Load user persona from localStorage
   useEffect(() => {
