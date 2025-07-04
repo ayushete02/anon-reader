@@ -12,7 +12,7 @@ import {
   CONTRACT_ADDRESS,
 } from "@/components/contract/contractDetails";
 import { useReadContract } from "wagmi";
-import { Abi } from "viem";
+import type { Abi } from "viem";
 
 const StoryDetailPage = () => {
   const params = useParams();
@@ -103,7 +103,7 @@ const StoryDetailPage = () => {
           id: `blockchain-${contractStoryId.toString()}`,
           title: storyData.title || `Story ${contractStoryId.toString()}`,
           description: storyData.description || "A story from the blockchain",
-          posterImage: "/comics/placeholder.jpg", // Default poster
+          posterImage: storyData.posterImage || "", // Use posterImage from storyData
           categories: storyData.categories || ["Blockchain"],
           type: storyData.type || "text",
           releaseDate: new Date(Number(createdAt) * 1000).toISOString(),

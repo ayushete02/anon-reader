@@ -161,7 +161,7 @@ export interface StoryDraft {
   type: "text" | "image";
   characters: Character[];
   categories: string[];
-  posterImage?: string;
+  posterImage: string;
   createdBy: string; // User ID
   status: "draft" | "published" | "generating" | "generated";
   createdAt: string;

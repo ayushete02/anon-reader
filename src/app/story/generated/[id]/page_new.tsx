@@ -115,7 +115,7 @@ const GeneratedStoryViewerPage = () => {
         id: story.id,
         title: story.title,
         description: story.description,
-        posterImage: story.posterImage || "/comics/placeholder.jpg",
+        posterImage: story.posterImage,
         categories: story.categories,
         type: story.type,
         releaseDate: story.created_at,

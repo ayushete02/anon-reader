@@ -3,7 +3,10 @@
 import { useState } from "react";
 import { StoryDraft, StoryRead, GeneratedChapter } from "@/lib/types";
 import Image from "next/image";
-import { uploadMultipleBase64ToLighthouse } from "@/lib/lighthouse";
+import {
+  uploadBase64ToLighthouse,
+  uploadMultipleBase64ToLighthouse,
+} from "@/lib/lighthouse";
 
 interface StoryPreviewProps {
   storyDraft: StoryDraft;
@@ -21,6 +24,9 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
   const [generatedStoryData, setGeneratedStoryData] =
     useState<StoryRead | null>(null);
   const [uploadingImages, setUploadingImages] = useState(false);
+  const [posterImage, setPosterImage] = useState<string | null>(
+    storyDraft.posterImage || null
+  );
 
   const handlePublish = async () => {
     setIsPublishing(true);
@@ -57,6 +63,7 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
       }
 
       const generatedStoryData = await response.json();
+      console.log("Generated Story Data:", generatedStoryData.poster_image);
 
       // Handle image upload to Lighthouse for image-type stories
       let processedStoryData = generatedStoryData;
@@ -119,6 +126,21 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
       setGeneratedStoryData(processedStoryData);
       setShowGeneratedPreview(true);
 
+      // upload poster image to Lighthouse if available
+      if (generatedStoryData.poster_image) {
+        try {
+          console.log("Uploading poster image to Lighthouse...");
+          const posterURL = await uploadBase64ToLighthouse(
+            generatedStoryData.poster_image
+          );
+          processedStoryData.poster_image = posterURL;
+          setPosterImage(posterURL);
+          console.log("Poster image uploaded successfully:", posterURL);
+        } catch (error) {
+          console.error("Error uploading poster image:", error);
+        }
+      }
+
       // Create the final story object with the unified structure
       const finalStory: StoryDraft = {
         ...storyDraft,
@@ -128,7 +150,7 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
         characters: processedStoryData.chapters
           ? storyDraft.characters
           : processedStoryData.characters,
-        posterImage: "/comics/placeholder.jpg",
+        posterImage: processedStoryData.poster_image,
         status: "generated" as const,
         updatedAt: new Date().toISOString(),
       };
@@ -359,72 +381,6 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
 
         {/* Poster Image and Actions */}
         <div className="space-y-6">
-          {/* Poster Image */}
-          {/* <div className="bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 p-6">
-            <h3 className="text-xl font-semibold text-white mb-6">
-              Story Poster
-            </h3>
-
-            <div className="aspect-[2/3] bg-white/5 rounded-xl overflow-hidden mb-6 border border-white/10">
-              {posterImage ? (
-                <Image
-                  src={posterImage}
-                  alt="Story poster"
-                  width={300}
-                  height={450}
-                  className="object-cover w-full h-full"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-white/40">
-                  <div className="text-center">
-                    <svg
-                      className="w-12 h-12 mx-auto mb-3"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                      />
-                    </svg>
-                    <p className="text-sm font-medium">No poster image</p>
-                    <p className="text-xs mt-1">
-                      Upload an image to set as your story poster
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <label className="flex items-center justify-center w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl cursor-pointer hover:bg-white/10 hover:border-white/20 backdrop-blur-sm transition-all duration-150">
-              <svg
-                className="w-5 h-5 mr-2 text-white/60"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                />
-              </svg>
-              <span className="text-sm font-medium text-white/80">
-                Upload Poster Image
-              </span>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handlePosterImageUpload}
-                className="hidden"
-              />
-            </label>
-          </div> */}
-
           {/* Action Buttons */}
           <div className="flex flex-col gap-4">
             {!showGeneratedPreview ? (
@@ -497,7 +453,10 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
                         generated_story: generatedStoryData.generated_story,
                         chapters: generatedStoryData.chapters, // This now contains Lighthouse URLs
                         characters: storyDraft.characters,
-                        posterImage: "/comics/placeholder.jpg",
+                        posterImage:
+                          posterImage ||
+                          generatedStoryData.poster_image ||
+                          "/comics/placeholder.jpg",
                         status: "generated" as const,
                         updatedAt: new Date().toISOString(),
                       };
@@ -512,6 +471,7 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
                   onClick={() => {
                     setShowGeneratedPreview(false);
                     setGeneratedStoryData(null);
+                    setPosterImage(null);
                   }}
                   className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl text-white/80 backdrop-blur-sm hover:bg-white/10 hover:border-white/20 transition-all duration-150"
                 >

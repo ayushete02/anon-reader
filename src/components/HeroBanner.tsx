@@ -28,11 +28,11 @@ const HeroBanner: React.FC<HeroBannerProps> = ({ comics }) => {
   const comic = comics[index];
 
   return (
-    <div className="relative pt-28 w-full h-[85vh] flex items-center justify-center overflow-hidden bg-black">
+    <div className="relative pt-28 w-full h-[99vh] flex items-center justify-center overflow-hidden bg-black">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src={comic.posterImage}
+          src={comic.posterImage || "/comics/placeholder.jpg"}
           alt={comic.title}
           fill
           className="object-cover object-center opacity-40"
@@ -46,7 +46,7 @@ const HeroBanner: React.FC<HeroBannerProps> = ({ comics }) => {
         {/* Poster */}
         <div className="w-[260px] min-w-[180px] max-w-[260px] h-[390px] rounded-xl overflow-hidden shadow-2xl bg-black/60 flex-shrink-0 flex items-center justify-center">
           <Image
-            src={comic.posterImage}
+            src={comic.posterImage || "/comics/placeholder.jpg"}
             alt={comic.title}
             width={260}
             height={390}
@@ -134,7 +134,7 @@ const HeroBanner: React.FC<HeroBannerProps> = ({ comics }) => {
               key={i}
               aria-label={`Go to slide ${i + 1}`}
               onClick={() => setIndex(i)}
-              className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
+              className={`w-2 h-2 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
                 i === index
                   ? "border-white bg-white"
                   : "border-gray-400 bg-transparent"

@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { Comic } from "@/lib/types";
 import { useUser } from "@/context/UserContext";
+import { Comic } from "@/lib/types";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 
 interface ComicCardProps {
   comic: Comic;
@@ -47,10 +46,9 @@ const ComicCard: React.FC<ComicCardProps> = ({ comic }) => {
           flexShrink: 0,
         }}
       >
-        <Image
-          src="https://gateway.lighthouse.storage/ipfs/bafybeiebxwuqgfvubckt5qtgifzvs752npdxvbcpui4pvtqiqw7ybyr5pi"
+        <img
+          src={comic.posterImage || "/comics/placeholder.jpg"}
           alt={comic.title}
-          fill
           style={{
             objectFit: "cover",
             transition: "transform 0.5s",
@@ -76,10 +74,11 @@ const ComicCard: React.FC<ComicCardProps> = ({ comic }) => {
 
       {/* Expanded Content (only visible on hover) */}
       <div
-        className={`transition-all duration-300 flex flex-col justify-between px-6 py-5 ${hovered
-          ? "opacity-100 w-[240px] pointer-events-auto"
-          : "hidden  w-0 pointer-events-none"
-          }`}
+        className={`transition-all duration-300 flex flex-col justify-between px-6 py-5 ${
+          hovered
+            ? "opacity-100 w-[240px] pointer-events-auto"
+            : "hidden  w-0 pointer-events-none"
+        }`}
         style={{
           minWidth: hovered ? 240 : 0,
           maxWidth: hovered ? 240 : 0,

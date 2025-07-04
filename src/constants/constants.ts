@@ -7,8 +7,9 @@ export const NEAR_AI_CONFIG = {
     Authorization:
       'Bearer {"account_id":"rishhh.near","public_key":"ed25519:7fgx6fVS7SixNi1PEF6UG3C7fiUDQUPXuh9oCRhkwmCh","signature":"YghVrPYlxcAB+OeYk8iB6amD1wwed5YZIY4Uxsfa7WWCg+n7wMCFwrRO5kd5EqevFtt81126zp0LpuAukfdHCA==","nonce":"1749832648115","recipient":"ai.near","message":"Welcome to NEAR AI","on_behalf_of":null}',
   },
-  MODEL: "fireworks::accounts/fireworks/models/mixtral-8x22b-instruct",
-  IMAGE_MODEL: "fireworks::accounts/fireworks/models/playground-v2-1024px-aesthetic",
+  MODEL: "fireworks::accounts/fireworks/models/deepseek-v3",
+  IMAGE_MODEL:
+    "fireworks::accounts/fireworks/models/playground-v2-1024px-aesthetic",
   PROVIDER: "fireworks",
   MAX_TOKENS: 8192,
   TEMPERATURE: 1,

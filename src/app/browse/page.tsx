@@ -1,5 +1,4 @@
 "use client";
-
 import ComicRow from "@/components/ComicRow";
 import {
   CONTRACT_ABI,
@@ -9,12 +8,12 @@ import HeroBanner from "@/components/HeroBanner";
 import Navbar from "@/components/Navbar";
 import { Comic, UserPersona } from "@/lib/types";
 import { filterComicsByPersona } from "@/lib/utils";
+import { usePrivy } from "@privy-io/react-auth";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Abi } from "viem";
+import type { Abi } from "viem";
 import { useReadContract, useReadContracts } from "wagmi";
-import { motion } from "framer-motion";
-import { usePrivy } from "@privy-io/react-auth";
 
 const BrowsePage = () => {
   const { login: privyLogin } = usePrivy();
@@ -69,8 +68,11 @@ const BrowsePage = () => {
         try {
           const blockchainComics = await Promise.all(
             stories
-              .filter((story) => story.status === "success" && story.result) // Only process successful calls
-              .map(async (story, index) => {
+              .filter(
+                (story): story is { status: "success"; result: unknown } =>
+                  story.status === "success" && story.result !== undefined
+              ) // Only process successful calls
+              .map(async (story, index: number) => {
                 try {
                   // Updated destructuring to match the actual contract response structure
                   const {
@@ -112,7 +114,7 @@ const BrowsePage = () => {
                     title: storyData.title || `Story ${storyId.toString()}`,
                     description:
                       storyData.description || "A story from the blockchain",
-                    posterImage: "/comics/placeholder.jpg", // Default poster
+                    posterImage: storyData.posterImage || "", // Use posterImage from storyData
                     categories: storyData.categories || ["Blockchain"],
                     type: storyData.type || "text",
                     releaseDate: new Date(
@@ -141,8 +143,8 @@ const BrowsePage = () => {
           );
 
           // Filter out null values and add to combined comics
-          const validBlockchainComics = blockchainComics.filter(
-            (comic): comic is Comic => comic !== null
+          const validBlockchainComics: Comic[] = blockchainComics.filter(
+            (comic: Comic | null): comic is Comic => comic !== null
           );
           combinedComics = validBlockchainComics;
 
@@ -323,7 +325,7 @@ const BrowsePage = () => {
   const trendingComics = getTrendingComics();
 
   return (
-    <div className="min-h-screen bg-morphic-dark text-white relative overflow-hidden pt-32">
+    <div className="min-h-screen bg-morphic-dark text-white relative overflow-hidden">
       {/* Enhanced Background blur effects */}
       <div className="fixed inset-0 z-0">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
