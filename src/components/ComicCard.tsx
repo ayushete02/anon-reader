@@ -8,29 +8,14 @@ import { useUser } from "@/context/UserContext";
 
 interface ComicCardProps {
   comic: Comic;
-  priority?: boolean;
 }
 
-const ComicCard: React.FC<ComicCardProps> = ({ comic, priority = false }) => {
-  const { user, updateUser } = useUser();
+const ComicCard: React.FC<ComicCardProps> = ({ comic }) => {
+  const { user } = useUser();
   const router = useRouter();
   const [hovered, setHovered] = useState(false);
 
-  const isFavorite = user?.favorites.includes(comic.id) || false;
   const readingHistory = user?.history.find((h) => h.comicId === comic.id);
-
-  const toggleFavorite = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (!user) return;
-
-    let newFavorites;
-    if (isFavorite) {
-      newFavorites = user.favorites.filter((id) => id !== comic.id);
-    } else {
-      newFavorites = [...user.favorites, comic.id];
-    }
-    updateUser({ favorites: newFavorites });
-  };
 
   const handleComicClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -62,13 +47,12 @@ const ComicCard: React.FC<ComicCardProps> = ({ comic, priority = false }) => {
           flexShrink: 0,
         }}
       >
-        <img
+        <Image
           src="https://gateway.lighthouse.storage/ipfs/bafybeiebxwuqgfvubckt5qtgifzvs752npdxvbcpui4pvtqiqw7ybyr5pi"
           alt={comic.title}
+          fill
           style={{
             objectFit: "cover",
-            width: "100%",
-            height: "100%",
             transition: "transform 0.5s",
             ...(hovered ? { transform: "scale(1.05)" } : {}),
           }}
@@ -92,11 +76,10 @@ const ComicCard: React.FC<ComicCardProps> = ({ comic, priority = false }) => {
 
       {/* Expanded Content (only visible on hover) */}
       <div
-        className={`transition-all duration-300 flex flex-col justify-between px-6 py-5 ${
-          hovered
-            ? "opacity-100 w-[240px] pointer-events-auto"
-            : "hidden  w-0 pointer-events-none"
-        }`}
+        className={`transition-all duration-300 flex flex-col justify-between px-6 py-5 ${hovered
+          ? "opacity-100 w-[240px] pointer-events-auto"
+          : "hidden  w-0 pointer-events-none"
+          }`}
         style={{
           minWidth: hovered ? 240 : 0,
           maxWidth: hovered ? 240 : 0,

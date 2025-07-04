@@ -3,13 +3,9 @@
 import { useEffect } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import Link from "next/link";
 import Image from "next/image";
-import { usePrivy } from "@privy-io/react-auth";
 
 export default function ComicSlider() {
-  const { login: privyLogin } = usePrivy();
-
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
