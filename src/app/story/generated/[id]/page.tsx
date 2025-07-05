@@ -483,7 +483,7 @@ const GeneratedStoryViewerPage = () => {
         </nav>
 
         {/* Main Content */}
-        <main className="mt-32 md:mt-20 container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8 relative z-10">
+        <main className="mt-32 md:mt-28 container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8 relative z-10">
           <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
             {/* Main Content */}
             <div className="flex-1 order-2 lg:order-1">
