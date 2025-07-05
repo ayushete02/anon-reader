@@ -1,7 +1,13 @@
 import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   experimental: {
-    serverComponentsExternalPackages: ['@lighthouse-web3/sdk', 'googleapis', 'google-auth-library', 'jimp']
+    serverComponentsExternalPackages: [
+      "@lighthouse-web3/sdk",
+      "googleapis",
+      "google-auth-library",
+      "jimp",
+      "fs-extra",
+    ],
   },
   images: {
     remotePatterns: [
