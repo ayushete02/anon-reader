@@ -459,7 +459,7 @@ const GeneratedStoryViewerPage = () => {
                           />
                         </svg>
                         {publishingStage === "uploading" &&
-                          "Uploading to Filecoin..."}
+                          "Uploading to Lighthouse..."}
                         {publishingStage === "blockchain" &&
                           "Sending to blockchain..."}
                         {(publishingStage === "confirming" || isConfirming) &&
@@ -756,7 +756,7 @@ const GeneratedStoryViewerPage = () => {
                             <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-primary/50 mr-2"></div>
                             <span className="font-semibold">
                               {publishingStage === "uploading" &&
-                                "Uploading to Filecoin..."}
+                                "Uploading to Lighthouse..."}
                               {publishingStage === "blockchain" &&
                                 "Sending to blockchain..."}
                               {(publishingStage === "confirming" ||

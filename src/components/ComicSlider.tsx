@@ -47,7 +47,7 @@ export default function ComicSlider() {
               genre: "Fantasy • Adventure",
               description:
                 "An epic tale of a young warrior protecting the last magical creature. Experience a world where courage meets destiny.",
-              image: "/comics/comic1.jpg",
+              image: "/landingpage/comic1.png",
             },
             {
               id: 2,
@@ -55,7 +55,7 @@ export default function ComicSlider() {
               genre: "Sci-Fi • Cyberpunk",
               description:
                 "Navigate the digital underground of Neo-Tokyo. A thrilling cyberpunk adventure with stunning visuals.",
-              image: "/comics/comic2.jpg",
+              image: "/landingpage/comic2.png",
             },
             {
               id: 3,
@@ -63,7 +63,7 @@ export default function ComicSlider() {
               genre: "Romance • Slice of Life",
               description:
                 "A touching story of love, loss, and second chances. Perfect for readers who enjoy emotional narratives.",
-              image: "/comics/comic3.jpg",
+              image: "/landingpage/comic3.png",
             },
             {
               id: 4,
@@ -71,7 +71,7 @@ export default function ComicSlider() {
               genre: "Horror • Mystery",
               description:
                 "Uncover dark secrets in this spine-chilling thriller. Not for the faint of heart, but perfect for mystery lovers.",
-              image: "/comics/comic4.jpg",
+              image: "/landingpage/comic4.png",
             },
             {
               id: 5,
@@ -79,7 +79,7 @@ export default function ComicSlider() {
               genre: "Space Opera • Adventure",
               description:
                 "Join an intergalactic crew on their journey across the universe. Epic space battles and alien civilizations await.",
-              image: "/comics/page-1.jpg",
+              image: "/landingpage/comic5.png",
             },
           ].map((comic) => (
             <div
