@@ -63,7 +63,7 @@ const ImageComicViewer: React.FC<ImageComicViewerProps> = ({
                 src={page.imageUrl}
                 alt={`${comic.title} - Page ${index + 1}`}
                 fill
-                className="object-contain"
+                className="object-contain pb-8"
                 priority={
                   index === currentPage ||
                   index === currentPage + 1 ||

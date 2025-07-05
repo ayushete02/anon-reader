@@ -376,17 +376,17 @@ const GeneratedStoryViewerPage = () => {
 
         {/* Top Navigation Bar */}
         <nav className="fixed w-full z-20 bg-morphic-gray/30 backdrop-blur-xl border-b border-white/5">
-          <div className="container mx-auto px-6 py-4">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center space-x-4">
+          <div className="container mx-auto px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
+            <div className="flex flex-col xs:flex-row xs:justify-between xs:items-center gap-3 sm:gap-4">
+              <div className="flex items-center space-x-2 sm:space-x-4">
                 <button
                   onClick={handleBack}
-                  className="group flex items-center space-x-2 text-white/80 hover:text-white transition-all duration-300"
+                  className="group flex items-center space-x-1 sm:space-x-2 text-white/80 hover:text-white transition-all duration-300"
                 >
-                  <div className="p-2 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl group-hover:bg-white/10 transition-all duration-300">
+                  <div className="p-1.5 sm:p-2 bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg sm:rounded-xl group-hover:bg-white/10 transition-all duration-300">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
+                      className="h-4 w-4 sm:h-5 sm:w-5"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -399,13 +399,15 @@ const GeneratedStoryViewerPage = () => {
                       />
                     </svg>
                   </div>
-                  <span className="font-medium">Back to Creator</span>
+                  <span className="hidden xs:inline text-sm sm:text-base font-medium">
+                    Back to Creator
+                  </span>
                 </button>
-                <div>
-                  <h1 className="text-2xl font-bold text-white font-display">
+                <div className="min-w-0">
+                  <h1 className="text-lg xs:text-xl sm:text-2xl font-bold text-white font-display truncate">
                     Story Review: {story.title}
                   </h1>
-                  <p className="text-white/60 text-sm">
+                  <p className="text-white/60 text-xs sm:text-sm truncate">
                     {story.chapters.length} chapters •{" "}
                     {story.type === "text" ? "Text Story" : "Visual Story"} •
                     Review before publishing
@@ -414,8 +416,8 @@ const GeneratedStoryViewerPage = () => {
               </div>
 
               {/* Progress Indicator */}
-              <div className="flex items-center space-x-4">
-                <div className="text-sm text-white/60">
+              <div className="flex items-center justify-between xs:justify-end space-x-2 sm:space-x-4">
+                <div className="text-xs sm:text-sm text-white/60">
                   {completedChapters} / {story.chapters.length} chapters
                 </div>
                 <div className="w-32 h-2 bg-white/5 rounded-full overflow-hidden">
@@ -481,26 +483,26 @@ const GeneratedStoryViewerPage = () => {
         </nav>
 
         {/* Main Content */}
-        <main className="mt-20 container mx-auto px-6 py-8 relative z-10">
-          <div className="flex gap-6">
-            {/* Left Side - Main Content */}
-            <div className="flex-1 ">
+        <main className="mt-32 md:mt-20 container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8 relative z-10">
+          <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
+            {/* Main Content */}
+            <div className="flex-1 order-2 lg:order-1">
               {/* Story Info Section */}
-              <div className="bg-morphic-gray/30 backdrop-blur-xl border  border-white/5 rounded-3xl p-8 mb-8 shadow-glossy">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="md:col-span-2">
-                    <h2 className="text-xl font-semibold text-white mb-4 font-display">
+              <div className="bg-morphic-gray/30 backdrop-blur-xl border border-white/5 rounded-xl sm:rounded-2xl lg:rounded-3xl p-4 sm:p-6 lg:p-8 mb-4 sm:mb-6 lg:mb-8 shadow-glossy">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+                  <div className="lg:col-span-2">
+                    <h2 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4 font-display">
                       Story Description
                     </h2>
-                    <p className="text-white/80 leading-relaxed mb-6">
+                    <p className="text-white/80 leading-relaxed mb-4 sm:mb-6 text-sm sm:text-base">
                       {story.description}
                     </p>
 
-                    <div className="flex flex-wrap gap-2 mb-6">
+                    <div className="flex flex-wrap gap-2 mb-4 sm:mb-6">
                       {story.categories.map((category) => (
                         <span
                           key={category}
-                          className="px-3 py-1 bg-primary/20 border border-primary/30 rounded-full text-sm font-medium backdrop-blur-sm"
+                          className="px-2 sm:px-3 py-1 bg-primary/20 border border-primary/30 rounded-full text-xs sm:text-sm font-medium backdrop-blur-sm"
                         >
                           {category}
                         </span>
@@ -509,16 +511,16 @@ const GeneratedStoryViewerPage = () => {
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold text-white mb-4 font-display">
+                    <h3 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4 font-display">
                       Characters ({story.characters.length})
                     </h3>
-                    <div className="space-y-3">
+                    <div className="space-y-2 sm:space-y-3">
                       {story.characters.slice(0, 3).map((character) => (
                         <div
                           key={character.id}
-                          className="flex items-center gap-3 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-3"
+                          className="flex items-center gap-2 sm:gap-3 bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl border border-white/10 p-2 sm:p-3"
                         >
-                          <div className="w-10 h-10 bg-white/5 rounded-lg overflow-hidden flex-shrink-0">
+                          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white/5 rounded-lg overflow-hidden flex-shrink-0">
                             {character.image_url ? (
                               <Image
                                 src={character.image_url}
@@ -530,7 +532,7 @@ const GeneratedStoryViewerPage = () => {
                             ) : (
                               <div className="w-full h-full flex items-center justify-center text-white/40">
                                 <svg
-                                  className="w-5 h-5"
+                                  className="w-4 h-4 sm:w-5 sm:h-5"
                                   fill="none"
                                   stroke="currentColor"
                                   viewBox="0 0 24 24"
@@ -546,7 +548,7 @@ const GeneratedStoryViewerPage = () => {
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-white text-sm truncate">
+                            <h4 className="font-medium text-white text-xs sm:text-sm truncate">
                               {character.name}
                             </h4>
                             <span className="text-xs text-white/60 capitalize">
@@ -568,27 +570,27 @@ const GeneratedStoryViewerPage = () => {
               </div>
 
               {/* Chapters Accordion */}
-              <div className="bg-morphic-gray/30 backdrop-blur-xl border border-white/5 rounded-3xl p-8 shadow-glossy">
-                <h2 className="text-2xl font-bold text-white mb-6 font-display">
+              <div className="bg-morphic-gray/30 backdrop-blur-xl border border-white/5 rounded-xl sm:rounded-2xl lg:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-glossy">
+                <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-white mb-4 sm:mb-6 font-display">
                   Story Chapters
                 </h2>
 
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {story.chapters.map((chapter) => (
                     <div
                       key={chapter.id}
-                      className="bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 overflow-hidden shadow-glossy"
+                      className="bg-white/5 backdrop-blur-xl rounded-lg sm:rounded-xl border border-white/10 overflow-hidden shadow-glossy"
                     >
                       {/* Chapter Header */}
                       <button
                         onClick={() =>
                           handleChapterToggle(chapter.chapter_number)
                         }
-                        className="w-full px-6 py-4 flex items-center justify-between hover:bg-white/5 transition-all duration-150"
+                        className="w-full px-3 sm:px-4 lg:px-6 py-3 sm:py-4 flex items-center justify-between hover:bg-white/5 transition-all duration-150"
                       >
-                        <div className="flex items-center space-x-4">
+                        <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4 min-w-0">
                           <div
-                            className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                            className={`w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold flex-shrink-0 ${
                               readingProgress[chapter.chapter_number]
                                 ? "bg-green-500/20 border border-green-500/30 text-green-400"
                                 : "bg-primary/20 border border-primary/30 text-primary"
@@ -596,7 +598,7 @@ const GeneratedStoryViewerPage = () => {
                           >
                             {readingProgress[chapter.chapter_number] ? (
                               <svg
-                                className="w-4 h-4"
+                                className="w-3 h-3 sm:w-4 sm:h-4"
                                 fill="currentColor"
                                 viewBox="0 0 20 20"
                               >
@@ -610,19 +612,19 @@ const GeneratedStoryViewerPage = () => {
                               chapter.chapter_number
                             )}
                           </div>
-                          <div className="text-left">
-                            <h3 className="text-lg font-semibold text-white">
+                          <div className="text-left min-w-0">
+                            <h3 className="text-sm sm:text-base lg:text-lg font-semibold text-white truncate">
                               {chapter.title}
                             </h3>
-                            <p className="text-sm text-white/60">
+                            <p className="text-xs sm:text-sm text-white/60">
                               {formatReadingTime(chapter.reading_time_seconds)}
                             </p>
                           </div>
                         </div>
 
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-2 flex-shrink-0">
                           <svg
-                            className={`w-5 h-5 text-white/60 transition-transform duration-200 ${
+                            className={`w-4 h-4 sm:w-5 sm:h-5 text-white/60 transition-transform duration-200 ${
                               expandedChapter === chapter.chapter_number
                                 ? "rotate-180"
                                 : ""
@@ -643,14 +645,14 @@ const GeneratedStoryViewerPage = () => {
 
                       {/* Chapter Content */}
                       {expandedChapter === chapter.chapter_number && (
-                        <div className="px-6 pb-6 animate-fadeIn">
-                          <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+                        <div className="px-3 sm:px-4 lg:px-6 pb-3 sm:pb-4 lg:pb-6 animate-fadeIn">
+                          <div className="bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 lg:p-6 border border-white/10">
                             {/* For text stories, show a note that content is displayed in the right panel */}
                             {story.type === "text" ? (
-                              <div className="text-center py-8">
-                                <div className="flex items-center justify-center mb-4">
+                              <div className="text-center py-4 sm:py-6 lg:py-8">
+                                <div className="flex items-center justify-center mb-3 sm:mb-4">
                                   <svg
-                                    className="w-8 h-8 text-primary/60"
+                                    className="w-6 h-6 sm:w-8 sm:h-8 text-primary/60"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -790,15 +792,15 @@ const GeneratedStoryViewerPage = () => {
             </div>
 
             {/* Right Side - Content Viewer */}
-            <div className="sticky top-6 h-fit w-[400px] flex-shrink-0">
+            <div className="order-1 lg:order-2 lg:sticky lg:top-6 lg:h-fit w-full lg:w-[400px] lg:flex-shrink-0">
               {story.type === "image" &&
               story.chapters.some((ch) => ch.image_url) ? (
                 /* Image Viewer */
-                <div className="bg-morphic-gray/30 backdrop-blur-xl w-[400px] md:fixed md:mr-6 border border-white/5 rounded-3xl p-8 shadow-glossy">
-                  <div className="h-[calc(100vh-200px)]">
+                <div className="bg-morphic-gray/30 backdrop-blur-xl w-full lg:w-[400px] border border-white/5 rounded-xl sm:rounded-2xl lg:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-glossy">
+                  <div className="h-[50vh] sm:h-[60vh] lg:h-[calc(100vh-200px)]">
                     <div
                       ref={imageViewerRef}
-                      className="h-full bg-black relative overflow-hidden rounded-3xl border border-white/10"
+                      className="h-full bg-black relative overflow-hidden rounded-xl sm:rounded-2xl lg:rounded-3xl border border-white/10"
                     >
                       {/* Instagram-style vertical scroll container */}
                       <div
@@ -897,22 +899,22 @@ const GeneratedStoryViewerPage = () => {
                 </div>
               ) : (
                 /* Text Viewer */
-                <div className="bg-morphic-gray/30 backdrop-blur-xl w-[400px] md:fixed md:mr-6 border border-white/5 rounded-3xl p-8 shadow-glossy">
-                  <div className="h-[calc(100vh-200px)] flex flex-col">
+                <div className="bg-morphic-gray/30 backdrop-blur-xl w-full lg:w-[400px] border border-white/5 rounded-xl sm:rounded-2xl lg:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-glossy">
+                  <div className="h-[50vh] sm:h-[60vh] lg:h-[calc(100vh-200px)] flex flex-col">
                     {expandedChapter &&
                     story.chapters.find(
                       (ch) => ch.chapter_number === expandedChapter
                     ) ? (
                       <>
                         {/* Chapter Header */}
-                        <div className="border-b border-white/10 pb-4 mb-6">
-                          <div className="flex items-center gap-3 mb-2">
-                            <div className="w-8 h-8 bg-primary/20 border border-primary/30 rounded-full flex items-center justify-center">
-                              <span className="text-primary text-sm font-bold">
+                        <div className="border-b border-white/10 pb-3 sm:pb-4 mb-4 sm:mb-6">
+                          <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                            <div className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 bg-primary/20 border border-primary/30 rounded-full flex items-center justify-center">
+                              <span className="text-primary text-xs sm:text-sm font-bold">
                                 {expandedChapter}
                               </span>
                             </div>
-                            <h3 className="text-lg font-semibold text-white">
+                            <h3 className="text-base sm:text-lg font-semibold text-white truncate">
                               {
                                 story.chapters.find(
                                   (ch) => ch.chapter_number === expandedChapter
@@ -920,15 +922,15 @@ const GeneratedStoryViewerPage = () => {
                               }
                             </h3>
                           </div>
-                          <p className="text-white/60 text-sm">
+                          <p className="text-white/60 text-xs sm:text-sm">
                             Chapter {expandedChapter} of {story.chapters.length}
                           </p>
                         </div>
 
                         {/* Scrollable Chapter Content */}
-                        <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-white/5 mb-4">
+                        <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-white/5 mb-3 sm:mb-4">
                           <div className="prose prose-invert max-w-none">
-                            <div className="text-white/90 leading-relaxed whitespace-pre-wrap text-sm">
+                            <div className="text-white/90 leading-relaxed whitespace-pre-wrap text-xs sm:text-sm">
                               {
                                 story.chapters.find(
                                   (ch) => ch.chapter_number === expandedChapter
@@ -939,7 +941,7 @@ const GeneratedStoryViewerPage = () => {
                         </div>
 
                         {/* Navigation Buttons */}
-                        <div className="flex items-center justify-between border-t border-white/10 pt-4">
+                        <div className="flex items-center justify-between border-t border-white/10 pt-3 sm:pt-4">
                           <button
                             onClick={() => navigateToChapter("previous")}
                             disabled={
@@ -947,10 +949,10 @@ const GeneratedStoryViewerPage = () => {
                                 (ch) => ch.chapter_number === expandedChapter
                               ) === 0
                             }
-                            className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl text-white text-sm font-medium transition-all duration-150"
+                            className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 bg-white/5 hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg sm:rounded-xl text-white text-xs sm:text-sm font-medium transition-all duration-150"
                           >
                             <svg
-                              className="w-4 h-4"
+                              className="w-3 h-3 sm:w-4 sm:h-4"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"

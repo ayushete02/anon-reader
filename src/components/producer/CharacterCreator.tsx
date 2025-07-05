@@ -99,20 +99,20 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
       {/* Enhanced Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold text-white mb-2">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-2">
             Character Creator
           </h2>
-          <p className="text-white/60">
+          <p className="text-white/60 text-sm sm:text-base">
             Bring your characters to life with detailed descriptions and
             AI-generated visuals
           </p>
         </div>
         <button
           onClick={handleAddCharacter}
-          className="inline-flex items-center gap-2 px-6 py-3 bg-primary/20 border border-primary/30 text-white rounded-xl font-medium backdrop-blur-sm hover:bg-primary/30 hover:border-primary/40 transition-all duration-150"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-3 bg-primary/20 border border-primary/30 text-white rounded-xl font-medium backdrop-blur-sm hover:bg-primary/30 hover:border-primary/40 transition-all duration-150 text-sm sm:text-base"
         >
           <svg
-            className="w-5 h-5"
+            className="w-4 h-4 sm:w-5 sm:h-5"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -130,7 +130,7 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
 
       {/* Progress Indicator */}
       <div className="bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 p-4">
-        <div className="flex items-center justify-between text-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-sm">
           <span className="text-white/60">Characters Created</span>
           <span className="text-white font-medium">
             {characters.length} / 8 recommended
@@ -149,15 +149,15 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
       {/* Characters List */}
       {characters.length > 0 ? (
         <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h3 className="text-xl font-semibold text-white">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <h3 className="text-lg sm:text-xl font-semibold text-white">
               Your Characters
             </h3>
             <span className="text-sm text-white/60">
               {characters.length} character{characters.length !== 1 ? "s" : ""}
             </span>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {characters.map((character, index) => (
               <div
                 key={character.id}
@@ -175,10 +175,10 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
           </div>
         </div>
       ) : (
-        <div className="text-center py-16">
-          <div className="w-24 h-24 bg-white/5 backdrop-blur-xl rounded-full flex items-center justify-center mx-auto mb-6">
+        <div className="text-center py-12 sm:py-16">
+          <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white/5 backdrop-blur-xl rounded-full flex items-center justify-center mx-auto mb-6">
             <svg
-              className="w-12 h-12 text-white/40"
+              className="w-10 h-10 sm:w-12 sm:h-12 text-white/40"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -191,19 +191,19 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
               />
             </svg>
           </div>
-          <h3 className="text-xl font-semibold text-white mb-2">
+          <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">
             No characters yet
           </h3>
-          <p className="text-white/60 mb-6 max-w-md mx-auto">
+          <p className="text-white/60 mb-6 max-w-md mx-auto text-sm sm:text-base">
             Start building your story&apos;s cast. Create compelling characters
             that will drive your narrative forward.
           </p>
           <button
             onClick={handleAddCharacter}
-            className="inline-flex items-center gap-2 px-8 py-4 bg-white/5 border border-white/10 text-white rounded-xl font-medium backdrop-blur-sm hover:bg-white/10 hover:border-white/20 transition-all duration-150"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-white/5 border border-white/10 text-white rounded-xl font-medium backdrop-blur-sm hover:bg-white/10 hover:border-white/20 transition-all duration-150 text-sm sm:text-base"
           >
             <svg
-              className="w-5 h-5"
+              className="w-4 h-4 sm:w-5 sm:h-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -244,17 +244,17 @@ const CharacterCreator: React.FC<CharacterCreatorProps> = ({
       </Dialog>
 
       {/* Action Buttons */}
-      <div className="flex justify-between pt-8">
+      <div className="flex flex-col sm:flex-row justify-between gap-4 pt-6 sm:pt-8">
         <button
           onClick={onBack}
-          className="px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white/80 backdrop-blur-sm hover:bg-white/10 hover:border-white/20 transition-all duration-150"
+          className="w-full sm:w-auto px-4 sm:px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white/80 backdrop-blur-sm hover:bg-white/10 hover:border-white/20 transition-all duration-150 text-sm sm:text-base"
         >
           ← Back to Details
         </button>
         <button
           onClick={handleSubmit}
           disabled={characters.length === 0}
-          className={`px-8 py-3 rounded-xl font-medium backdrop-blur-sm transition-all duration-150 ${
+          className={`w-full sm:w-auto px-6 sm:px-8 py-3 rounded-xl font-medium backdrop-blur-sm transition-all duration-150 text-sm sm:text-base ${
             characters.length > 0
               ? "bg-primary/20 border border-primary/30 text-white hover:bg-primary/30 hover:border-primary/40"
               : "bg-white/5 border border-white/10 text-white/50 cursor-not-allowed"
@@ -338,24 +338,24 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
       </div>
 
       {/* Character Info */}
-      <div className="p-4">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h3 className="text-lg font-semibold text-white mb-1 line-clamp-1">
+      <div className="p-3 sm:p-4">
+        <div className="flex items-start justify-between gap-3 sm:gap-4">
+          <div className="flex-1 min-w-0">
+            <h3 className="text-base sm:text-lg font-semibold text-white mb-1 line-clamp-1">
               {character.name}
             </h3>
-            <span className="inline-block px-3 py-1 bg-primary/20 border border-primary/30 rounded-full text-xs font-medium backdrop-blur-sm">
+            <span className="inline-block px-2 sm:px-3 py-1 bg-primary/20 border border-primary/30 rounded-full text-xs font-medium backdrop-blur-sm">
               {typeLabel}
             </span>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-1 sm:gap-2 flex-shrink-0">
             <button
               onClick={onEdit}
-              className="p-2 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:border-white/20 transition-all duration-150"
+              className="p-1.5 sm:p-2 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:border-white/20 transition-all duration-150"
               title="Edit Character"
             >
               <svg
-                className="w-4 h-4 text-white/60"
+                className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/60"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -370,11 +370,11 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
             </button>
             <button
               onClick={onDelete}
-              className="p-2 bg-white/5 border border-white/10 rounded-lg hover:bg-red-500/20 hover:border-red-500/30 transition-all duration-150"
+              className="p-1.5 sm:p-2 bg-white/5 border border-white/10 rounded-lg hover:bg-red-500/20 hover:border-red-500/30 transition-all duration-150"
               title="Delete Character"
             >
               <svg
-                className="w-4 h-4 text-white/60"
+                className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/60"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -389,7 +389,7 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
             </button>
           </div>
         </div>
-        <p className="text-white/60 text-sm mt-3 line-clamp-3">
+        <p className="text-white/60 text-xs sm:text-sm mt-3 line-clamp-3">
           {character.description}
         </p>
       </div>

@@ -168,31 +168,33 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
   const wordCount = storyDraft.plot?.trim().split(/\s+/).length || 0;
 
   return (
-    <div className="space-y-8 animate-fadeIn">
+    <div className="space-y-6 sm:space-y-8 animate-fadeIn">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold text-white mb-2">Story Preview</h2>
-          <p className="text-white/60">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-2">
+            Story Preview
+          </h2>
+          <p className="text-white/60 text-sm sm:text-base">
             Review your story details before publishing
           </p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Story Info */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-4 sm:space-y-6">
           {/* Basic Info */}
-          <div className="bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 p-6">
-            <h3 className="text-xl font-semibold text-white mb-6">
+          <div className="bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 p-4 sm:p-6">
+            <h3 className="text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6">
               Story Information
             </h3>
 
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               <div>
                 <label className="block text-sm font-medium text-white/80 mb-2">
                   Title
                 </label>
-                <p className="text-lg font-semibold text-white">
+                <p className="text-base sm:text-lg font-semibold text-white">
                   {storyDraft.title}
                 </p>
               </div>
@@ -201,18 +203,18 @@ const StoryPreview: React.FC<StoryPreviewProps> = ({
                 <label className="block text-sm font-medium text-white/80 mb-2">
                   Description
                 </label>
-                <p className="text-white/80 leading-relaxed">
+                <p className="text-white/80 leading-relaxed text-sm sm:text-base">
                   {storyDraft.description}
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <label className="block text-sm font-medium text-white/80 mb-2">
                     Type
                   </label>
                   <div className="flex items-center gap-2">
-                    <p className="text-white/80 capitalize">
+                    <p className="text-white/80 capitalize text-sm sm:text-base">
                       {storyDraft.type}-based Story
                     </p>
                     {storyDraft.type === "image" && (
