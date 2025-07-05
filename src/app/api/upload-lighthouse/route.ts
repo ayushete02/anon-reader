@@ -4,6 +4,9 @@ import path from "path";
 import os from "os";
 import { NextRequest, NextResponse } from "next/server";
 
+// Force Node.js runtime for native modules
+export const runtime = 'nodejs';
+
 export async function POST(request: NextRequest) {
     let tempFilePath: string | null = null;
 

@@ -8,13 +8,19 @@ import {
   Character,
 } from "@/lib/types";
 import { NearAIHelper } from "@/lib/near-ai";
-import { createStoryPrompt, createPosterImagePrompt, SYSTEM_PROMPT } from "@/constants/prompts";
+import {
+  createStoryPrompt,
+  createPosterImagePrompt,
+  SYSTEM_PROMPT,
+} from "@/constants/prompts";
 import {
   STORY_CONFIG,
   FIELD_CONSTRAINTS,
   NEAR_AI_CONFIG,
 } from "@/constants/constants";
 import { generateStoryImages, ChapterImage } from "@/lib/gemini";
+
+export const runtime = "nodejs";
 
 function parseStoryIntoChapters(storyText: string): Chapter[] {
   const chapters: Chapter[] = [];
@@ -316,7 +322,10 @@ export async function POST(request: NextRequest) {
         posterImageBase64 = await NearAIHelper.generateImage(posterPrompt);
         console.log("Successfully generated poster image for text story");
       } catch (posterError) {
-        console.error("Failed to generate poster image for text story:", posterError);
+        console.error(
+          "Failed to generate poster image for text story:",
+          posterError
+        );
         // Continue without poster image
       }
 

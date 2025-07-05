@@ -3,6 +3,9 @@ import GoogleProvider from "next-auth/providers/google";
 import type { Account, Profile, Session } from "next-auth";
 import type { JWT } from "next-auth/jwt";
 
+// Force Node.js runtime for NextAuth
+export const runtime = "nodejs";
+
 const authOptions = {
   providers: [
     GoogleProvider({

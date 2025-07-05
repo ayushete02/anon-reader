@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 
+// Force Node.js runtime
+export const runtime = "nodejs";
+
 export async function GET() {
   return NextResponse.json({
     message: "Diagnostic API is working",
