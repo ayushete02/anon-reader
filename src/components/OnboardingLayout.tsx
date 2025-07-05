@@ -40,7 +40,7 @@ const OnboardingLayout: React.FC<OnboardingLayoutProps> = ({
         {/* Logo or Brand */}
         <div className="mb-8">
           <div className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 text-transparent bg-clip-text">
-            Anon Reader
+            Comics.ai
           </div>
         </div>
 
@@ -68,8 +68,10 @@ const OnboardingLayout: React.FC<OnboardingLayoutProps> = ({
       </div>
 
       {/* Footer */}
-      <div className="mt-8 text-sm text-white/60">
-        Discover your unique AI-powered reading preferences
+      <div className="mt-4 sm:mt-6 lg:mt-8 px-4 text-center">
+        <div className="text-xs sm:text-sm text-white/60 max-w-sm mx-auto leading-relaxed">
+          Discover your unique AI-powered reading preferences
+        </div>
       </div>
     </div>
   );

@@ -175,7 +175,7 @@ export default function Home() {
         >
           <div className="flex items-center">
             <h1 className="text-lg sm:text-2xl font-display text-white">
-              Anon Reader
+              Comics.ai
             </h1>
           </div>
 
@@ -204,6 +204,7 @@ export default function Home() {
                               {balance.symbol}
                             </span>
                           )}
+                          <div className="h-full w-1 bg-slate-500" />
                           <span
                             className="text-white text-xs sm:text-sm truncate max-w-[100px] sm:max-w-[180px]"
                             title={address}

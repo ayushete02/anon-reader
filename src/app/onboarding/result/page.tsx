@@ -45,7 +45,7 @@ const OnboardingResultPage = () => {
         <div className="w-full max-w-md bg-morphic-gray/50 backdrop-blur-xl rounded-3xl border border-white/5 p-8 flex flex-col relative z-10 items-center">
           {/* Logo or Brand */}
           <div className="mb-6">
-            <div className="text-2xl font-bold text-primary">Anon Reader</div>
+            <div className="text-2xl font-bold text-primary">Comics.ai</div>
           </div>
 
           {/* Persona Type Pill */}

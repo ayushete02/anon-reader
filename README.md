@@ -1,4 +1,4 @@
-# Comic Reader App
+# Comics.ai
 
 A Next.js application for reading digital comics with personalized recommendations based on user preferences.
 

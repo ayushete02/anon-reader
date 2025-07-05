@@ -1,7 +1,7 @@
-# Anon Reader - Backend API Documentation
+# Comics.ai - Backend API Documentation
 
 ## Overview
-This document outlines the required backend API endpoints and data structures for the Anon Reader application. The frontend is built with Next.js 15 using TypeScript and implements a comic/story reading platform with personalized recommendations, user authentication, and story creation tools.
+This document outlines the required backend API endpoints and data structures for the Comics.ai application. The frontend is built with Next.js 15 using TypeScript and implements a comic/story reading platform with personalized recommendations, user authentication, and story creation tools.
 
 ## Technology Stack
 - **Authentication**: Google OAuth 2.0 via NextAuth.js
