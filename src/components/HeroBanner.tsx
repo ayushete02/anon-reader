@@ -27,29 +27,31 @@ const HeroBanner: React.FC<HeroBannerProps> = ({ comics }) => {
 
   const comic = comics[index];
 
+  if (!comic) return null;
+
   return (
-    <div className="relative pt-28 w-full h-[99vh] flex items-center justify-center overflow-hidden bg-black">
+    <div className="relative pt-16 sm:pt-20 lg:pt-28 w-full min-h-[70vh] sm:min-h-[80vh] lg:h-[85vh] flex items-center justify-center overflow-hidden bg-black">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
           src={comic.posterImage || "/comics/placeholder.jpg"}
           alt={comic.title}
           fill
-          className="object-cover object-center opacity-40"
+          className="object-cover object-center opacity-30 sm:opacity-40"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 sm:via-black/40 to-transparent" />
       </div>
 
       {/* Carousel Content */}
-      <div className="relative z-10 flex w-full max-w-6xl mx-auto items-center h-[70vh]">
+      <div className="relative z-10 flex flex-col lg:flex-row w-full max-w-7xl mx-auto items-center h-auto lg:h-[70vh] px-4 sm:px-6 py-6 sm:py-8 lg:py-0">
         {/* Poster */}
-        <div className="w-[260px] min-w-[180px] max-w-[260px] h-[390px] rounded-xl overflow-hidden shadow-2xl bg-black/60 flex-shrink-0 flex items-center justify-center">
+        <div className="w-full sm:w-[280px] md:w-[300px] lg:w-[320px] max-w-[320px] h-[300px] sm:h-[380px] md:h-[420px] lg:h-[480px] rounded-xl overflow-hidden shadow-2xl bg-black/60 flex-shrink-0 flex items-center justify-center mb-6 lg:mb-0 mx-auto lg:mx-0">
           <Image
             src={comic.posterImage || "/comics/placeholder.jpg"}
             alt={comic.title}
-            width={260}
-            height={390}
+            width={320}
+            height={480}
             className="object-cover object-center w-full h-full"
             priority
           />
@@ -63,34 +65,38 @@ const HeroBanner: React.FC<HeroBannerProps> = ({ comics }) => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -60 }}
             transition={{ duration: 0.5 }}
-            className="ml-10 flex-1 max-w-2xl"
+            className="lg:ml-10 flex-1 max-w-2xl text-center lg:text-left"
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
               {comic.title}
             </h1>
-            <div className="flex items-center gap-3 mb-2">
-              <span className="text-white/80">
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 sm:gap-3 mb-4">
+              <span className="text-white/80 text-sm sm:text-base">
                 {new Date(comic.releaseDate).getFullYear()}
               </span>
               <span className="text-white/50">|</span>
-              <span className="text-white/80">{comic.rating}★</span>
-              <span className="text-white/50">|</span>
-              {comic.categories.slice(0, 2).map((cat) => (
-                <span
-                  key={cat}
-                  className="text-xs bg-primary/20 text-primary px-2 py-1 rounded-full font-semibold mr-2"
-                >
-                  {cat}
-                </span>
-              ))}
+              <span className="text-white/80 text-sm sm:text-base">
+                {comic.rating}★
+              </span>
+              <span className="text-white/50 hidden sm:inline">|</span>
+              <div className="flex flex-wrap gap-1 sm:gap-2">
+                {comic.categories.slice(0, 2).map((cat) => (
+                  <span
+                    key={cat}
+                    className="text-xs bg-primary/20 text-primary px-2 py-1 rounded-full font-semibold"
+                  >
+                    {cat}
+                  </span>
+                ))}
+              </div>
             </div>
-            <p className="text-white/90 text-lg mb-6 line-clamp-3">
+            <p className="text-white/90 text-sm sm:text-base lg:text-lg mb-6 line-clamp-3 px-4 lg:px-0">
               {comic.description}
             </p>
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-center justify-center lg:justify-start">
               <Link
-                href={`/comic/${comic.id}`}
-                className="rounded-md bg-primary px-6 py-3 text-white font-medium hover:bg-red-700 transition-colors inline-flex items-center gap-2"
+                href={`/story/${comic.id}`}
+                className="w-full sm:w-auto rounded-md bg-primary text-white hover:bg-primary/90 px-6 py-3 font-medium transition-colors inline-flex items-center justify-center gap-2"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -106,7 +112,7 @@ const HeroBanner: React.FC<HeroBannerProps> = ({ comics }) => {
                 </svg>
                 Read Now
               </Link>
-              <button className="rounded-md border border-white/20 px-6 py-3 text-white font-medium hover:bg-white/10 transition-colors inline-flex items-center gap-2">
+              <button className="w-full sm:w-auto rounded-md border border-white/20 bg-white/5 hover:bg-white/10 px-6 py-3 text-white font-medium transition-colors inline-flex items-center justify-center gap-2">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5"
@@ -128,7 +134,7 @@ const HeroBanner: React.FC<HeroBannerProps> = ({ comics }) => {
         </AnimatePresence>
 
         {/* Dots Indicator */}
-        <div className="absolute right-8 top-1/2 -translate-y-1/2 flex flex-col gap-4 z-20">
+        <div className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 lg:flex flex-col gap-4 z-20 hidden">
           {comics.map((_, i) => (
             <button
               key={i}
@@ -142,6 +148,25 @@ const HeroBanner: React.FC<HeroBannerProps> = ({ comics }) => {
               style={{
                 opacity: i === index ? 1 : 0.5,
                 boxShadow: i === index ? "0 0 0 2px #fff" : undefined,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Mobile Dots Indicator */}
+        <div className="flex lg:hidden justify-center gap-2 mt-6">
+          {comics.map((_, i) => (
+            <button
+              key={i}
+              aria-label={`Go to slide ${i + 1}`}
+              onClick={() => setIndex(i)}
+              className={`w-2 h-2 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
+                i === index
+                  ? "border-white bg-white"
+                  : "border-gray-400 bg-transparent"
+              }`}
+              style={{
+                opacity: i === index ? 1 : 0.5,
               }}
             />
           ))}
