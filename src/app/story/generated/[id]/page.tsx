@@ -219,7 +219,7 @@ const GeneratedStoryViewerPage = () => {
 
   const formatReadingTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
-    return `${minutes} min read`;
+    return `3 min read`;
   };
 
   const navigateToChapter = (direction: "next" | "previous") => {

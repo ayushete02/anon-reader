@@ -66,7 +66,7 @@ export function createStoryPrompt(storyData: StoryCreate): string {
   return `
 Create a complete short story with the following specifications:
 
-**Story Details:**
+Story Details:
 - Title: ${storyData.title}
 - Description: ${storyData.description}
 - Type: ${storyData.type}
@@ -74,16 +74,16 @@ Create a complete short story with the following specifications:
 - Categories/Themes: ${categoriesStr}
 - Chapter Length: Atleast ${STORY_CONFIG.WORDS_PER_CHAPTER} words per chapter
 
-**Characters:**
+Characters:
 ${characterDescriptions}
 
-**Requirements:**
+Requirements:
 - Each chapter should have a clear title
 - The story should be engaging and follow the plot and themes provided
 - Include all the characters mentioned in meaningful ways
 - Make sure the story flows naturally from chapter to chapter
 
-**Format your response as follows:**
+Format your response as follows:
 Chapter 1: [Chapter Title]
 [Chapter content here]
 

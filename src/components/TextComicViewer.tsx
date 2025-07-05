@@ -158,7 +158,7 @@ const TextComicViewer: React.FC<TextComicViewerProps> = ({ comic }) => {
         <section className="relative min-h-screen flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 py-8 sm:py-16 z-10">
           {/* <div className="sticky top-0 left-0 right-0 h-12 sm:h-24 bg-gradient-to-b from-morphic-dark to-transparent z-10 pointer-events-none"></div> */}
 
-          <div className="w-full py-96 md:py-40 max-w-4xl lg:max-w-5xl mx-auto z-10 overflow-y-auto scrollbar-hide">
+          <div className="w-full py-96 md:py-96 max-w-4xl lg:max-w-5xl mx-auto z-10 overflow-y-auto scrollbar-hide">
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}

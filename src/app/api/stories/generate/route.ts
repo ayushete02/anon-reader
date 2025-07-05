@@ -60,6 +60,16 @@ function parseStoryIntoChapters(storyText: string): Chapter[] {
   return chapters;
 }
 
+function cleanMarkdownFormatting(text: string): string {
+  // Remove ** bold formatting (e.g., **text**)
+  let cleaned = text.replace(/\*\*(.*?)\*\*/g, "$1");
+  // Remove standalone ** markers at the beginning or end
+  cleaned = cleaned.replace(/^\*\*|\*\*$/g, "");
+  // Remove any remaining ** markers
+  cleaned = cleaned.replace(/\*\*/g, "");
+  return cleaned.trim();
+}
+
 function generateStoryData(
   storyData: StoryCreate,
   chapters: Chapter[],
@@ -71,6 +81,8 @@ function generateStoryData(
     .toString(36)
     .substr(2, 9)}`;
 
+  // check
+
   return {
     id: storyId,
     title: storyData.title,
@@ -80,7 +92,7 @@ function generateStoryData(
     categories: storyData.categories,
     created_at: now,
     updated_at: now,
-    generated_story: generatedStory,
+    generated_story: cleanMarkdownFormatting(generatedStory),
     poster_image: posterImageBase64,
     characters: storyData.characters.map((char, index) => ({
       id: `char_${storyId}_${index}`,
@@ -91,8 +103,8 @@ function generateStoryData(
     })),
     chapters: chapters.map((chapter, index) => ({
       id: `chapter_${storyId}_${index}`,
-      title: chapter.title,
-      content: chapter.content,
+      title: cleanMarkdownFormatting(chapter.title),
+      content: cleanMarkdownFormatting(chapter.content),
       chapter_number: chapter.chapter_number,
       reading_time_seconds: chapter.reading_time_seconds,
     })),

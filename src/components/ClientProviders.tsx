@@ -33,7 +33,7 @@ const ClientProviders: React.FC<Props> = ({ children }) => {
         appId="cmckmrdo700chjl0n51w75eue"
         config={{
           embeddedWallets: { createOnLogin: "users-without-wallets" },
-          defaultChain: flowTestnet,
+          defaultChain: flowMainnet,
           supportedChains: [flowMainnet, flowTestnet],
         }}
       >

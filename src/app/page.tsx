@@ -175,7 +175,7 @@ export default function Home() {
         >
           <div className="flex items-center">
             <h1 className="text-lg sm:text-2xl font-display text-white">
-              Comics.ai
+              comics.ai
             </h1>
           </div>
 

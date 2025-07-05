@@ -40,7 +40,7 @@ const OnboardingLayout: React.FC<OnboardingLayoutProps> = ({
         {/* Logo or Brand */}
         <div className="mb-8">
           <div className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 text-transparent bg-clip-text">
-            Comics.ai
+            comics.ai
           </div>
         </div>
 
