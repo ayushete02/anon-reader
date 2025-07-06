@@ -198,4 +198,4 @@ src/
 
 ## 📜 License
 
-This project is built for hackathon demonstration purposes.
+This project is built for hackathon demonstration purposes only.
