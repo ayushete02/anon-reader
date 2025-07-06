@@ -18,7 +18,7 @@ A **complete decentralized comic creation and publishing platform** that combine
 - AI-Powered Story Generation using NEAR AI
 - Story Publishing & Writer's Registration via Smart Contracts on Flow Mainnet
 - Story Artifacts Storage on Filecoin through Lighthouse Storage
-- Interactive Reading Experience with a TikTok-style scroll-to-read UI for immersive engagement
+- Interactive Reading Experience with a TikTok style scroll-to-read UI for immersive engagement
 
 ## ⚡ Quick Start - Try It Now!
 
