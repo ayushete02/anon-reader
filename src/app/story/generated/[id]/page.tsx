@@ -217,9 +217,9 @@ const GeneratedStoryViewerPage = () => {
     }));
   };
 
-  const formatReadingTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    return `3 min read`;
+  const formatReadingTime = () => {
+    const randomMinutes = Math.floor(Math.random() * 5) + 1;
+    return `${randomMinutes} min read`;
   };
 
   const navigateToChapter = (direction: "next" | "previous") => {
@@ -617,7 +617,7 @@ const GeneratedStoryViewerPage = () => {
                               {chapter.title}
                             </h3>
                             <p className="text-xs sm:text-sm text-white/60">
-                              {formatReadingTime(chapter.reading_time_seconds)}
+                              {formatReadingTime()}
                             </p>
                           </div>
                         </div>

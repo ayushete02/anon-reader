@@ -353,7 +353,7 @@ const StoryDetailPage = () => {
               <div className="pt-2 flex justify-center lg:justify-start">
                 <button
                   onClick={handlePlay}
-                  className="group relative w-full sm:w-auto min-w-[200px] bg-primary text-white font-medium py-3 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 text-sm shadow-lg hover:shadow-xl hover:bg-primary/90"
+                  className="group relative w-full sm:w-auto min-w-[200px] bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 text-sm shadow-lg hover:shadow-xl"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
