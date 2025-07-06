@@ -118,7 +118,6 @@ const ipfsUrl = await uploadBase64ToLighthouse(base64Data);
   ```env
   NEAR_AI_API_URL=https://api.near.ai/v1/chat/completions
   NEXT_PUBLIC_LIGHTHOUSE_API_KEY=your_lighthouse_key
-  GEMINI_API_KEY=your_gemini_key
   ```
 
 ### Installation
