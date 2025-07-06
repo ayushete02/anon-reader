@@ -1,51 +1,50 @@
-# Comics.ai - Decentralized Comic Story Platform
+# Comics.ai - TikTok for readers and Writers
 
-🏆 **Hackathon Submission**: A Next.js application that creates, publishes, and reads AI-generated comic stories using blockchain infrastructure. This platform leverages NEAR AI, Flow blockchain, and Filecoin/Lighthouse for a complete decentralized storytelling experience.
+Unlock a world of stories and comics instantly. Our dApp offers effortless Google login, personalized browsing, and an immersive reading experience, making every journey into imagination seamless and enjoyable powered by Near AI, Filecoin and Flow Blockchain.
 
 ## 🚀 Live Demo & Contract
 
-**🎮 Try the Platform**: [Comics.ai Demo](https://your-demo-url.vercel.app) _(Add your deployed URL)_
+Here's how you can learn more about Comics.ai:
 
-**📋 Smart Contract**: [View on Flow Explorer](https://evm.flowscan.io/address/0x98Fa81BFea72C4601737D4a49E7fa2d7Ca387398?tab=contract)  
-Contract Address: `0x98Fa81BFea72C4601737D4a49E7fa2d7Ca387398`
-
-**📊 Live Transactions**: [Monitor Activity](https://evm.flowscan.io/address/0x98Fa81BFea72C4601737D4a49E7fa2d7Ca387398?tab=txs)  
-Real-time story publishing and blockchain interactions
+* **Comics.ai Platform Demo:** [Try it out now!](https://comics-ai.vercel.app/)
+* **Smart Contract Overview:** Explore the core contract on [Flow Explorer](https://evm.flowscan.io/address/0x98Fa81BFea72C4601737D4a49E7fa2d7Ca387398?tab=contract).
+    * *Address:* `0x98Fa81BFea72C4601737D4a49E7fa2d7Ca387398`
+* **Live Story Publishing:** Witness blockchain interactions in real-time by [monitoring transactions](https://evm.flowscan.io/address/0x98Fa81BFea72C4601737D4a49E7fa2d7Ca387398?tab=txs).
 
 ## 🌟 What We Built
 
 A **complete decentralized comic creation and publishing platform** that combines:
 
-- 🤖 **AI-Powered Story Generation** via NEAR AI
-- ⛓️ **Blockchain Publishing** on Flow Network
-- 🌐 **Decentralized Storage** via Filecoin/Lighthouse
-- 🎨 **Interactive Reading Experience** with Web3 integration
+- AI-Powered Story Generation using NEAR AI
+- Story Publishing & Writer's Registration via Smart Contracts on Flow Mainnet
+- Story Artifacts Storage on Filecoin through Lighthouse Storage
+- Interactive Reading Experience with a TikTok-style scroll-to-read UI for immersive engagement
 
 ## ⚡ Quick Start - Try It Now!
 
-1. **🔗 Connect Wallet**: Visit our demo and connect via Privy
-2. **✍️ Create Story**: Go to `/producer` → Define characters & plot
-3. **🤖 Generate**: Let NEAR AI create your story and character images
-4. **📤 Publish**: Upload to Filecoin and publish to Flow blockchain
-5. **📖 Read**: Browse stories from our decentralized library
+- **Connect Wallet**: Visit our demo and connect to Flow Mainnet via Privy
+- **Create Story**: Go to `/producer` → Define characters & story plot
+- **Generate**: Let our NEAR AI Agent create your story and character images and show the magic
+- **Publish**: Upload to Filecoin and public the story on Flow Mainnet via our Smart Contract
+- **Read**: Read and Chill 
 
 ## 🏗 Complete Architecture
 
 ```mermaid
 graph TD
     A[🎨 User Creates Story] --> B[🤖 NEAR AI Generates Content]
-    B --> C[🖼️ AI Character Images]
-    C --> D[🌐 Upload to Filecoin/Lighthouse]
-    D --> E[⛓️ Publish Hash to Flow Blockchain]
-    E --> F[📚 Story Live on Platform]
-    F --> G[👥 Users Read from IPFS + Blockchain]
+    B --> C[🖼️ Review the AI generated Story]
+    C --> D[🌐 Upload to Filecoin via Lighthouse Storage]
+    D --> E[⛓️ Publish Story via Smart contract deployed on Flow Mainnet]
+    E --> F[📚 Story Live on Comics.ai]
+    F --> G[👥 Users Swipe and Scroll to Read]
 ```
 
 ## 🔗 Blockchain Integrations
 
 ### � NEAR AI Integration
 
-- **Story Generation**: Advanced language models for narrative creation
+- **Story Generation**: Advanced language models for Chapter wise story and Comic Creation
 - **Character Images**: AI-generated character illustrations
 - **Streaming API**: Real-time content generation
 - **Implementation**: [`src/lib/near-ai.ts`](src/lib/near-ai.ts)
@@ -53,13 +52,13 @@ graph TD
 ### 🔵 Flow Blockchain Integration
 
 - **Smart Contract**: Story metadata publishing and indexing
-- **Live Contract**: [View on Explorer](https://evm.flowscan.io/address/0x98Fa81BFea72C4601737D4a49E7fa2d7Ca387398?tab=contract)
+- **Deployed Smart Contract**: [View on Explorer](https://evm.flowscan.io/address/0x98Fa81BFea72C4601737D4a49E7fa2d7Ca387398?tab=contract)
 - **Transaction History**: [Monitor Activity](https://evm.flowscan.io/address/0x98Fa81BFea72C4601737D4a49E7fa2d7Ca387398?tab=txs)
 - **Implementation**: [`src/components/contract/contractDetails.tsx`](src/components/contract/contractDetails.tsx)
 
-### 🟡 Filecoin/Lighthouse Integration
+### 🟡 Filecoin and Lighthouse Integration
 
-- **IPFS Storage**: Decentralized content hosting
+- **Decentralized Storage**: Storing Story Metadata (Avg. 30 MB per Story)
 - **Asset Management**: Images, text, and metadata storage
 - **Gateway Access**: `https://gateway.lighthouse.storage/ipfs/{hash}`
 - **Implementation**: [`src/lib/lighthouse.ts`](src/lib/lighthouse.ts)
@@ -69,59 +68,29 @@ graph TD
 ### � Complete Workflow
 
 1. **Story Creation**: AI-powered story generation using NEAR AI
-2. **Image Generation**: Character and scene illustrations via NEAR AI
-3. **Content Upload**: Store all assets on Filecoin via Lighthouse
-4. **Blockchain Publishing**: Publish story metadata to Flow blockchain
-5. **Decentralized Reading**: Access stories from IPFS and blockchain
+2. **Image Generation**: Character and scene illustrations creation via NEAR AI
+3. **Content Upload**: Store all assets on Filecoin via Lighthouse Storage
+4. **Smart Contract Integration**: Publish story metadata to Flow blockchain
+5. **Read and Chill**: Browse and read stories fetched from onchain data
 
 ### 🎯 Core Features
 
 - **AI Story Generation**: Create complete stories with characters and plots
 - **Character Creation**: Generate custom characters with AI-generated images
-- **Decentralized Publishing**: Stories stored on IPFS and indexed on Flow
+- **Decentralized Publishing**: Stories stored on Filecoin and indexed on Flow
 - **Interactive Reader**: Immersive reading experience with image and text modes
 - **Wallet Integration**: Seamless Web3 authentication via Privy
-- **Cross-chain Support**: Flow mainnet/testnet compatibility
-
-### 🌟 Innovation Highlights
-
-- **Multi-chain Integration**: Combines NEAR AI, Flow blockchain, and Filecoin storage
-- **AI-Powered Creation**: Complete story generation with characters and visuals
-- **True Decentralization**: Content stored on IPFS, metadata on blockchain
-- **Seamless UX**: Web3 complexity hidden behind intuitive interface
-- **Scalable Architecture**: Ready for multiple blockchain networks
 
 ## 🛠 Tech Stack
+
+![Tech Stack](public/tech.png)
 
 - **Next.js 15** - React framework with App Router
 - **React 19** - Latest React features
 - **TypeScript** - Type-safe development
 - **Tailwind CSS** - Responsive styling
 - **Framer Motion** - Smooth animations
-
-### Blockchain & Web3
-
-- **Flow Blockchain** - Smart contract deployment
-- **Wagmi** - Ethereum-compatible wallet integration
-- **Privy** - Web3 authentication and wallet management
-- **Viem** - TypeScript Ethereum library
-
-### AI & Storage
-
-- **NEAR AI** - Story and image generation
-- **Lighthouse (Filecoin)** - Decentralized storage
-
-### Key Dependencies
-
-```json
-{
-  "@lighthouse-web3/sdk": "^0.4.0",
-  "@privy-io/react-auth": "^2.17.2",
-  "@privy-io/wagmi": "^1.0.5",
-  "viem": "^2.31.7",
-  "wagmi": "^2.15.6"
-}
-```
+- **Solidity** - Smart Contract development
 
 ## � Quick Start
 
@@ -188,7 +157,7 @@ export const NEAR_AI_CONFIG = {
 ```solidity
 // Contract Address: 0x98Fa81BFea72C4601737D4a49E7fa2d7Ca387398
 function publishStory(string memory _cid) public {
-    // Publishes story CID to Flow blockchain
+    // Publishes story CID and register writer to Flow blockchain
 }
 ```
 
@@ -200,8 +169,8 @@ function publishStory(string memory _cid) public {
 ### Lighthouse Storage
 
 ```typescript
-// Upload to IPFS via Lighthouse
-const ipfsUrl = await uploadBase64ToLighthouse(base64Data);
+// Upload to Filecoin via Lighthouse
+const dataURL = await uploadBase64ToLighthouse(base64Data);
 // Returns: https://gateway.lighthouse.storage/ipfs/{hash}
 ```
 
